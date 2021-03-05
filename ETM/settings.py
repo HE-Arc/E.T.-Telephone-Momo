@@ -56,7 +56,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'ETM/templates/'
+            #BASE_DIR / 'ETMApp/templates/'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
