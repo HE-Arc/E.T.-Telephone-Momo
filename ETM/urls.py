@@ -16,10 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from ETMApp import views as vue_views
+from ETMApp import views as ETMApp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('test', vue_views.test_vue, name='test_vue'),
+    path('', ETMApp.index, name='index'),
+    path('login', ETMApp.login, name='login'),
+    path('signup', ETMApp.signup, name='signup'),
+    path('lobby', ETMApp.lobby, name='lobby'),
+    path('game', ETMApp.game, name='game'),
+    path('disconnect', ETMApp.disconnect, name='disconnect'),
 ]
