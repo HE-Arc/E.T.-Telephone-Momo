@@ -83,12 +83,20 @@ DATABASES = {
     }
 }
 """
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ETM',
         'USER': 'root',
         'PASSWORD': 'root'
+    }
+}"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file':  str(BASE_DIR / 'ETM/mysql.conf'),
+        }
     }
 }
 
