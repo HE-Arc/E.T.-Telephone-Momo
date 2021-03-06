@@ -23,7 +23,9 @@ def signup(request):
 
 
 def lobby(request, url):
-    return render(request, 'ETMApp/lobby.html')
+    return render(request, 'ETMApp/lobby.html', {
+        'game_url': url
+    })
 
 
 def game(request):
