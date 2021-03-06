@@ -22,8 +22,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ETMApp.index, name='index'),
     path('login', ETMApp.login, name='login'),
+    path('tryLogin', ETMApp.try_login, name='try_login'),
     path('signup', ETMApp.signup, name='signup'),
-    path('lobby', ETMApp.lobby, name='lobby'),
+    path('trySignup', ETMApp.try_signup, name='try_signup'),
+    path('play/<slug:url>', ETMApp.lobby, name='lobby'),
     path('game', ETMApp.game, name='game'),
     path('disconnect', ETMApp.disconnect, name='disconnect'),
+
+    path('createGame', ETMApp.create_game, name='create_game')
 ]

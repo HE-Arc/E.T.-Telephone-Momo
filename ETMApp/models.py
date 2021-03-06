@@ -1,10 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import string
+import random
 
 
 class Game(models.Model):
     date = models.DateTimeField('date published')
-    url_game = models.CharField(max_length=8)
+    url_game = models.CharField(max_length=8, unique=True)
+    @classmethod
+    def create(cls):
+        return cls(date=timezone.now(), url_game=id_generator(8))
+
 
 
 class UserAnonyme(models.Model):
@@ -13,7 +20,7 @@ class UserAnonyme(models.Model):
 
 class Conversation(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    url_conversation = models.CharField(max_length=8)
+    url_conversation = models.CharField(max_length=8, unique=True)
 
 
 class Message(models.Model):
@@ -34,3 +41,6 @@ class UserGame(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
     id_message = models.ForeignKey(Message, on_delete=models.CASCADE)
 
+def id_generator(size):
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(size))
