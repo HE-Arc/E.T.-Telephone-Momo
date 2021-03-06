@@ -1,5 +1,11 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
+{% load static %}
     <p>Lobby</p>
     <p>Au boulot marty</p>
+
+    <button onclick="sendMessage()">sendMessage</button>
+
+    {{ game_url|json_script:"game_url" }}
+    <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
 {% endblock %}
