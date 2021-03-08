@@ -44,14 +44,14 @@ class ChatConsumer(WebsocketConsumer):
 
         user = self.scope["user"]
         self.me = None
+        print(self.scope['session']['test'])
         if not user.is_authenticated:
             print("user not connected")
             #TODO
 
-            #print(self.scope["session"]["anonID"])
             if "anonID" in self.scope["session"]:
                 # Already have a session
-                self.me = Member(self.scope["session"]["pseudo"], self.self.scope["session"]["anonID"], False, self.channel_name)
+                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False, self.channel_name)
             else:
                 r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
                 print(r.text)

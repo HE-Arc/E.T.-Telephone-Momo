@@ -23,6 +23,7 @@ def signup(request):
 
 
 def lobby(request, url):
+    request.session['isWorking'] = 1  # necessary to make session work
     return render(request, 'ETMApp/lobby.html', {
         'game_url': url
     })
