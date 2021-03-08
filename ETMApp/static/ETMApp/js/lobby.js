@@ -35,10 +35,12 @@ function sendMessage() {
 
 function lobbyPlayers(players) {
     console.log(players);
-    let str = "";
-    for (let player of players) {
-        str += player.pseudo + "<br>";
-    }
-    document.getElementById('users').innerHTML = str;
 
+    for (let player of players) {
+        let tr = document.createElement('tr');
+        let td = document.createElement('tr');
+        td.innerHTML = player.pseudo;
+        tr.appendChild(td);
+        document.getElementById('players').appendChild(tr);
+    }
 }
