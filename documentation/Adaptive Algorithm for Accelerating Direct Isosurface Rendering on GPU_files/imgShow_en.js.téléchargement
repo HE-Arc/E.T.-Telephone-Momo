@@ -1,0 +1,303 @@
+$(document).ready(function () {
+	
+	// 弹出的div的宽度等于全文宽度
+	$("#originalImgs-wrapper").css({"width":$(".article-main-mid").outerWidth()});
+	function wh(index){
+		var imgClass=$('#FullText div._figclass.figure .figure_title>a>img').eq(index).attr("class");
+        $("#originalImgs").attr({"class":imgClass});
+	}
+	
+	
+    // 全局变量
+//	所有图片的信息
+    var imgArr = imgBox();
+    var wrapper = $('#miniImgs-wrapper');
+    var miniImgHeight = parseInt(wrapper.css('height'));
+    
+//    用来记录缓存的图片
+    var originalImgsObj = {};
+    
+
+//    主要方法,图片滚动
+    function openImg(imgIndex) {
+//    	限制点击换图的参数
+    	var clickAble = true;
+    	
+        var miniImgs = $("#miniImgs");
+//        ul
+        var miniImgsUl = miniImgs.children('ul');
+//        所有图片的wrapper  li
+        var miniImgsLi = miniImgsUl.children('li');
+//        图片数量
+        var miniImgsLength = miniImgsLi.length;
+
+
+//        给图片总数赋值
+        $('#allImgNum').html(miniImgsLength);
+
+
+//        单个图片高度
+        var miniImgsLiHeight = miniImgsLi.eq(0).css('height');
+//        单个图片算上margin一共所占高度
+        var liHeight = parseInt(miniImgsLiHeight) + 5;
+//            当前图片的index
+        var index = 0;
+//        展示数量
+        var num = 4;
+//        用于比较范围
+        var num2 = Math.ceil(num / 2);
+        
+//        执行图片切换的次数
+        var theOpenNum = 0;
+
+        
+//        主要切换方法
+        function change() {
+            var originalImgs = $('#originalImgs');
+            
+            
+//            $('#ruler .staff').css('left',-13);
+            
+            
+//            用来接收mini图ul位移的变量
+            var val;
+//            切换范围判断
+            if (index < num2) {
+                val = Animate(miniImgsUl, {top: 0});
+            } else if (index + num2 < miniImgsLength) {
+                val = Animate(miniImgsUl, {top: -(index - num2 + 1) * liHeight});
+            } else {
+                val = Animate(miniImgsUl, {top: -(miniImgsLength - num) * liHeight});
+            }
+
+
+//            从所有图片信息中选中当前图片
+			var nowImg = imgArr[index];
+            var src = nowImg.src;
+            
+//            判断originalImgsObj对象中是否有该图片,也就意味是否加载完成过该图片
+            if(!originalImgsObj[src]){
+//            	没加载过改图片
+//            	隐藏大图,加载完成后显示
+                originalImgs.css('visibility','hidden');
+                // 新建img加载src开始
+                var img = new Image();
+                img.src = src;
+                img.onload = function(e){
+//                  e.stopPropagation();
+                    originalImgs.attr('src', src);
+                    originalImgsObj[src] = true;
+                    originalImgs.css('visibility','visible');
+                    wh(index);
+                };
+            }else{
+//            	加载过该图片,直接添加
+                originalImgs.attr('src', src);
+            }
+//				当前第几个图片
+            $('#nowImgIndex').html(index+1);
+//              英文图题
+            $('#imgTitle .titleEn').html(nowImg.titleEn);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            $('#originalImgDownload').attr('onclick',nowImg.downloadImg);
+            $('#originalPPTDownload').attr('onclick',nowImg.downloadPPT);
+
+//          给当前选中的mini图添加类名(border)
+            miniImgsLi.eq(index).addClass('borderHigh').siblings('.borderHigh').removeClass('borderHigh');
+//            是否第一次切换,默认打开自动切换一次
+            if(theOpenNum!=0 && clickAble){
+//            	非首次切换,且限制切换速度,有动画
+                clickAble = false;
+                miniImgsUl.animate({top: val}, 150);
+                setTimeout(function(){
+                	clickAble = true;
+                },150);
+            }else{
+//            	第一次切换,没动画效果
+                miniImgsUl.css('top',val);
+//                resetMiniImgs();
+                theOpenNum++;
+            }
+        }
+
+
+//        点击mini图切换大图
+        $(document).on('click', '#miniImgs a', function (e) {
+            e.preventDefault();
+            if(index === $(this).parent().index()){
+                return;
+            }
+            index = $(this).parent().index();
+            wh(index);
+            change();
+        });
+
+//        上下页
+        $('#imgPrev').click(imgPrev);
+        $('#imgNext').click(imgNext);
+
+        function imgPrev() {
+            index--;
+//            index = index == -1 ? miniImgsLength -1 : index;
+            if (index === -1){
+                index = 0;
+                return;
+            }
+            wh(index);
+            change();
+        };
+        function imgNext() {
+            index++;
+//            index = index == miniImgsLength ? 0 : index;
+            if(index === miniImgsLength){
+                index = miniImgsLength-1;
+                return;
+            }
+            wh(index);
+            change();
+        };
+
+//        整个方法可传参可不传,当在htmlContent中点击图片时会传入图片index
+        if (typeof imgIndex === 'number') {
+            index = imgIndex;
+        }else{
+            index = 0;
+        }
+
+        // 鼠标在大图上进行上一页下一页
+        $('#originalImgs-wrapper div.originalImgs-wrapper').mousemove(function(event){
+            var _this = $(this);
+            var y = event.pageY;
+
+            var height = $(this).height();
+            var marginTop = $(this).offset().top;
+
+            if(y>=marginTop&&y<marginTop+height/2) {
+                _this.removeClass('theNext').addClass('thePrev');
+                return;
+            }
+            if(y>=marginTop+height/2 && y<marginTop+height){
+                _this.addClass('theNext').removeClass('thePrev');
+                return;
+            }
+
+            _this.removeClass('theNext').removeClass('thePrev');
+        }).on('click',function(){
+            if($(this).hasClass('theNext')){
+                imgNext();
+                return;
+            }
+            if($(this).hasClass('thePrev')){
+                imgPrev();
+                return;
+            }
+
+        });
+
+
+//        默认自动执行一次切换方法
+        change();
+    }
+
+    
+
+    
+//    $(window).resize(resetMiniImgs);
+//
+//    function resetMiniImgs(){
+//        var top = ($(window).height() - miniImgHeight)/2;
+//        // 设置小图wrapper的纵向位置
+//        wrapper.css('top',top+'px');
+//    }
+
+
+
+//  页面"图集"点击展开图示
+	$(document).on('click','.atlas img',function(){
+		$('#imgShow').show();
+		addHtmlPadding();
+		openImg();
+	});
+//	htmlContent中点击图片展开图示
+	$(document).on('click','#FullText ._figclass .figure_title>a',function(e){
+		e.preventDefault();
+		var index = $(this).parents('._figclass').index('#FullText ._figclass');
+//		alert(index);
+		$('#imgShow').show();
+		addHtmlPadding();
+		openImg(index);
+	});
+//	图表中点击图片展开图示
+	$(document).on('click','#figTab ._figclass .figureTextBox a',function(e){
+		e.preventDefault();
+		var index = $(this).parents('._figclass').index('#figTab ._figclass');
+//		alert(index);
+		$('#imgShow').show();
+		addHtmlPadding();
+		openImg(index);
+	});
+	
+//	关闭图示功能
+	$(document).on('click','#imgBack>a',function(e){
+		e.preventDefault();
+		clearHtmlPadding();
+		$('#imgShow').hide();
+	});
+
+	
+//  返回mini图ul位移数
+    function Animate(obj, json) {
+        var iCur = parseInt(obj.css('top'));
+        iCur = iCur ? iCur : 0;
+        var iSpeed = (json.top - iCur);
+        iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+        return (iCur + iSpeed + 'px');
+    }
+	
+	
+//    获取图片原始大小,暂未使用
+    function getImgSize(img){
+        var nWidth, nHeight;
+        if(img.naturalWidth){
+            nWidth = img.naturalWidth;
+            nHeight = img.naturalHeight;
+        }else{//IE 6 7 8
+            var image = new Image();
+            image.src = img.src;
+            image.onload = function(){
+                nHeight = image.style.height;
+                nWidth = image.style.width;
+            }
+        }
+        return {width:nWidth,height:nHeight};
+    }
+	//获取htmlContent中所有图示需要的图片信息，包成对象，返回
+	function imgBox(){
+		var imgs = $('#miniImgs>ul>li');
+		var titles = $('#miniImgs_title>li');
+		MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+		var imgArr = [];
+		
+		for (var n=0;n<imgs.length;n++){
+			var img = imgs.eq(n);
+			var title = titles.eq(n);
+			var imgSrc = img.find('a').attr('href');
+			var imgDownloadImg = img.attr('data-img');
+			var imgDownloadPPT = img.attr('data-ppt');
+			var imgTitleEn = title.text();
+			var miniSrc = img.find('a>img').attr('src');
+			var imgObj = {
+				src:imgSrc,
+				downloadImg:imgDownloadImg,
+				downloadPPT:imgDownloadPPT,
+				titleEn:imgTitleEn,
+				miniSrc:miniSrc
+			};
+			imgArr.push(imgObj);
+		}
+		return imgArr;
+	}
+});
+
+
+

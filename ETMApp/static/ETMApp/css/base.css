@@ -1,4 +1,12 @@
+body, html{
+    height: 100%;
+}
+
 #logo{
     height: 50px;
     width: 50px;
+}
+
+#test{
+    /*margin-top: 30%;*/
 }

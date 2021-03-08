@@ -1,0 +1,1139 @@
+var _canScroll = true;
+$(document).ready(function(){//在文档加载完毕后执行
+	$('.search-heard').find('a').each(function(i,e){
+		if(!isNull($(e).attr("ref-type"))){
+			$(e).attr("onclick","return false;").attr("style","color:#666;");
+		}
+	})
+	var searchType = $("#searchType").val();
+	var languageUrl = local_host + "en/";
+	if(searchType == 1){
+		var fullTextUrl = languageUrl + "to_search_fulltext"
+		$("#searchform").attr("action",fullTextUrl);
+	}else if(searchType == 2){
+		var figureUrl = languageUrl + "to_search_figure"
+		$("#searchform").attr("action",figureUrl);
+	}else if(searchType == 3){
+		var tableUrl = languageUrl + "to_search_table"
+		$("#searchform").attr("action",tableUrl);
+	}else if(searchType == 4){
+		var newsUrl = languageUrl + "to_search_news"
+		$("#searchform").attr("action",newsUrl);
+	}
+	//搜索所有，摘要时显示摘要
+	var selectvalue = $("#searchform select[name='searchField']").val();
+	if(searchType == '0' && (selectvalue=="" || selectvalue=="abstractinfoEn")){
+		$(".search-abstract").attr("style","display:block;");
+	}
+    if(isNull(searchType)|| searchType == '0'){
+    	$(".form-control-1").show();
+   	 	if($(window).width()>767){
+   	 		$(".search-wrap .inputText.paddingLeftNone").css({"width":"365px","margin":"0 30px 0 0"});
+        }else{
+            $(".search-wrap .inputText.paddingLeftNone").css({"width":"71%","margin":"0 0 0 2%"});
+        }
+    }else{
+    	$(".form-control-1").hide();
+    	if($(window).width()>767){
+            $(".search-wrap .inputText.paddingLeftNone").css({"width":"482px"});
+        }else{
+            $(".search-wrap .inputText.paddingLeftNone").css({"width":"100%"}); 
+        }
+    }
+    $(".search-single-wrap label").each(function () {
+        $(this).click(function () {
+        	var clickType = $('input[name="searchType1"]:checked').val();
+        	if(!isNull(clickType)){
+    			if(clickType == 0){
+    				var articleUrl = languageUrl + "search"
+    				$("#searchform").attr("action",articleUrl);
+    			}else if(clickType == 1){
+    				var fullTextUrl = languageUrl + "to_search_fulltext"
+    				$("#searchform").attr("action",fullTextUrl);
+    			}else if(clickType == 2){
+    				var figureUrl = languageUrl + "to_search_figure"
+    				$("#searchform").attr("action",figureUrl);
+    			}else if(clickType == 3){
+    				var tableUrl = languageUrl + "to_search_table"
+    				$("#searchform").attr("action",tableUrl);
+    			}else if(clickType == 4){
+    				var newsUrl = languageUrl + "to_search_news"
+    				$("#searchform").attr("action",newsUrl);
+    			}
+    			$('#year').val("");
+    			$('#categoryNameEn').val("");
+    			$('input[name="year"]').val("");
+    			$('input[name="authorNameEn"]').val("");
+    			$('input[name="keywordEn"]').val("");
+    			$('input[name="categoryNameEn"]').val("");
+    			$('input[name="columnName"]').val("");
+    		}
+        	if($(this).index()>0){
+                $(".form-control-1").hide();
+                if($(window).width()>767){
+                    $(".search-wrap .inputText.paddingLeftNone").css({"width":"482px"});
+                }else{
+                	$(".inputText").css({"width":"100%","margin":"0"}); 
+                    $(".search-wrap .inputText.paddingLeftNone").css({"width":"100%"}); 
+                }
+            }else{
+                $(".form-control-1").show();
+                if($(window).width()>767){
+                	$(".search-wrap .inputText.paddingLeftNone").css({"width":"365px"});
+                }else{
+                	$(".inputText.paddingLeftNone").css({"width":"71%","margin":"0 0 0 2%"}); 
+                }
+            }
+        });
+    });
+	
+	var $container = $('#masonry');
+	if($container.length > 0){
+		$container.imagesLoaded( function(){
+	        $container.masonry({
+	            itemSelector : '.box',
+	            gutterWidth : 20,
+	            isAnimated: true
+	        });
+	    });
+		
+		var pageNum = $("#pageNum").val();
+		$("#masonry").infinitescroll({
+			navSelector : "#page-nav",
+			nextSelector : "#page-nav a",
+			itemSelector : ".box",
+			maxPage : pageNum,
+			loading : {
+				img : local_host +"style/web/images/public/1.gif",
+				finishedMsg : '',
+				msgText : "<em>Loading...</em>"
+			},
+			errorCallback : function() {
+				$("#page").show();
+			},
+		}, function(newElements) {
+				var $newElems = $( newElements ).css({ opacity: 0 });
+				// 在添加到masonry布局之前保证图片载入
+		    	$newElems.imagesLoaded(function(){
+		    	var accessNum = $("#accessNum").val();
+		    	$("#accessNum").val(Number(accessNum) + 1);
+		    	var nexthref = $("#nexthref").attr("href");
+		    	var subStr=new RegExp('page=.*?&');
+		    	var realUrl= "page="+(Number(accessNum) + 1)+"&";
+		    	nexthref = nexthref.replace(subStr,realUrl);
+		        $("#nexthref").attr("href",nexthref);
+		        //$(".fig-tit").subTextMax({trim:false,keep_len:50,add_title:true});
+				// 现在可以显示所有的元素了
+		        $newElems.animate({ opacity: 1 });
+		        $container.masonry( 'appended', $newElems, true );
+		        loadFigureArticleReleaseInfoByIds();
+	        });
+		});
+	}
+	//$(".fig-tit").subTextMax({trim:false,keep_len:50,add_title:true});
+//	$(".bottom-tit").subTextMax({trim:false,keep_len:50,add_title:true});
+//	$(".right-tit").subTextMax({trim:false,keep_len:100,add_title:true});
+//	$(".table-right-tit").subTextMax({trim:false,keep_len:70,add_title:true});
+	loadFigureArticleReleaseInfoByIds();
+	
+	
+//	var url= window.location.href;
+//	if(url.indexOf("fulltextSearch") > 0){
+//		$('.nav-tabs li.fulltextSearch').addClass("active").siblings().removeClass("active");
+//		$('.tab-content div#fulltextSearch').addClass("active").siblings().removeClass("active");
+//	}else if(url.indexOf("tableSearch")> 0){
+//		$('.nav-tabs li.tableSearch').addClass("active").siblings().removeClass("active");
+//		$('.tab-content div#tableSearch').addClass("active").siblings().removeClass("active");
+//	}else if(url.indexOf("newsSearch")> 0){
+//		$('.nav-tabs li.newsSearch').addClass("active").siblings().removeClass("active");
+//		$('.tab-content div#newsSearch').addClass("active").siblings().removeClass("active");
+//	}
+//	
+//	$(window).unbind('scroll').bind("scroll",function(){//开始监听滚动条
+//		if(!_canScroll) return;
+//		if($('#figScrollIndex').length > 0){
+//			var figIndex = $('#figScrollIndex')[0].offsetTop;
+//			var top = $(document).scrollTop();
+//	        //判断如果滚动条大于90则弹出 "ok" figIndex.offset().top
+//			if(top > figIndex - 900){
+//				var currentPage = $("#figurepage").val();
+//				var oldPage = $('#oldPage').val();
+//				if(currentPage = oldPage){
+//					_canScroll = false;
+//					$('#oldPage').val(Number(oldPage) + 1)
+//					submitFigureAdvanceSearch(1);
+//				}
+//			}
+//		}
+//	})
+
+})
+
+function sortFieldSubmit(val){
+	$("input[name='sortField']").val(val);
+	if($("#isAdvSearch").val() != 'y'){
+		$('.pageviewform').submit();
+	}else{
+		submitAdvanceSearch();
+	}
+}
+function pageFilterSubmit(val){
+	$("input[name='showNum']").val(val);
+	if($("#isAdvSearch").val() != 'y'){
+		$('.pageviewform').submit();
+	}else{
+		submitAdvanceSearch();
+	}
+}
+function pageFilterChange(obj){
+	$("input[name='showNum']").val($(obj).val());
+	if($("#isAdvSearch").val() != 'y'){
+		$('.pageviewform').submit();
+	}else{
+		submitAdvanceSearch();
+	}
+}
+
+/**
+ * 加载聚类统计信息
+ * @return
+ */
+function loadFacet(){
+	$("body").on("click",".yearfacetVal", function () {
+		var _year = $(this).text();
+		$("#filterCondContentYear").val(_year);
+		$(".pageviewform input[name='year']").val(_year);
+		$('.pageviewform').submit();	
+	});
+
+	$("body").on("click",".authorfacetVal", function () {
+		var _author = $(this).text();
+		$("#filterCondContentAuthor").val(_author);
+		$(".pageviewform input[name='authorNameEn']").val(_author);
+		$('.pageviewform').submit();	
+	});
+	$("body").on("click",".keywordfacetVal", function () {
+		var _keyword = $(this).text();
+		$("#filterCondContentKeyWord").val(_keyword);
+		$(".pageviewform input[name='keywordEn']").val(_keyword);
+		$('.pageviewform').submit();	
+	});
+	/** 异步填充聚类信息 **/
+	var _yearVal = $(".pageviewform input[name='year']").val();
+	var _authorVal = $(".pageviewform input[name='authorNameEn']").val();
+	var _keywordVal = $(".pageviewform input[name='keywordNameEn']").val();
+	var _searchWord = $(".pageviewform input[name='q']").val();
+	var _searchField = $(".pageviewform select[name='searchField']").val();
+	var facetUrl = local_host + "en/search/advancefacet";
+	$.ajax({
+		type:'post',
+		url:facetUrl,
+		data:{'searchWord':_searchWord,'searchField':_searchField,'year':_yearVal,pageType:'en',
+			 'authorNameEn':_authorVal,'keywordEn':_keywordVal},
+		success:function(_resultdata){
+			var _respObj = eval('('+_resultdata+')');
+			var _yearObj = _respObj['yearFacet'];
+			$('#yearfacet').empty();
+			if(_yearObj && _yearObj.length>0){
+				var _yearfacetli = "";
+				for(var i=0;i<_yearObj.length;i++){
+					var _year = _yearObj[i]['facetName'];
+					var _count = _yearObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" class="yearfacetVal journal_search_a" input_rel="year" input_val="'+_year+'">'+_year+'</a></span><span class="span2">'+_count+'</span></p>';
+					_yearfacetli += _lihtml; 
+				}
+	         	$('#yearfacet').append(_yearfacetli);
+	         	$('#yearfacet').parent(".soutongji").show();
+			}else{
+				$('#yearfacet').parent(".soutongji").hide();
+			}
+			var _authorObj = _respObj['authorEnFacet'];
+			$('#authorfacet').empty();
+			if(_authorObj && _authorObj.length>0){
+				var _length = 10;
+				if(_authorObj.length <10) _length = _authorObj.length;
+				var _authorfacetli = "";
+				for(var i=0;i<_length;i++){
+					var _author = _authorObj[i]['facetName'];
+					var _count = _authorObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" class="authorfacetVal journal_search_a" input_rel="authorNameEn" input_val="'+_author+'">'+_author+'</a></span><span class="span2">'+_count+'</span></p>';
+		             _authorfacetli += _lihtml; 
+				}
+	         	$('#authorfacet').append(_authorfacetli);
+	         	$('#authorfacet').parent(".soutongji").show();
+			}else{
+				$('#authorfacet').parent(".soutongji").hide();
+			}
+			var _keywordObj = _respObj['keywordEnFacet'];
+			$('#keywordfacet').empty();
+			if(_keywordObj && _keywordObj.length>0){
+				var _length = 10;
+				if(_keywordObj.length <10) _length = _keywordObj.length;
+				var _keywordfacetli = "";
+				for(var i=0;i<_length;i++){
+					var _keyword = _keywordObj[i]['facetName'];
+					var _count = _keywordObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" class="keywordfacetVal journal_search_a" input_rel="keywordEn" input_val="'+_keyword+'">'+_keyword+'</a></span><span class="span2">'+_count+'</span></p>';
+		            _keywordfacetli += _lihtml; 
+				}
+	         	$('#keywordfacet').append(_keywordfacetli);
+	         	$('#keywordfacet').parent(".soutongji").show();
+			}else{
+				$('#keywordfacet').parent(".soutongji").hide();
+			}
+		}
+	})
+}
+
+function facetYear(_this){
+	var _year = $(_this).text();
+	$(".pageviewform input[name='year']").val(_year);
+	$("#filterCondDiv").show();
+	$(".filterCondContentYear").show();
+	$("#filterCondContentYear").empty().append("Year =  "+_year);		
+	submitAdvanceSearch();
+}
+
+function facetAuthor(_this){
+	var _author = $(_this).text();
+	$(".pageviewform input[name='authorNameEn']").val(_author);
+	$("#filterCondDiv").show();
+	$(".filterCondContentAuthor").show();
+	$("#filterCondContentAuthor").empty().append("Author Name  =  "+_author);		
+	submitAdvanceSearch();
+}
+
+function facetKeyWord(_this){
+	var _keyword = $(_this).text();
+	$(".pageviewform input[name='keywordEn']").val(_keyword);
+	$("#filterCondDiv").show();
+	$(".filterCondContentKeyWord").show();
+	$("#filterCondContentKeyWord").empty().append("Keyword  =  "+_keyword);		
+	submitAdvanceSearch();
+}
+
+/**
+ * 加载聚类统计信息
+ * @return
+ */
+function loadAdvanceFacet(){
+
+	/** 异步填充聚类信息 **/
+	var _yearVal = $(".pageviewform input[name='year']").val();
+	var _authorVal = $(".pageviewform input[name='authorNameEn']").val();
+	var _keywordVal = $(".pageviewform input[name='keywordEn']").val();
+	
+	var _searchCondition = $(".pageviewform input[name='searchCondition']").val();
+	//var _categoryNameVal = $('#pageviewform .categoryName').val();
+	var facetUrl = local_host + "en/search/advancefacet";
+
+	$.ajax({
+		type:'post',
+		url:facetUrl,
+		data:{'searchCondition':_searchCondition,'year':_yearVal,
+			'authorNameEn':_authorVal,'keywordEn':_keywordVal},
+		success:function(_resultdata){
+			var _respObj = eval('('+_resultdata+')');
+			var _yearObj = _respObj['yearFacet'];
+			$('#yearfacet').empty();
+			if(_yearObj && _yearObj.length>0){
+				var _yearfacetli = "";
+				for(var i=0;i<_yearObj.length;i++){
+					var _year = _yearObj[i]['facetName'];
+					var _count = _yearObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" onclick="facetYear(this)" class=" journal_search_a" input_rel="year" input_val="'+_year+'">'+_year+'</a></span><span class="span2">'+_count+'</span></p>';
+					_yearfacetli += _lihtml; 
+				}
+	         	$('#yearfacet').append(_yearfacetli);
+	         	$('#yearfacet').parent(".soutongji").show();
+			}else{
+				$('#yearfacet').parent(".soutongji").hide();
+			}
+			var _authorObj = _respObj['authorEnFacet'];
+			$('#authorfacet').empty();
+			if(_authorObj && _authorObj.length>0){
+				var _length = 10;
+				if(_authorObj.length <10) _length = _authorObj.length;
+				var _authorfacetli = "";
+				for(var i=0;i<_length;i++){
+					var _author = _authorObj[i]['facetName'];
+					var _count = _authorObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" onclick="facetAuthor(this)" class=" journal_search_a" input_rel="authorNameCn" input_val="'+_author+'">'+_author+'</a></span><span class="span2">'+_count+'</span></p>';
+		             _authorfacetli += _lihtml; 
+				}
+	         	$('#authorfacet').append(_authorfacetli);
+	         	$('#authorfacet').parent(".soutongji").show();
+			}else{
+				$('#authorfacet').parent(".soutongji").hide();
+			}
+			var _keywordObj = _respObj['keywordEnFacet'];
+			$('#keywordfacet').empty();
+			if(_keywordObj && _keywordObj.length>0){
+				var _length = 10;
+				if(_keywordObj.length <10) _length = _keywordObj.length;
+				var _keywordfacetli = "";
+				for(var i=0;i<_length;i++){
+					var _keyword = _keywordObj[i]['facetName'];
+					var _count = _keywordObj[i]['facetCount'];
+					var _lihtml = '<p class="clear"><span class="span1"><a href="javascript:void(0)" onclick="facetKeyWord(this)" class=" journal_search_a" input_rel="keywordCn" input_val="'+_keyword+'">'+_keyword+'</a></span><span class="span2">'+_count+'</span></p>';
+		            _keywordfacetli += _lihtml; 
+				}
+	         	$('#keywordfacet').append(_keywordfacetli);
+	         	$('#keywordfacet').parent(".soutongji").show();
+			}else{
+				$('#keywordfacet').parent(".soutongji").hide();
+			}
+			/*var _categoryNameObj = _respObj['categoryNameFacet'];
+			$('#categoryNamefacet').empty();
+			if(_categoryNameObj && _categoryNameObj.length>0){
+				var _length = 10;
+				if(_categoryNameObj.length <10) _length = _categoryNameObj.length;
+				var _categoryNamefacetli = "";
+				for(var i=0;i<_length;i++){
+					var _categoryName = _categoryNameObj[i]['facetName'];
+					var _count = _categoryNameObj[i]['facetCount'];
+					if(typeof(_categoryName) != "undefined" && _categoryName.trim() != ''){
+						var _lihtml = '<p><span><a href="javascript:void(0)" class="categoryNamefacetVal journal_search_a" input_rel="categoryName" input_val="'+_categoryName+'">'+_categoryName+'</a></span>'+_count+'</p>';
+						_categoryNamefacetli += _lihtml; 
+					}
+				}
+	         	$('#categoryNamefacet').append(_categoryNamefacetli);
+	         	$('#categoryNamefacet').parent(".soutongji").show();
+			}*/
+			loadArticleReleaseInfoByIds();
+			//搜索摘要，显示出来
+			if($("#searchCondition").val().search("abstractinfo") != -1){
+				$(".search-abstract").attr("style","display:block;");
+			}
+		}
+	})
+}
+
+/**
+ * 高级检索表单提交前校验查询条件，并拼接为搜索引擎json参数格式
+ * @return
+ */
+function subAdvanceResult(){
+	//高级检索条件是否都为空
+	var searchFlag = false;
+	$(".searchFieldVal").each(function(i,e){
+		if(!isNull($(e).val())){
+			searchFlag = true;
+		}
+	})
+	if(searchFlag == false){
+		alert("Please enter the search word");
+		return false;
+	}
+	/*检索条件验证*/
+	$(".adv-form-group").each(function(i,e){
+		var searchFieldVal = $(e).find('.searchFieldVal').val();
+		if(!isNull(searchFieldVal)){
+			var yearfield = $(e).find('.searchField').val();
+			if(yearfield == 'year'){
+				var ret = /^[1-2]{1}[0-9]{3}$/;
+				if(!ret.test(searchFieldVal)){
+					alert("Incorrectly formatting of year");
+					return false;
+				}
+			}
+		}
+	})
+	var _searchUiIndex=[],_searchRelations=[],_searchFields = [],_searchFieldVals = [],_searchTypes = [];
+	$(".adv-form-group").each(function(i,e){
+		var searchFieldVal = $(e).find('.searchFieldVal').val();
+		if(!isNull(searchFieldVal)){
+			_searchUiIndex.push(i);
+			var searchRelation = $(e).find('.searchRelation').val();
+			if(isNull(searchRelation)){
+				searchRelation = "OR";
+			}
+			_searchRelations.push(searchRelation);
+			_searchFields.push($(e).find('.searchField').val());
+			_searchFieldVals.push(replaceHtml(searchFieldVal));
+			_searchTypes.push($(e).find('.searchType').val());
+		}
+	})
+	var _searchObjArr = [];
+	for(var i=0;i<_searchFieldVals.length;i++){
+		var _searchObj = "{\"field\":\""+_searchFields[i]+"\",\"value\":\""+ _searchFieldVals[i]  +"\",\"type\":\""+_searchTypes[i]+"\",\"relation\":\""+_searchRelations[i]+"\"}";
+		if(null != _searchFieldVals[i] && _searchFieldVals[i] != ""){
+			_searchObjArr.push(_searchObj);
+		}
+	}
+	$('.searchCondition').val(_searchObjArr.join(','));
+	return true;
+}
+
+function replaceHtml(_html){
+	
+	var domHtml = $("<div></div>").html(_html);
+	var _regSYH = new RegExp("\"","g");//g,表示全部替换。 
+	var _regSYH_ZY = new RegExp("%22","g");
+	var outHtml = domHtml.html().replace(_regSYH,"&quot;").replace(_regSYH_ZY,"&quot;");
+	
+	console.log(outHtml);
+	return outHtml;
+}
+
+function submitAdvanceSearch(){
+	if(!subAdvanceResult()){
+		return;
+	};
+	
+	$.post(
+		"advancesearch",
+		{
+			page:$("#page").val(),
+			pageType:'en',
+			searchCondition:$("#searchCondition").val(),
+			searchType:$("#searchType").val(),
+			year:$("input[name='year']").val(),
+			authorNameEn:$("input[name='authorNameEn']").val(),
+			keywordEn:$("input[name='keywordEn']").val(),
+			showNum:$("input[name='showNum']").val(),
+			sortField:$("input[name='sortField']").val()
+		},function (data){
+			$("#advance_search_detail").empty();
+			$("#advance_search_detail").append(data);
+			//搜索摘要，显示出来
+			if($("#searchCondition").val().search("abstractinfo") != -1){
+				$(".search-abstract").attr("style","display:block;");
+			}
+			//渲染数学公式
+    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+			loadAdvanceFacet();
+		}
+	);
+}
+
+function submitFulltextAdvanceSearch(){
+	if($("#fulltextwords").val() == ''){
+		alert("Please input search content");
+		return;
+	}
+	var _searchObj = "{\"field\":\"title\",\"value\":\""+ $("#fulltextwords").val()  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"}";
+	$.post(
+		"advancesearch",
+		{
+			page:$("#fulltextpage").val(),
+			searchCondition:_searchObj,
+			pageType:'en',
+			searchType:$("#fulltextsearchType").val(),
+			
+		},function (data){
+			$("#advance_search_detail").empty();
+			$("#advance_search_detail").append(data);
+			//渲染数学公式
+    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+		}
+	);
+}
+
+function submitFigureAdvanceSearch(page){
+	var _searchObj = "";
+	if(!isNull($("#figurewords").val())){
+		_searchObj = "{\"field\":\"title\",\"value\":\""+ $("#figurewords").val()  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"}";
+		$("#searchCondition").val(_searchObj);
+	}
+	if(page == 0){
+		$('#advanceFigure').submit();
+	}else{
+		if($("#figurewords").val() == ''){
+			alert("Please input search content");
+			return;
+		}
+		var currentPage = $("#figurepage").val();
+		$.post(
+			"advancesearch",
+			{
+				page:Number(currentPage) + 1,
+				searchCondition:_searchObj,
+				pageType:'en',
+				searchType:$("#figuresearchType").val(),
+				
+			},function (data){
+				$("#figurepage").val(Number(currentPage) + 1);
+				if(page == 0){
+					$("#advance_search_detail").empty();
+				}
+				if($("#gallery-wrapper").length > 0){
+					var str = data.substring(data.indexOf("<section id=\"gallery-wrapper\">")+30,data.indexOf("</section>"));
+					$("#gallery-wrapper").append(str);
+				}else{
+					$("#advance_search_detail").append(data);
+				}
+				//图片瀑布流渲染
+				$("#gallery-wrapper").pinterest_grid({
+					no_columns: 4,
+	                padding_x: 10,
+	                padding_y: 10,
+	                margin_bottom: 50,
+	                single_column_breakpoint: 900
+				});
+				//渲染数学公式
+	    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	    	    $(".group3").colorbox({rel:'group4',width:'90%',height:"75%",opacity:'0.8',inline:true,
+			    	onComplete:function(){
+			    		removeTableBorder();
+			    		$("#cboxTitle").niceScroll({  
+			    	        cursorcolor:"transparent",  
+			    	        cursoropacitymax:1,  
+			    	        touchbehavior:false,  
+			    	        cursorwidth:"5px",  
+			    	        cursorborder:"0",  
+			    	        cursorborderradius:"5px"  
+			    	    });
+			    		//渲染数学公式
+			    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+					}
+			    });
+	    	    setTimeout(function(){
+	    			_canScroll = true;
+	    		},1500)
+			}
+		);
+	}
+}
+
+function closeFilterConds(type){
+	var year = $("input[name='year']").val();
+	if(isNull(year)){
+		$(".filterCondContentYear").hide();
+	}
+	var author = $("input[name='authorNameEn']").val();
+	if(isNull(author)){
+		$(".filterCondContentAuthor").hide();
+	}
+	var keyword = $("input[name='keywordEn']").val();
+	if(isNull(keyword)){
+		$(".filterCondContentKeyWord").hide();
+	}
+	if(type == 0){
+		$(".filterCondContentYear").hide();
+		$("input[name='year']").val("");
+		if(isNull(author) && isNull(keyword)){
+			$("#filterCondDiv").hide();
+		}
+	}else if(type == 1){
+		$(".filterCondContentAuthor").hide();
+		$("input[name='authorNameEn']").val("");
+		if(isNull(year) && isNull(keyword)){
+			$("#filterCondDiv").hide();
+		}
+	}else if(type == 2){
+		$(".filterCondContentKeyWord").hide();
+		$("input[name='keywordEn']").val("");
+		if(isNull(year) && isNull(author)){
+			$("#filterCondDiv").hide();
+		}
+	}
+	
+	submitAdvanceSearch();
+}
+
+function closeQuickFilterConds(type){
+	if(type == 0){
+		$(".filterCondContentYear").hide();
+		$(".pageviewform input[name='year']").val("");
+		$('.pageviewform').submit();
+	}else if(type == 1){
+		$(".filterCondContentAuthor").hide();
+		$(".pageviewform input[name='authorNameEn']").val("");
+		$('.pageviewform').submit();
+	}else if(type == 2){
+		$(".filterCondContentKeyWord").hide();
+		$(".pageviewform input[name='keywordEn']").val("");
+		$('.pageviewform').submit();
+	}
+}
+
+function submitTableAdvanceSearch(){
+	if($("#tablewords").val() == ''){
+		alert("Please input search content");
+		return;
+	}
+	var _searchObj = "{\"field\":\"title\",\"value\":\""+ $("#tablewords").val()  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"}";
+	$.post(
+		"advancesearch",
+		{
+			page:$("#tablepage").val(),
+			searchCondition:_searchObj,
+			pageType:'en',
+			searchType:$("#tablesearchType").val(),
+			
+		},function (data){
+			$("#advance_search_detail").empty();
+			$("#advance_search_detail").append(data);
+			//渲染数学公式
+    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+			$(".group4").colorbox({rel:'group4',width:'90%',height:"75%",opacity:'0.8',inline:true,
+		    	onComplete:function(){
+		    		removeTableBorder();
+		    		$("#cboxTitle").niceScroll({  
+		    	        cursorcolor:"transparent",  
+		    	        cursoropacitymax:1,  
+		    	        touchbehavior:false,  
+		    	        cursorwidth:"5px",  
+		    	        cursorborder:"0",  
+		    	        cursorborderradius:"5px"  
+		    	    });
+		    		//渲染数学公式
+		    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+				}
+		    });
+		}
+	);
+}
+
+function submitNewsAdvanceSearch(){
+	var newswords = $("#newswords").val();
+	if(newswords == ''){
+		alert("Please input search content");
+		return;
+	}
+	var _searchObj = "{\"field\":\"title\",\"value\":\""+ newswords  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"},"+
+	"{\"field\":\"content\",\"value\":\""+ newswords  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"},"+
+	"{\"field\":\"author\",\"value\":\""+ newswords  +"\",\"type\":\"LIKE\",\"relation\":\"OR\"},"+
+	"{\"field\":\"newsColumn.language\",\"value\":\""+ $("#language").val() +"\",\"type\":\"EQUAL\",\"relation\":\"AND\"}";
+	//"{\"field\":\"releaseState\",\"value\":\"1\",\"type\":\"EQUAL\",\"relation\":\"AND\"}";
+	$.post(
+		"advancesearch",
+		{
+			page:$("#newspage").val(),
+			searchCondition:_searchObj,
+			pageType:'en',
+			searchType:$("#newssearchType").val(),
+		},function (data){
+			$("#advance_search_detail").empty();
+			$("#advance_search_detail").append(data);
+			//渲染数学公式
+    	    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+		}
+	);
+}
+
+function resetQuickSearch(){
+	$("input[name='q']").val("");
+	$("input[name='year']").val("");
+	$("input[name='authorNameEn']").val("");
+	$("input[name='keywordEn']").val("");
+}
+$(document).ready(function(){
+	$("select[name='searchField']").on('change',function(e){
+		$("input[name='searchType']").val("");
+		$("input[name='year']").val("");
+		$("input[name='authorNameEn']").val("");
+		$("input[name='keywordEn']").val("");
+	})
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$("#advance_search_detail").empty();
+		$("input[name='page']").val("");
+	})
+});
+
+function checkAdvanceSearch(form){
+	var searchText = $(form).find("input[name='q']").val();
+	if(isNull($("#language").val()) || $("#language").val()=="en"){
+		if(typeof(searchText) == "undefined" || searchText == "" || searchText == "Please enter the search word" || searchText.replace(" ","") == ""){
+			alert("Please enter the search content");
+			return false;
+		}
+	}
+	return true;
+}
+
+//------------------------------全文右侧聚类处理----------------------------
+//全文右侧聚类点击年方法
+function facetFulltextYear(_this){
+	var _year = $(_this).text();
+	$(".pageviewform input[name='year']").val(_year);
+	$("#searchform").attr("action",local_host + "en/to_search_fulltext");
+	$(".pageviewform").submit();
+}
+
+//全文右侧聚类点击栏目方法
+function facetFulltextCategoryName(_this){
+	var categoryNameEn = $(_this).text();
+	$(".pageviewform input[name='categoryNameEn']").val(categoryNameEn);
+	$("#searchform").attr("action",local_host + "en/to_search_fulltext");
+	$(".pageviewform").submit();
+}
+//全文 叉掉全文里的右侧条件
+function closeFulltextFilterConds(type){
+	var year = $(".pageviewform input[name='year']").val();
+	if(isNull(year)){
+		$(".filterYear").hide();
+	}
+	var categoryNameEn = $(".pageviewform input[name='categoryNameEn']").val();
+	if(isNull(categoryNameEn)){
+		$(".filterCategoryNameEn").hide();
+	}
+	if(type == 0){
+		$(".filterYear").hide();
+		$(".pageviewform input[name='year']").val("");
+		if(isNull(categoryNameEn)){
+			$("#filterCondDiv").hide();
+		}
+	}else if(type == 1){
+		$(".filterCategoryNameEn").hide();
+		$(".pageviewform input[name='categoryNameEn']").val("");
+		if(isNull(year)){
+			$("#filterCondDiv").hide();
+		}
+	}
+	$("#searchform").attr("action",local_host + "en/to_search_fulltext");
+	$(".pageviewform").submit();
+}
+
+//------------------------------新闻右侧处理----------------------------
+//新闻右侧年聚类
+function facetNewsYear(_this){
+	var year = $(_this).text();
+	$(".pageviewform input[name='year']").val(year);
+	$("#searchform").attr("action",local_host + "en/to_search_news");
+	$(".pageviewform").submit();
+}
+//新闻右侧栏目聚类
+function facetNewsColumn(_this){
+	var columnName = $(_this).text();
+	$(".pageviewform input[name='columnName']").val(columnName);
+	$("#searchform").attr("action",local_host + "en/to_search_news");
+	$(".pageviewform").submit();
+}
+//新闻 叉掉新闻里的右侧条件
+function closeNewsFilterConds(type){
+	var year = $(".pageviewform input[name='year']").val();
+	if(isNull(year)){
+		$(".filterYear").hide();
+	}
+	var columnName = $(".pageviewform input[name='columnName']").val();
+	if(isNull(columnName)){
+		$(".filterColumnName").hide();
+	}
+	if(type == 0){
+		$(".filterYear").hide();
+		$(".pageviewform input[name='year']").val("");
+		if(isNull(columnName)){
+			$("#filterCondDiv").hide();
+		}
+	}else if(type == 1){
+		$(".filterColumnName").hide();
+		$(".pageviewform input[name='columnName']").val("");
+		if(isNull(year)){
+			$("#filterCondDiv").hide();
+		}
+	}
+	$("#searchform").attr("action",local_host + "en/to_search_news");
+	$(".pageviewform").submit();
+}
+
+//从base.js上的js移动过来
+function checkSearchNew(form){
+	var searchText = $(form).find("input[name='q']").val().replace(" ","");
+	if($("#language").val()=="cn"){
+		if(typeof(searchText) == "undefined" || searchText == "" || searchText == "请输入检索词！"){
+			alert("请输入检索词！");
+			return false;
+		}
+	}else if(isNull($("#language").val()) || $("#language").val()=="en"){
+		if(typeof(searchText) == "undefined" || searchText == "" || searchText == "Please enter the search word"){
+			alert("Please enter the search word");
+			return false;
+		}
+	}
+	var searchType = $('input[name="searchType1"]:checked').val();
+	if(isNull(searchType)){
+		searchType = $('#searchType1').val();
+	}
+	if(!isNull(searchType)){
+		if(searchType == 0){
+			var articleUrl = local_host + "en/search"
+			$(".topSearchForm").attr("action",articleUrl);
+		}else if(searchType == 1){
+			var fullTextUrl = local_host + "en/to_search_fulltext"
+			$(".topSearchForm").attr("action",fullTextUrl);
+		}else if(searchType == 2){
+			var figureUrl = local_host + "en/to_search_figure"
+			$(".topSearchForm").attr("action",figureUrl);
+		}else if(searchType == 3){
+			var tableUrl = local_host + "en/to_search_table"
+			$(".topSearchForm").attr("action",tableUrl);
+		}else if(searchType == 4){
+			var newsUrl = local_host + "en/to_search_news"
+			$(".topSearchForm").attr("action",newsUrl);
+		}
+	}
+	return true;
+}
+
+/**
+ * 校验检索词输入状态
+ * @return
+ */
+function checkSearch(form){
+	var searchText = $(form).find("input[name='q']").val().replace(" ","");
+	if($("#language").val()=="cn"){
+		if(typeof(searchText) == "undefined" || searchText == "" || searchText == "请输入检索词！"){
+			alert("请输入检索词！");
+			return false;
+		}
+	}else if(isNull($("#language").val()) || $("#language").val()=="en"){
+		if(typeof(searchText) == "undefined" || searchText == "" || searchText == "Please enter the search word"){
+			alert("Please enter the search word");
+			return false;
+		}
+	}
+	var _searchFieldArr = [],_searchValArr = [],_searchConditionArr = [];
+	var searchTypeNames = $("#search_field").val().split(",");
+	$.each(searchTypeNames,function(i,e){
+		if(!isNull(e)){
+			_searchFieldArr.push(e);
+			_searchValArr.push(searchText);
+			_searchConditionArr.push("OR");	//默认为and查询
+		}
+	})
+	var _searchObjArr = [];
+	for(var i=0;i<_searchFieldArr.length;i++){
+		var _searchObj = "{\"field\":\""+_searchFieldArr[i]+"\",\"value\":\""+ _searchValArr[i] 
+		   +"\",\"type\":\"LIKE\",\"relation\":\""+_searchConditionArr[i]+"\"}";
+		if(null != _searchValArr[i] && _searchValArr[i] != ""){
+			searchFlag = true;
+			_searchObjArr.push(_searchObj);
+		}
+	}
+	$('.searchConditionLike').val(_searchObjArr.join(','));
+	return true;
+}
+
+//高级检索条件是否都为空
+function subQuickResult(clearFlag){
+	var searchWord = $(".pageviewform input[name='q']").val();
+	if($("#language").val()=="cn"){
+		if(isNull(searchWord)){
+			alert("检索词不能为空");
+			return false;
+		}
+	}else if(isNull($("#language").val()) || $("#language").val()=="en"){
+		if(isNull(searchWord)){
+			alert("Please enter the search word");
+			return false;
+		}
+	}
+}
+
+/**
+ * 点击关键词、作者、等查询
+ * @param _searchFieldArr
+ * @param _searchValArr
+ * @param _searchConditionArr
+ * @return
+ */
+function searchLike(_searchFieldArr, _searchValArr, _searchConditionArr){
+	 var tempform = document.createElement("form");  
+	 var pageType = $('#language').val();
+        if(isNull(pageType) || pageType == "en"){
+//        	 var searchPageTypeOpt = document.createElement("input");  
+//             searchPageTypeOpt.name = "pageType";  
+//             searchPageTypeOpt.value = "en";  
+//             tempform.appendChild(searchPageTypeOpt);
+        	tempform.action = local_host+"en/search";  
+        }else{
+        	tempform.action = local_host+"cn/search";  
+        }  
+	    tempform.method = "post";  
+	    tempform.style.display="none";
+	    tempform.id="rhQuickSearchForm";
+	    tempform.target="_blank";
+        var searchFieldOpt = document.createElement("input");  
+	    searchFieldOpt.name = "searchField";  
+	    searchFieldOpt.value = _searchFieldArr;  
+        tempform.appendChild(searchFieldOpt);  
+        var searchWordOpt = document.createElement("input");  
+        searchWordOpt.name = "q";  
+        searchWordOpt.value = _searchValArr;  
+        tempform.appendChild(searchWordOpt);
+//        var pageType = $('#language').val();
+//        if(pageType == "en"){
+//        	 var searchPageTypeOpt = document.createElement("input");  
+//             searchPageTypeOpt.name = "pageType";  
+//             searchPageTypeOpt.value = "en";  
+//             tempform.appendChild(searchPageTypeOpt);
+//        }
+	    var opt = document.createElement("input");  
+	    opt.type = "submit";  
+	    tempform.appendChild(opt);  
+	    document.body.appendChild(tempform);  
+	    tempform.submit();  
+}
+
+//-------------------- 瀑布流图片优先发表状态加载 -------------
+/**
+ * 批量查询图片列表文章发布状态信息
+ * @return
+ */
+function loadFigureArticleReleaseInfoByIds(){
+	var idArray = [] ;
+	$(".article-list-figure").each(function(i,e){
+		var articleId = $(e).attr("name");
+		if(!isNull(articleId)){
+			idArray.push(articleId);
+		}
+	})
+	
+	if(idArray.length > 0){
+		var ids = idArray.toString();
+		var ajaxArg={
+			url: local_host +"article/getArticleReleaseProgress",
+			data: {'articleIds':ids},
+			returnFun:outFigureArticleReleaseInfo
+		};
+		ajaxPost(ajaxArg);
+	}
+}
+
+/**
+ * 输出图片列表中的文章状态信息
+ * @param data
+ * @param indexArray
+ * @return
+ */
+function outFigureArticleReleaseInfo(data){
+	if(typeof(data) != "undefined"){
+		$.each(data,function(i,e){
+			$("div[name='"+e.articleId+"']").find(".current_state").html(e.currentState);
+			$("div[name='"+e.articleId+"']").find(".current_state_en").html(e.currentStateEn);
+//			$("#"+e.articleId).find(".latest_update").html(e.lastReleaseTime);
+			$("div[name='"+e.articleId+"']").find(".latest_update_span").show();
+		})
+	}
+}
+$(function(){
+	$(".left-fig li:even").addClass("active1");
+	$(".left-fig li:odd").addClass("active2");
+})
+
+//高级搜索 导出需要的js(其他搜索，用的是base)
+function checkedAllArticle(){
+	var checkAll = $('input[name="journalArticleCheck"]');
+	var checkedSize = $("input[name='journalArticleCheck']:checked").size();
+	if(checkedSize == 0){
+		checkAll.prop("checked","checked");
+	}else{
+		checkAll.removeProp("checked");
+	}
+	
+}
+
+function checkedArticle(){
+	var $journalArticleCheck = $("input[name='journalArticleCheck']");
+	$(".checkAll").prop("checked",$journalArticleCheck.length == $("input[name='journalArticleCheck']:checked").length ? true : false);
+}
+
+function exportArticleCitation(){
+    var articleIds ="";
+    var exportCheckObj = $("input[name='journalArticleCheck']:checked");
+    var size = exportCheckObj.size();
+    if (size == 0) {
+        if(isNull($("#language").val()) || $("#language").val()=="en"){
+            alert("Please select at least one article!");
+            return false;
+        }else{
+            alert("请至少选择一篇文章！");
+            return false;
+        }
+    }else{
+        $.each(exportCheckObj,function(i,e){
+            var articleId = $(e).attr("checkArticleId");
+            if(size-1== i){
+                articleIds +=articleId
+            }else{
+                articleIds +=articleId+",";
+            }
+        })
+        //alert(articleId);
+        $("#exportArticleId").attr("article_id",articleIds);
+    }
+}
+
+//引用本文
+function showArticleCitation(){
+	var showAlert = "";
+	var pageType = "";
+	if(isNull($("#language").val()) || $("#language").val()=="en"){
+		showAlert = "Please select at least one article!";
+		pageType = "en";
+    }else{
+    	showAlert = "请至少选择一篇文章！";
+    	pageType = "cn";
+    }
+    if ($("input[name='journalArticleCheck']:checked").size() == 0) {
+        if(isNull($("#language").val()) || $("#language").val()=="en"){
+            alert(showAlert);
+            return false;
+        }else{
+            alert(showAlert);
+            return false;
+        }
+    }else{
+        var html = "";
+        var articleIds = "";
+        $.each($("input[name='journalArticleCheck']:checked"),function(i,e){
+//            var contenObj = $(e).parents(".article-list-left").siblings().clone();
+//            html += $(contenObj).find(".citation").show().prop('outerHTML');
+            var articleId = $(e).attr("checkArticleId");
+            var size = $("input[name='journalArticleCheck']:checked").size();
+            if(size-1== i){
+                articleIds +=articleId
+            }else{
+                articleIds +=articleId+",";
+            }
+        })
+        if(!isNull(articleIds)){
+        	$.ajax({
+	    		type:'post',
+	    		url:local_host +"article/getCitationStr",
+	    		data:{'ids':articleIds,
+					'fileType':1,
+					'pageType':pageType},
+	    		success:function(dataMap){
+						var citation = "";
+						if(pageType == "cn"){
+							citation = dataMap.citationCn.split("****");
+						}else{
+							citation = dataMap.citationEn.split("****");
+						}
+						for(var i=0;i<citation.length;i++){
+							html += '<div style="display: block;" class="citation">'+citation[i]+'</div>';
+						}
+						$("#copyReference").html(html);
+						MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	    		}
+			})
+        }
+        
+    }
+}
+
+//显示，隐藏摘要
+function showSearchAbstract(id){
+	var searchAbstract = $("div[id='"+id+"'] .search-abstract");
+	if(searchAbstract.attr("style")=="display:block;"){
+		searchAbstract.attr("style","display:none;");
+	}else{
+		searchAbstract.attr("style","display:block;");
+	}
+}
+
+function addSearchCondGroup(){
+	var newGroup = $(".adv-form-group").last().clone();
+	$(".adv-form-group").last().after(newGroup);
+}
+
+function deleteSearchCondGroup(){
+	var condGroup = $(".adv-form-group");
+	if(condGroup.length > 2){
+		$(".adv-form-group").last().remove();
+	}
+}
+

@@ -1,0 +1,631 @@
+var pageTypeDefault = "en" ;
+$(function () {
+	if($("#articleId").length > 0){
+		var articleId =  $("#articleId").val();
+		//citation显示
+		showCitation();
+	    //currentAllTextHtml();
+	    //关系图
+	    //getRelationship();
+	    //cited by 被引信息
+	    loadCitedByInfo();
+	    
+	    var viewType = getUrlParam("viewType");
+		if(viewType && "HTML" == viewType){
+			getVisitInfo(articleId,1);
+		}else{
+			//摘要访问记录
+		    getVisitInfo(articleId,0);
+		}
+	}
+})
+
+function showCitation(){
+	var articleId =  $("#articleId").val();
+	if($("#language").val()=="en"){
+		pageType = "en";
+    }else{
+    	pageType = "cn";
+    }
+	if(!isNull(articleId)){
+    	$.ajax({
+    		type:'post',
+    		url:local_host +"article/getCitationStr",
+    		data:{'ids':articleId,
+				'fileType':2,
+				'pageType':pageType},
+				success:function(dataMap){
+					if(!isNull(dataMap.citationEn)){
+						$(".copyCitationInfo").html(dataMap.citationEn);
+						$(".citationEn").html(dataMap.citationEnHtml);
+					}
+    		}
+		})
+    }
+}
+/**
+ * 关系图
+ * @param type
+ * @param q
+ * @return
+ */
+function getRelationship(){
+        var url = local_host + "article/getRelationship";
+        var myChart = "";
+    	$.ajax({
+    		type:'post',
+    		url:url,
+    		data:{'id':$("#articleId").val()},
+    		async: false,
+    		dataType:'json',
+    		success:function(dataMap){
+    			var webkitDep = null;
+				for(var key in dataMap){
+					if(key == "keyword"){
+			        	myChart = echarts.init(document.getElementById('keywordEcharts'));
+			        }else if(key == "author"){
+			        	myChart = echarts.init(document.getElementById('authorEcharts'));
+			        }
+					/**
+					if(key == "keywordCn"){
+			        	myChart = echarts.init(document.getElementById('keywordCnEcharts'));
+			        }else if(key == "keywordEn"){
+			        	myChart = echarts.init(document.getElementById('keywordEnEcharts'));
+			        }else if(key == "authorCn"){
+			        	myChart = echarts.init(document.getElementById('authorCnEcharts'));
+			        }else if(key == "authorEn"){
+			        	myChart = echarts.init(document.getElementById('authorEnEcharts'));
+			        }
+			        */
+					webkitDep = dataMap[key];
+					myChart.showLoading({
+			    		text: "Data loading..."
+			        });
+					myChart.hideLoading();
+	        		var categories = webkitDep.categories;
+	        		var categoryArray  = new Array();
+	        		$(categories).each(function(i,val) {
+	        			categoryArray.push(val.name);
+	        		}); 
+	        		//alert(sds);
+	    	        var option = {
+	    	            legend: {
+	    	                data: categoryArray//此处的数据必须和关系网类别中name相对应
+	    	            },
+	    	            series: [{
+	    	                type: 'graph',
+	    	                layout: 'force',
+	    	                animation: false,
+	    	                label: {
+	    	                    normal: {
+	    	                        show:true,
+	    	                        position: 'right'
+	    	                    }
+	    	                },
+	    	                draggable: true,
+	    	                data: webkitDep.nodes.map(function (node, idx) {
+	    	                    node.id = idx;
+	    	                    return node;
+	    	                }),
+	    	                categories: webkitDep.categories,
+	    	                force: {
+	    	                    edgeLength: 105,//连线的长度
+	    	                    repulsion: 100  //子节点之间的间距
+	    	                },
+	    	                edges: webkitDep.links
+	    	            }]
+	    	        };
+	    	        myChart.setOption(option);
+	                //绑定图表节点的点击事件
+	                myChart.on('click', function (param) {
+	                	var option = myChart.getOption();
+	                    var data = param.data;
+	                    //判断节点的相关数据是否正确
+	                    if (data != null && data != undefined) {
+	                        if (data.url != null && data.url != undefined) {
+	                            //根据节点的扩展属性url打开新页面
+	                            window.open(local_host+data.url);
+	                        }
+	                    }
+	                });
+				}
+        	}
+    	})
+    }
+/**
+ * 如果viewType=="HTML",默认当前显示全文内容
+ * @return
+ */
+function currentAllTextHtml(){
+	var viewType = getUrlParam("viewType");
+	if(viewType && "HTML" == viewType){
+		 // 获取全文数据
+		var articleId =  $("#articleId").val();
+		$.ajax({
+	        url: local_host + 'en/article/htmlContent',
+	        type: 'post',
+	        dataType: 'json',
+	        async:false,
+	        data: {'id':articleId},
+	        success: function (data) {
+	        	if (data.access == false) {
+	        		window.location.href = local_host + 'member/login';
+	                //alert(data.message);
+	            } else {
+	                $('#htmlContent').html(data.htmlContent);
+	                $('#htmlContent1').html(data.htmlContent);
+	                //创建文档结构树
+	                currentTab = "html";
+	                catalogTree();
+	                //重置表格图片路径
+	                setTableImg();
+	                //重置全文中的公式是图片的路径
+	                resetFormulaSrc();
+	              //图表链接点击跳转大图
+	                //showBigFigTable();
+	                $(".group3").colorbox({
+	                	rel:'group3',width:'90%',height:"75%",opacity:'0.8',
+	                	onComplete:function(){
+	                		$("#cboxTitle").niceScroll({  
+	                	        cursorcolor:"transparent",  
+	                	        cursoropacitymax:1,  
+	                	        touchbehavior:false,  
+	                	        cursorwidth:"5px",  
+	                	        cursorborder:"0",  
+	                	        cursorborderradius:"5px"  
+	                	    });
+	                		//渲染数学公式
+	         	   			MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	            		}
+	                });
+	                $(".group4").colorbox({rel:'group4',width:'90%',height:"75%",opacity:'0.8',inline:true,
+	                	onComplete:function(){
+	                		removeTableBorder();
+	                		$("#cboxTitle").niceScroll({  
+	                	        cursorcolor:"transparent",  
+	                	        cursoropacitymax:1,  
+	                	        touchbehavior:false,  
+	                	        cursorwidth:"5px",  
+	                	        cursorborder:"0",  
+	                	        cursorborderradius:"5px"  
+	                	    });
+	                		//渲染数学公式
+	         	   			MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	            		}
+	                });
+	            }
+	        }
+	    })
+	   //渲染数学公式
+	   MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+	}
+}
+
+//下载pdf
+function downloadpdf(articleId) {
+    var url = local_host + "article/checkArticlePdf?id=" + articleId;
+    $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        success: function (data) {
+            if (data.access == false) {
+            	window.location.href = local_host + 'member/login';
+                //alert(data.message);
+            } else if (data.result == 'true') {
+
+                var url = local_host + "article/exportPdf";
+                var form = $("<form>");   //定义一个form表单
+                form.attr('style', 'display:none');   //在form表单中添加查询参数
+                form.attr('target', '');
+                //form.attr('method', 'post');
+                form.attr('action', url);
+
+                var input1 = $('<input>');
+                input1.attr('type', 'hidden');
+                input1.attr('name', 'id');
+                input1.attr('value', articleId);
+                
+                var input2 = $('<input>');
+                input2.attr('type', 'hidden');
+                input2.attr('name', 'language');
+                input2.attr('value', "en");
+                $('body').append(form);  //将表单放置在web中
+                form.append(input1);   //将查询参数控件提交到表单上
+                form.append(input2);   //将查询参数控件提交到表单上
+                form.submit();
+
+                //添加文章PDF访问记录
+                getVisitInfo(articleId,2);
+            } else if (data.result == 'false') {
+                var url = window.location.href;
+                var pageType = getUrlParam("pageType") || pageTypeDefault;
+                if (url.indexOf("_en.htm") > 0 || pageType == "en") {
+                    alert("PDF not found!")
+                } else {
+                    alert("该文章没有PDF");
+                }
+            }
+        },
+        error: function () {
+            alert("Download error, please contact the administrator!");
+        }
+    });
+}
+
+
+//下载pdf
+function downloadEntireIssuepdf(articleId) {
+    var url = local_host + "article/checkArticlePdf?id=" + articleId;
+    $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        success: function (data) {
+            if (data.access == false) {
+            	window.location.href = local_host + 'member/login';
+                //alert(data.message);
+            } else if (data.result == 'true') {
+
+                var url = local_host + "article/exportEntireIssuePdf";
+                var form = $("<form>");   //定义一个form表单
+                form.attr('style', 'display:none');   //在form表单中添加查询参数
+                form.attr('target', '');
+                form.attr('method', 'post');
+                form.attr('action', url);
+
+                var input1 = $('<input>');
+                input1.attr('type', 'hidden');
+                input1.attr('name', 'id');
+                input1.attr('value', articleId);
+                $('body').append(form);  //将表单放置在web中
+                form.append(input1);   //将查询参数控件提交到表单上
+                form.submit();
+
+
+            } else if (data.result == 'false') {
+                var url = window.location.href;
+                var pageType = getUrlParam("pageType") || pageTypeDefault;
+                if (url.indexOf("_en.htm") > 0 || pageType == "en") {
+                    alert("PDF not found!")
+                } else {
+                    alert("该文章没有PDF");
+                }
+                //$(".icon-user").click();
+            }
+        },
+        error: function () {
+            alert("Download error, please contact the administrator!");
+        }
+    });
+}
+
+/**
+ * ajax增加文章HTML浏览次数
+ * @return
+ */
+var currentState = 0;	//当前页面不刷新只记录一次
+function ajaxCountHtmlView(articleId) {
+    // 获取全文数据
+    var contentHtml = cacheObj.get('htmlContent', articleId) || $.ajax({
+        url: local_host + 'en/article/htmlContent',
+        type: 'post',
+        async: false,
+        dataType: 'json',
+        data: {'id': articleId},
+        success: function (data) {
+            if (data.access == false) {
+            	window.location.href = local_host + 'member/login';
+                //alert(data.message);
+            } else {
+                data.htmlContent && $('#htmlContent').html(data.htmlContent);
+                data.htmlContent && $('#htmlContent1').html(data.htmlContent);
+                cacheObj.set('htmlContent', articleId, true)
+            }
+        }
+    });
+    $(".group3").colorbox({
+    	rel:'group3',width:'90%',height:"75%",opacity:'0.8',
+    	onComplete:function(){
+			$("#cboxTitle").niceScroll({  
+		        cursorcolor:"transparent",  
+		        cursoropacitymax:1,  
+		        touchbehavior:false,  
+		        cursorwidth:"5px",  
+		        cursorborder:"0",  
+		        cursorborderradius:"5px"  
+		    });
+			//渲染数学公式
+	   		MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+		}
+    });
+    $(".group4").colorbox({rel:'group4',width:'90%',height:"75%",opacity:'0.8',inline:true,
+    	onComplete:function(){
+    		removeTableBorder();
+    		$("#cboxTitle").niceScroll({  
+    	        cursorcolor:"transparent",  
+    	        cursoropacitymax:1,  
+    	        touchbehavior:false,  
+    	        cursorwidth:"5px",  
+    	        cursorborder:"0",  
+    	        cursorborderradius:"5px"  
+    	    });
+    		//渲染数学公式
+	   		MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+		}
+    });
+    //重置图表中table是图片的路径
+    setTableImg();
+   //重置全文中的公式是图片的路径
+    resetFormulaSrc();
+}
+
+function articleVisitMonth(articleId) {
+    //按照月份分组统计
+    $.ajax({
+        type: 'post',
+        url: local_host + 'metric/visitMonth',
+        data: {'articleId': articleId},
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+        	$("#downLoading").hide();
+            var abstractCount = $.map(data, function (n, i) {
+                return n.abstractCount;
+            });
+            var fullTextCount = $.map(data, function (n, i) {
+                return n.fullTextCount;
+            });
+            var pdfCount = $.map(data, function (n, i) {
+                return n.pdfCount;
+            });
+            var createDate = $.map(data, function (n, i) {
+                return n.createDate;
+            });
+            var monthChart = new Highcharts.chart('article_visit_count_column', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Abstract Views, HTML Views, PDF Downloads Statistics'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: createDate,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Amount of access'
+                    }
+                },
+                tooltip: {
+                    valueDecimals: 0,
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: 'Abstract Views',
+                    data: abstractCount
+                }, {
+                    name: 'HTML Views',
+                    data: fullTextCount
+
+                }, {
+                    name: 'PDF Downloads',
+                    data: pdfCount
+                }]
+            });
+        }
+    })
+}
+
+function articleVisitType(articleId) {
+    //按照访问类别分组统计
+    $.ajax({
+        type: 'post',
+        url: local_host + 'metric/visitType',
+        data: {'articleId': articleId},
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            var data = $.map(data, function (n, i) {
+                return n;
+            });
+            
+            var typeChart = new Highcharts.chart('article_visit_type_pie', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    backgroundColor: 'transparent'
+                },
+                title: {
+                    text: 'Access Class Distribution'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            connectorColor: 'silver'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Amount of access',
+                    colorByPoint: true,
+                    data: data
+                }]
+            });
+
+        }
+    });
+}
+
+function articleVisitArea(articleId) {
+    //按照访问地区分组统计
+    $.ajax({
+        type: 'post',
+        url: local_host + 'metric/visitArea',
+        data: {'articleId': articleId},
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            var data = $.map(data, function (n, i) {
+                return n;
+            });
+            
+            var areaChart = new Highcharts.chart('article_visit_area_pie', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    backgroundColor: 'transparent'
+                },
+                title: {
+                    text: 'Access Area Distribution'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            connectorColor: 'silver'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Amount of access',
+                    colorByPoint: true,
+                    data: data
+                }]
+            });
+        }
+    });
+}
+//loadArticleMetricCount($("#articleId").val());
+/**
+ * 单篇论文查询cnki被引信息
+ * @return
+ */
+function loadCitedByInfo(){
+	var id = $("#articleId").val();
+	var ajaxArg={
+		url: local_host +"article/getArticleCitedBy",
+		data: {'articleIds':id},
+		returnFun:outCitedByInfo
+	};
+	ajaxPost(ajaxArg);
+}
+
+/**
+ * 输出列表中的文章citedBy引证文献信息
+ * @param data
+ * @param indexArray
+ * @return
+ */
+function outCitedByInfo(data){
+	if(typeof(data) != "undefined"){
+		data = jQuery.parseJSON(data);
+		$.each(data,function(i,e){
+			if(e.citedCount > 0){
+				var journalTitleCn = $("#journalTitleCn").val();
+				var journalTitleEn = $("#journalTitleEn").val();
+				var journalAbbr = $("#journalAbbr").val();
+				$("#citedByCount").html(e.citedCount);
+				var html = "<table class='cited-content' style='text-align:left;'>";
+				var htmltitle = "<h2 style=\"text-align: left;line-height: 24px;font-size: 130%;}\"><b>Cited by</b></h2>";
+				var jnum = 0;
+				var _tempIndex = 1;
+				$.each(e.citedByArticles,function(i,v){
+					//if(v.articleType == "journal"){
+						var _citiationInfo = v.citiation.replace(/\[\d+\]/,"");
+						var _doi = v.doi;
+						var _aHtml = '';
+						if (typeof(_citiationInfo)!="undefined" && _citiationInfo !=null && _citiationInfo!=""){
+						if(/.*[\u4e00-\u9fa5]+.*$/.test(_citiationInfo)){ //包含中文
+							if(v.journal == journalTitleCn || v.journal == journalTitleEn){ //本刊查看
+								try{
+									var _hrefVal = local_host+"/article/"+journalAbbr+"/" + v.year + "/" + v.issue + "/" + v.fpage;
+									_aHtml = " <a class='cited-location' target='_blank' href='"+_hrefVal+"'><img src='/style/web/images/public/search-cited.png' class='cited-search'/> 本站查看</a>";
+								}catch(e){
+									_aHtml = " <a class='cited-location' target='_blank' href='http://xueshu.baidu.com/s?wd="+encodeURI(_citiationInfo)+"'><img src='/style/web/images/public/search-cited.png' class='cited-search'/> 百度学术</a>";
+								}
+							}else{
+								//_aHtml = " <a class='cited-location' target='_blank' href='http://xueshu.baidu.com/s?wd="+encodeURI(_citiationInfo)+"'><img src='/style/web/images/search-cited.png' class='cited-search'/> 百度学术</a>";
+								//英文需要加doi
+								if(_doi){
+									if (_citiationInfo.indexOf(_doi)<0){
+										_doi =  $.trim(_doi);
+										_aHtml = " doi:<a class='cited-location' target='_blank' href='https://doi.org/"+_doi+"'>"+_doi+"</a>";
+									}									
+								}else{
+									_aHtml = " <a class='cited-location' target='_blank' href='"+v.visitUri+"'><img src='"+local_host+"/style/web/images/public/search-cited.png' class='cited-search'/></a>";
+								}
+							}
+						}else{
+							//_aHtml = " <a class='cited-location' target='_blank' href='https://cn.bing.com/academic/search?q="+encodeURI(_citiationInfo)+"'><img src='/style/web/images/search-cited.png' class='cited-search'/> 必应学术</a>";
+							if(_doi){
+								if (_citiationInfo.indexOf(_doi)<0){
+									_doi =  $.trim(_doi);
+									_aHtml = " doi:<a class='cited-location' target='_blank' href='https://doi.org/"+_doi+"'>"+_doi+"</a>";
+								}
+								
+							}else{
+								_aHtml = " <a class='cited-location' target='_blank' href='"+v.visitUri+"'><img src='"+local_host+"/style/web/images/public/search-cited.png' class='cited-search'/></a>";
+							}
+						}
+						var _viewCitiation = _citiationInfo.replace(/\, /g,",").replace(/\,/g,", ").replace("[J].",".").replace(" :",": ");
+						html = html + "<tr class=\"citedby-p\"><td class=\"cited-order-num\" valign=\"top\" width=\"20\">" + _tempIndex + ". </td><td class=\"cited-info\" style=\"padding-left:5px;\">"+ _viewCitiation + _aHtml +"<td></tr>";
+						jnum ++;
+						_tempIndex++;
+					}
+				})
+				html += '</table>';
+				var jhtmltitle = "<h3 style=\"line-height: 30px;font-size: 110%;\"><b>Periodical cited type("+jnum+")</b></h3>";
+				//var qtnum = e.citedCount-jnum;
+				//var qthtmltitle = "<h3 style=\"line-height: 30px;font-size: 110%;\"><b>Other cited types("+qtnum+")</b></h3>";
+				//$("#citedby-info").html(htmltitle+jhtmltitle+html+qthtmltitle);	
+				$("#citedby-info").html(htmltitle+html);	
+			}
+				
+		})
+	}
+}
+
+
+
+
+
+
+

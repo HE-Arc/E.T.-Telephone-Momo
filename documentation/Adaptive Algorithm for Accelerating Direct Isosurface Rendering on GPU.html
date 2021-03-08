@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- saved from url=(0083)http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.465.8032&rep=rep1&type=pdf -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body style="height: 100%; width: 100%; overflow: hidden; margin:0px; background-color: rgb(82, 86, 89);"><embed name="2F8904BFC22505CFAF4FF6C5CF655F14" style="position:absolute; left: 0; top: 0;" width="100%" height="100%" src="about:blank" type="application/pdf" internalid="2F8904BFC22505CFAF4FF6C5CF655F14"><script>mendeleyWebImporter = {
+  downloadPdfs(t) { return this._call('downloadPdfs', [t]); },
+  open() { return this._call('open', []); },
+  _call(methodName, methodArgs) {
+    const id = Math.random();
+    window.postMessage({ id, token: '0.13565254726124465', methodName, methodArgs }, 'http://citeseerx.ist.psu.edu');
+    return new Promise(resolve => {
+      const listener = window.addEventListener('message', event => {
+        const data = event.data;
+        if (typeof data !== 'object' || !('result' in data) || data.id !== id) return;
+        window.removeEventListener('message', listener);
+        resolve(data.result);
+      });
+    });
+  }
+};</script></body></html>
