@@ -15,6 +15,9 @@ chatSocket.onmessage = function(e) {
         case "lobby_players":
             lobbyPlayers(e.data);
             break;
+        case "init_player":
+            initPlayer(e.data);
+            break;
     
         default:
             console.error("Unknown event type", e);
@@ -34,10 +37,6 @@ function sendMessage() {
 }
 
 function lobbyPlayers(players) {
-    console.log(players);
-
-    //Clear the table
-
     //Add elements
     for (let player of players) {
         let tr = document.createElement('tr');
@@ -46,4 +45,20 @@ function lobbyPlayers(players) {
         tr.appendChild(td);
         document.getElementById('players').appendChild(tr);
     }
+}
+let me = null;
+function initPlayer(initMe) {
+    me = initMe;
+    document.getElementById('pseudo').value = me.pseudo
+    document.getElementById('pseudo').disabled = false;
+    document.getElementById('btnPseudo').disabled = false;
+}
+
+function changePseudo() {
+    let pseudo = document.getElementById('pseudo').value;
+    chatSocket.send(JSON.stringify({
+        'type': 'changePseudo',
+        'pseudo': pseudo
+    }));
+    me.pseudo = pseudo;
 }

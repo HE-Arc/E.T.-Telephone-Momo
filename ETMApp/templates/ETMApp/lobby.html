@@ -2,12 +2,12 @@
 {% block content %}
 {% load static %}
 
-{% if not user.is_authenticated %}
-<div>
-    <input type="text">
-    <button>Changer de pseudo</button>
-</div>
-{% endif %}
+    {% if not user.is_authenticated %}
+    <div>
+        <input type="text" id="pseudo" disabled>
+        <button onclick="changePseudo()" id="btnPseudo" disabled>Changer de pseudo</button>
+    </div>
+    {% endif %}
 
 <table class="table mt-5 table-striped table-hover table-sm">
   <thead>
@@ -15,21 +15,11 @@
       <th>Connected</th>
     </tr>
   </thead>
-  <tbody id="players" class="text-danger">
-    <tr>
-        <td>LaMousseAuini</td>
-    </tr>
-    <tr>
-        <td>GurixD</td>
-    </tr>
-    <tr>
-        <td>LaonLeLardon</td>
-    </tr>
-    <tr>
-        <td>Momo</td>
-    </tr>
+  <tbody class="text-danger" id="players">
+
   </tbody>
 </table>
+
 
 <p class="text-primary text-center">4 players ready !</p>
 
