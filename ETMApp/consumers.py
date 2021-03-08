@@ -18,10 +18,13 @@ class Game:
 
     def add_player(self, member):
         self.players[member.id] = member
-        self.send('lobby_players', [x.__dict__ for x in self.players.values()])
+        self.update_player()
 
     def remove_player(self, member):
         del self.players[member.id]
+        self.update_player()
+
+    def update_player(self):
         self.send('lobby_players', [x.__dict__ for x in self.players.values()])
 
     def send(self, data_type, data):
@@ -103,17 +106,29 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data = json.loads(text_data)
+        #message = data['message']
 
+        if data['type'] == 'changePseudo':
+            self.changePseudo(data['pseudo'])
         # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
+        """async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message
             }
-        )
+        )"""
+
+    def changePseudo(self, pseudo):
+        if 'anonID' in self.scope['session']:
+            self.me.pseudo = pseudo
+            self.game.update_player()
+            self.scope['session']['pseudo'] = pseudo
+            self.scope['session'].save()
+            anon = UserAnonyme.objects.get(id=self.scope['session']['anonID'])
+            anon.pseudo = pseudo
+            anon.save()
 
 
     def message(self, event):

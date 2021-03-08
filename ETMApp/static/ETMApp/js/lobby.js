@@ -42,3 +42,11 @@ function lobbyPlayers(players) {
     document.getElementById('users').innerHTML = str;
 
 }
+
+function changePseudo() {
+    let pseudo = document.getElementById('pseudo').value;
+    chatSocket.send(JSON.stringify({
+        'type': 'changePseudo',
+        'pseudo': pseudo
+    }));
+}
