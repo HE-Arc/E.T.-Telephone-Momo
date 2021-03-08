@@ -8,6 +8,7 @@ import requests
 
 games = {}
 
+
 class Game:
     def __init__(self, url):
         self.url = url
@@ -29,7 +30,8 @@ class Game:
 
     def send(self, data_type, data):
         self.group_send(self.url,
-        {'type': 'message', 'data_type': data_type,'data':data})
+                        {'type': 'message', 'data_type': data_type, 'data': data})
+
 
 class Member:
     def __init__(self, pseudo, id, is_connected, channel_name):
@@ -37,6 +39,7 @@ class Member:
         self.id = id
         self.isConnected = is_connected
         self.channel_name = channel_name
+
 
 class ChatConsumer(WebsocketConsumer):
     def __init__(self):
@@ -47,35 +50,25 @@ class ChatConsumer(WebsocketConsumer):
 
         user = self.scope["user"]
         self.me = None
-        print(self.scope['session']['test'])
         if not user.is_authenticated:
-            print("user not connected")
-            #TODO
-
+            # Is not connected
             if "anonID" in self.scope["session"]:
                 # Already have a session
-                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False, self.channel_name)
+                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
+                                 self.channel_name)
             else:
                 r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
-                print(r.text)
                 anon = UserAnonyme(pseudo=r.text)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
-                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False, self.channel_name)
+                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
+                                 self.channel_name)
                 self.scope["session"].save()
-                print(self.scope["session"]["anonID"])
-                print(self.scope)
                 for attr in dir(self.scope):
                     print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
-
         else:
-            print("user connected")
-            print(user)
-            print(user.username)
-            print(user.id)
             self.me = Member(user.username, user.id, True, self.channel_name)
-
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -90,10 +83,12 @@ class ChatConsumer(WebsocketConsumer):
         self.game = games[self.room_name]
         self.game.add_player(self.me)
 
-
-
-
         self.accept()
+
+        self.send(text_data=json.dumps({
+            'type': 'init_player',
+            'data': self.me.__dict__
+        }))
 
     def disconnect(self, close_code):
         # Leave room group
@@ -107,7 +102,7 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         data = json.loads(text_data)
-        #message = data['message']
+        # message = data['message']
 
         if data['type'] == 'changePseudo':
             self.changePseudo(data['pseudo'])
@@ -130,11 +125,9 @@ class ChatConsumer(WebsocketConsumer):
             anon.pseudo = pseudo
             anon.save()
 
-
     def message(self, event):
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'type': event['data_type'],
             'data': event['data']
         }))
-
