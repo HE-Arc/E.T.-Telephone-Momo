@@ -36,6 +36,9 @@ function sendMessage() {
 function lobbyPlayers(players) {
     console.log(players);
 
+    //Clear the table
+
+    //Add elements
     for (let player of players) {
         let tr = document.createElement('tr');
         let td = document.createElement('tr');
