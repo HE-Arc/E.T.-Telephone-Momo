@@ -2,6 +2,13 @@
 {% block content %}
 {% load static %}
 
+{% if not user.is_authenticated %}
+<div>
+    <input type="text">
+    <button>Changer de pseudo</button>
+</div>
+{% endif %}
+
 <table class="table mt-5 table-striped table-hover table-sm">
   <thead>
     <tr>
@@ -35,3 +42,4 @@
 {% block title %}
 Create a party
 {% endblock %}
+

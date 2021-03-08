@@ -9,8 +9,17 @@ const chatSocket = new WebSocket(
 );
 
 chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    console.log(data);
+    e = JSON.parse(e.data);
+
+    switch (e.type) {
+        case "lobby_players":
+            lobbyPlayers(e.data);
+            break;
+    
+        default:
+            console.error("Unknown event type", e);
+            break;
+    }
 };
 
 chatSocket.onclose = function(e) {
@@ -22,4 +31,14 @@ function sendMessage() {
         'message': "yo"
     }));
     console.log("sended yo");
+}
+
+function lobbyPlayers(players) {
+    console.log(players);
+    let str = "";
+    for (let player of players) {
+        str += player.pseudo + "<br>";
+    }
+    document.getElementById('users').innerHTML = str;
+
 }
