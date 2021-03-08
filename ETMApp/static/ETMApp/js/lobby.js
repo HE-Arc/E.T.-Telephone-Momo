@@ -35,4 +35,10 @@ function sendMessage() {
 
 function lobbyPlayers(players) {
     console.log(players);
+    let str = "";
+    for (let player of players) {
+        str += player.pseudo + "<br>";
+    }
+    document.getElementById('users').innerHTML = str;
+
 }

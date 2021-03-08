@@ -15,7 +15,7 @@ class Game(models.Model):
 
 
 class UserAnonyme(models.Model):
-    pseudo = models.CharField(max_length=20)
+    pseudo = models.CharField(max_length=50)
 
 
 class Conversation(models.Model):
