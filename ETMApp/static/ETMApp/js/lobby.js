@@ -82,5 +82,7 @@ function startGame() {
         'type': 'startGame'
     }));
 }
+
 //Set on click event
-document.getElementById("btnPseudo").addEventListener("click", changePseudo);
+let btnPseudo = document.getElementById("btnPseudo");
+if(!btnPseudo) addEventListener("click", changePseudo);
