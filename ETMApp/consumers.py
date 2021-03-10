@@ -2,6 +2,12 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.shortcuts import redirect
+
+# from game.game_logic import GameLogic
+# from game.member import Member
+
+from ETMApp.game.game_logic import GameLogic
 
 from ETMApp.models import UserAnonyme
 import requests
@@ -18,34 +24,24 @@ class ChatConsumer(WebsocketConsumer):
         user = self.scope["user"]
         self.me = None
         if not user.is_authenticated:
-            print("user not connected")
-            #TODO
-
-            #print(self.scope["session"]["anonID"])
+            # Is not connected
             if "anonID" in self.scope["session"]:
                 # Already have a session
-                self.me = Member(self.scope["session"]["pseudo"], self.self.scope["session"]["anonID"], False, self.channel_name)
+                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
+                                 self.channel_name)
             else:
                 r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
-                print(r.text)
                 anon = UserAnonyme(pseudo=r.text)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
-                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False, self.channel_name)
+                self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
+                                 self.channel_name)
                 self.scope["session"].save()
-                print(self.scope["session"]["anonID"])
-                print(self.scope)
                 for attr in dir(self.scope):
                     print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
-
         else:
-            print("user connected")
-            print(user)
-            print(user.username)
-            print(user.id)
             self.me = Member(user.username, user.id, True, self.channel_name)
-
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -53,17 +49,19 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-        # TODO check if game exist
+
         if self.room_name not in games:
             games[self.room_name] = Game(self.room_name)
 
         self.game = games[self.room_name]
         self.game.add_player(self.me)
 
-
-
-
         self.accept()
+
+        self.send(text_data=json.dumps({
+            'type': 'init_player',
+            'data': self.me.__dict__
+        }))
 
     def disconnect(self, close_code):
         # Leave room group
@@ -71,23 +69,35 @@ class ChatConsumer(WebsocketConsumer):
             self.room_name,
             self.channel_name
         )
+        
 
         self.game.remove_player(self.me)
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data = json.loads(text_data)
+        # message = data['message']
 
+        if data['type'] == 'changePseudo':
+            self.changePseudo(data['pseudo'])
         # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
+        """async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message
             }
-        )
+        )"""
 
+    def changePseudo(self, pseudo):
+        if 'anonID' in self.scope['session']:
+            self.me.pseudo = pseudo
+            self.game.update_player()
+            self.scope['session']['pseudo'] = pseudo
+            self.scope['session'].save()
+            anon = UserAnonyme.objects.get(id=self.scope['session']['anonID'])
+            anon.pseudo = pseudo
+            anon.save()
 
     def message(self, event):
         # Send message to WebSocket
@@ -95,4 +105,3 @@ class ChatConsumer(WebsocketConsumer):
             'type': event['data_type'],
             'data': event['data']
         }))
-

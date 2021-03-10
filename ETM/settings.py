@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ETM',
         'USER': 'root',
-        'PASSWORD': 'root'
+        'PASSWORD': 'jaimeleweb'
     }
 }"""
 DATABASES = {
@@ -101,7 +101,6 @@ DATABASES = {
         }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

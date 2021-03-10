@@ -23,6 +23,14 @@ def signup(request):
 
 
 def lobby(request, url):
+    request.session['isWorking'] = 1  # necessary to make session work
+
+    game = Game.objects.get(url_game=url)
+    if game is None or game.has_started:
+        return redirect('/')
+    elif game.has_ended:
+        return redirect('/history/url')
+
     return render(request, 'ETMApp/lobby.html', {
         'game_url': url
     })

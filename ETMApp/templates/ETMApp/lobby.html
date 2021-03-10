@@ -1,21 +1,35 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
 {% load static %}
-    <p>Lobby</p>
-    <p>Au boulot marty</p>
-
-    <button onclick="sendMessage()">sendMessage</button>
 
     {% if not user.is_authenticated %}
     <div>
-        <input type="text">
-        <button>Changer de pseudo</button>
+        <input type="text" id="pseudo" disabled>
+        <button onclick="changePseudo()" id="btnPseudo" disabled>Changer de pseudo</button>
     </div>
     {% endif %}
 
-    <h2>Listes des participants</h2>
-    <div id="users"></div>
+<table class="table mt-5 table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th>Connected</th>
+    </tr>
+  </thead>
+  <tbody class="text-danger" id="users">
 
-    {{ game_url|json_script:"game_url" }}
-    <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
+  </tbody>
+</table>
+
+
+<p class="text-primary text-center">4 players ready !</p>
+
+<button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()">Start !</button>
+
+{{ game_url|json_script:"game_url" }}
+<script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
 {% endblock %}
+
+{% block title %}
+Create a party
+{% endblock %}
+
