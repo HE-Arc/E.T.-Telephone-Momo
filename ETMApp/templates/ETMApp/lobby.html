@@ -3,17 +3,17 @@
 {% load static %}
 
 {% if not user.is_authenticated %}
-<form class="form-inline">
+<div class="form-inline">
   <div class="form-group row">
     <label for="pseudo"  class="col-sm-2 col-form-label">Change your pseudo</label>
     <div class="col-sm-6">
-      <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="LaonLeLardon">
+      <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
     </div>
     <div class="col-sm-4 text-center">
-      <button id="btnPseudo" type="submit" class="btn btn-primary mb-2">Confirm your pseudo</button>
+      <button id="btnPseudo" class="btn btn-primary mb-2">Change pseudo</button>
     </div>
   </div>
-</form>
+</div>
 {% endif %}
 
 <table class="table mt-5 table-striped table-hover table-sm">
@@ -30,7 +30,7 @@
 
 <p class="text-primary text-center">4 players ready !</p>
 
-<button type="button" class="btn btn-primary btn-lg w-100">Start !</button>
+<button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()">Start !</button>
 
 {{ game_url|json_script:"game_url" }}
 <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>

@@ -8,6 +8,8 @@ import random
 class Game(models.Model):
     date = models.DateTimeField('date published')
     url_game = models.CharField(max_length=8, unique=True)
+    has_started = models.BooleanField(default=False)
+    has_ended = models.BooleanField(default=False)
     @classmethod
     def create(cls):
         return cls(date=timezone.now(), url_game=id_generator(8))

@@ -44,6 +44,7 @@ function lobbyPlayers(players) {
     table.innerHTML = '';
 
     //Add elements
+    document.getElementById('players').innerHTML = "";
     for (let player of players) {
         let tr = document.createElement('tr');
 
@@ -76,5 +77,10 @@ function changePseudo() {
     me.pseudo = pseudo;
 }
 
+function startGame() {
+    chatSocket.send(JSON.stringify({
+        'type': 'startGame'
+    }));
+}
 //Set on click event
 document.getElementById("btnPseudo").addEventListener("click", changePseudo);
