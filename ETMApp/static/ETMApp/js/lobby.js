@@ -37,12 +37,17 @@ function sendMessage() {
 }
 
 function lobbyPlayers(players) {
-    let str = "";
+    //Add elements
+    document.getElementById('players').innerHTML = "";
     for (let player of players) {
-        str += "<tr><td>" + player.pseudo + "</td></tr>";
+        let tr = document.createElement('tr');
+        let td = document.createElement('tr');
+        td.innerHTML = player.pseudo;
+        tr.appendChild(td);
+        document.getElementById('players').appendChild(tr);
     }
-    document.getElementById('users').innerHTML = str;
 }
+
 let me = null;
 function initPlayer(initMe) {
     me = initMe;
@@ -65,3 +70,5 @@ function startGame() {
         'type': 'startGame'
     }));
 }
+//Set on click event
+document.getElementById("btnPseudo").addEventListener("click", changePseudo);

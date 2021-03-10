@@ -2,15 +2,13 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.shortcuts import redirect
-
-# from game.game_logic import GameLogic
-# from game.member import Member
 
 from ETMApp.game.game_logic import GameLogic
+from ETMApp.game.member import Member
 
 from ETMApp.models import UserAnonyme
 import requests
+import random
 
 games = {}
 
@@ -30,8 +28,9 @@ class ChatConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name)
             else:
-                r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
-                anon = UserAnonyme(pseudo=r.text)
+                #r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
+                r = "anon" + str(random.randint(0, 1000))
+                anon = UserAnonyme(pseudo=r)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
@@ -51,7 +50,7 @@ class ChatConsumer(WebsocketConsumer):
 
 
         if self.room_name not in games:
-            games[self.room_name] = Game(self.room_name)
+            games[self.room_name] = GameLogic(self.room_name)
 
         self.game = games[self.room_name]
         self.game.add_player(self.me)
@@ -80,6 +79,9 @@ class ChatConsumer(WebsocketConsumer):
 
         if data['type'] == 'changePseudo':
             self.changePseudo(data['pseudo'])
+        if data['type'] == 'startGame':
+            #self.game.start()
+            pass
         # Send message to room group
         """async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
