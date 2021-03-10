@@ -3,44 +3,14 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+from ETMApp.game.game_logic import GameLogic
+from ETMApp.game.member import Member
+
 from ETMApp.models import UserAnonyme
 import requests
 import random
 
 games = {}
-
-
-class Game:
-    def __init__(self, url):
-        self.url = url
-        self.players = {}
-
-        self.channel_layer = get_channel_layer()
-        self.group_send = async_to_sync(self.channel_layer.group_send)
-
-    def add_player(self, member):
-        self.players[member.id] = member
-        self.update_player()
-
-    def remove_player(self, member):
-        del self.players[member.id]
-        self.update_player()
-
-    def update_player(self):
-        self.send('lobby_players', [x.__dict__ for x in self.players.values()])
-
-    def send(self, data_type, data):
-        self.group_send(self.url,
-                        {'type': 'message', 'data_type': data_type, 'data': data})
-
-
-class Member:
-    def __init__(self, pseudo, id, is_connected, channel_name):
-        self.pseudo = pseudo
-        self.id = id
-        self.isConnected = is_connected
-        self.channel_name = channel_name
-
 
 class ChatConsumer(WebsocketConsumer):
     def __init__(self):
@@ -78,9 +48,9 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-        # TODO check if game exist
+
         if self.room_name not in games:
-            games[self.room_name] = Game(self.room_name)
+            games[self.room_name] = GameLogic(self.room_name)
 
         self.game = games[self.room_name]
         self.game.add_player(self.me)
@@ -98,6 +68,7 @@ class ChatConsumer(WebsocketConsumer):
             self.room_name,
             self.channel_name
         )
+        
 
         self.game.remove_player(self.me)
 
@@ -108,6 +79,9 @@ class ChatConsumer(WebsocketConsumer):
 
         if data['type'] == 'changePseudo':
             self.changePseudo(data['pseudo'])
+        if data['type'] == 'startGame':
+            #self.game.start()
+            pass
         # Send message to room group
         """async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
