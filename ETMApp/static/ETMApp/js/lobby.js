@@ -46,6 +46,7 @@ function lobbyPlayers(players) {
         document.getElementById('players').appendChild(tr);
     }
 }
+
 let me = null;
 function initPlayer(initMe) {
     me = initMe;
@@ -62,3 +63,6 @@ function changePseudo() {
     }));
     me.pseudo = pseudo;
 }
+
+//Set on click event
+document.getElementById("btnPseudo").addEventListener("click", changePseudo);
