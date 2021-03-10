@@ -80,8 +80,8 @@ class ChatConsumer(WebsocketConsumer):
         if data['type'] == 'changePseudo':
             self.changePseudo(data['pseudo'])
         if data['type'] == 'startGame':
-            #self.game.start()
-            pass
+            self.game.start()
+
         # Send message to room group
         """async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,

@@ -18,6 +18,8 @@ chatSocket.onmessage = function(e) {
         case "init_player":
             initPlayer(e.data);
             break;
+        case "game_start":
+            gameStarted();
     
         default:
             console.error("Unknown event type", e);
@@ -84,3 +86,7 @@ function startGame() {
 }
 //Set on click event
 document.getElementById("btnPseudo").addEventListener("click", changePseudo);
+
+function gameStarted() {
+    alert("the game has started");
+}
