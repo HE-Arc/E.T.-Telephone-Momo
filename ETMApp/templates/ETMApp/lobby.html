@@ -2,12 +2,19 @@
 {% block content %}
 {% load static %}
 
-    {% if not user.is_authenticated %}
-    <div>
-        <input type="text" id="pseudo" disabled>
-        <button onclick="changePseudo()" id="btnPseudo" disabled>Changer de pseudo</button>
+{% if not user.is_authenticated %}
+<form class="form-inline">
+  <div class="form-group row">
+    <label for="pseudo"  class="col-sm-2 col-form-label">Change your pseudo</label>
+    <div class="col-sm-6">
+      <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="LaonLeLardon">
     </div>
-    {% endif %}
+    <div class="col-sm-4">
+      <button id="btnPseudo" type="submit" class="btn btn-primary mb-2">Confirm your pseudo</button>
+    </div>
+  </div>
+</form>
+{% endif %}
 
 <table class="table mt-5 table-striped table-hover table-sm">
   <thead>
@@ -15,7 +22,7 @@
       <th>Connected</th>
     </tr>
   </thead>
-  <tbody class="text-danger" id="users">
+  <tbody class="text-danger" id="players">
 
   </tbody>
 </table>

@@ -5,6 +5,7 @@ from channels.layers import get_channel_layer
 
 from ETMApp.models import UserAnonyme
 import requests
+import random
 
 games = {}
 
@@ -57,8 +58,9 @@ class ChatConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name)
             else:
-                r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
-                anon = UserAnonyme(pseudo=r.text)
+                #r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
+                r = "anon" + str(random.randint(0, 1000))
+                anon = UserAnonyme(pseudo=r)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
