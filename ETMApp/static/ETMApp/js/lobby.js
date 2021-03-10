@@ -37,13 +37,25 @@ function sendMessage() {
 }
 
 function lobbyPlayers(players) {
+
+    let table = document.getElementById('players');
+
+    //Clear the current table
+    table.innerHTML = '';
+
     //Add elements
     for (let player of players) {
         let tr = document.createElement('tr');
-        let td = document.createElement('tr');
+
+        //If it's the actual client, put it in evidence
+        if(me.id === player.id) {
+            tr.classList.add("bg-success")
+        }
+
+        let td = document.createElement('td');
         td.innerHTML = player.pseudo;
         tr.appendChild(td);
-        document.getElementById('players').appendChild(tr);
+        table.appendChild(tr);
     }
 }
 
