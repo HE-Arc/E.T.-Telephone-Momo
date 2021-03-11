@@ -25,7 +25,7 @@ SECRET_KEY = 'ro^e!)p4&1^&%hvr-y*k(n50)@0kzehw68k1wu%xfgxi8_bi_='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://momo.srvz-webapp.he-arc.ch']
+ALLOWED_HOSTS = ['momo.srvz-webapp.he-arc.ch', 'localhost']
 
 
 # Application definition
