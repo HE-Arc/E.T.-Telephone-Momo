@@ -154,19 +154,19 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': str(BASE_DIR / 'debug.log'),
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'filters': None,
             'class': 'logging.StreamHandler',
         },
     },
     'root': {
         'handlers': ['file', 'console'],
-        'level': 'DEBUG',
+        'level': 'ERROR',
         'propagate': True,
     },
 }

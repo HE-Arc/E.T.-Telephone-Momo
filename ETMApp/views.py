@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts import redirect
 from ETMApp.models import Game
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -23,6 +26,8 @@ def signup(request):
 
 
 def lobby(request, url):
+
+    logger.error("test lobbby")
     request.session['isWorking'] = 1  # necessary to make session work
 
     game = Game.objects.get(url_game=url)
@@ -37,6 +42,7 @@ def lobby(request, url):
 
 
 def game(request):
+    return JsonResponse({'yo': 1})
     return render(request, 'ETMApp/game.html')
 
 
