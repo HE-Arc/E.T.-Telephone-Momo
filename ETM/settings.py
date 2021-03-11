@@ -98,6 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'read_default_file':  str(BASE_DIR / 'ETM/mysql.conf'),
+            'ssl_mode': 'DISABLED'
         }
     }
 }
