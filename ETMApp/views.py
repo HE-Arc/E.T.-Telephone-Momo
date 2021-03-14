@@ -93,6 +93,8 @@ def disconnect(request):
     logout(request)
     return redirect('/')
 
+def history(request):
+    return render(request, 'ETMApp/history.html')
 
 def create_game(request):
     game = Game.create()

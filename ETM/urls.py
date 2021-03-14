@@ -31,7 +31,7 @@ urlpatterns = [
     path('play/<slug:url>', ETMApp.lobby, name='lobby'),
     path('game', ETMApp.game, name='game'),
     path('disconnect', ETMApp.disconnect, name='disconnect'),
-    path('history', ETMApp.disconnect, name='history'),
+    path('history', ETMApp.history, name='history'),
     path('createGame', ETMApp.create_game, name='create_game')
 ]
 if not settings.DEBUG:
