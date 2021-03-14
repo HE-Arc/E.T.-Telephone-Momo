@@ -9,14 +9,18 @@ from ETMApp.game.member import Member
 from ETMApp.models import UserAnonyme
 import requests
 import random
+import logging
 
 games = {}
+logger = logging.getLogger(__name__)
 
 class ChatConsumer(WebsocketConsumer):
     def __init__(self):
         super().__init__()
 
     def connect(self):
+        print("new connexion")
+        logger.error("new connexion log");
         self.room_name = self.scope['url_route']['kwargs']['game_url']
 
         user = self.scope["user"]
