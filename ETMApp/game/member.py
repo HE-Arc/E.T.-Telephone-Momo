@@ -4,3 +4,5 @@ class Member:
         self.id = id
         self.is_connected = is_connected
         self.channel_name = channel_name
+        self.isAdmin = False
+        self.isDisconnected = False

@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet"  href="{% static 'ETMApp/css/base.css' %}">
+    {% block link %}
+    {% endblock %}
 </head>
 <body>
     <div class="container h-100">
@@ -52,7 +54,7 @@
             </nav>
         </div>
 
-        <h2 class="text-center mt-3">
+        <h2 class="text-center mt-3" id="pageTitle">
         {% block title %}
         {% endblock %}
         </h2>
