@@ -1,7 +1,11 @@
 const game_url = JSON.parse(document.getElementById('game_url').textContent);
 
+let protocol = "ws";
+if (window.location.protocol === "https:") {
+    protocol = "wss";
+}
 const chatSocket = new WebSocket(
-    'ws://'
+    protocol + '://'
     + window.location.host
     + '/ws/chat/'
     + game_url
