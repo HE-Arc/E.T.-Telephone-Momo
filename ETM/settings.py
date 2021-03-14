@@ -97,7 +97,7 @@ DATABASES = {
         'PORT': os.environ.get('MYSQL_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
-            'ssl_mode': 'DISABLED'
+            #'ssl_mode': 'DISABLED'
         }
     }
 }
