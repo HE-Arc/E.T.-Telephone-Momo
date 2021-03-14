@@ -49,7 +49,7 @@ function lobbyPlayers(players) {
     //Clear the current table
     table.innerHTML = '';
 
-    //Add elements
+    //Add players in element then in the html table
     document.getElementById('players').innerHTML = "";
     for (let player of players) {
         let tr = document.createElement('tr');
@@ -64,6 +64,9 @@ function lobbyPlayers(players) {
         tr.appendChild(td);
         table.appendChild(tr);
     }
+
+    //Update the number of players
+    document.getElementById("numberOfPlayers").innerHTML = players.length + ' players ready !';
 }
 
 let me = null;
@@ -88,8 +91,10 @@ function startGame() {
         'type': 'startGame'
     }));
 }
+
 //Set on click event
-document.getElementById("btnPseudo").addEventListener("click", changePseudo);
+let btnPseudo = document.getElementById("btnPseudo");
+if(!btnPseudo) addEventListener("click", changePseudo);
 
 function gameStarted() {
     alert("the game has started");
