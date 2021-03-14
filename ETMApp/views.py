@@ -96,6 +96,9 @@ def disconnect(request):
 def history(request):
     return render(request, 'ETMApp/history.html')
 
+def rounds(request):
+    return render(request, 'ETMApp/rounds.html')
+
 def create_game(request):
     game = Game.create()
     game.save()

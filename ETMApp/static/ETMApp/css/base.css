@@ -11,7 +11,7 @@ body, html{
     /*margin-top: 30%;*/
 }
 
-#history_table{
+#history_table, #rounds_table{
     table-layout: fixed;
 }
 
