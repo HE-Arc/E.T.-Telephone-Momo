@@ -38,7 +38,6 @@ chatSocket.onmessage = function (e) {
         case "game_start":
             gameStarted();
             break;
-
         default:
             console.error("Unknown event type", e);
             break;

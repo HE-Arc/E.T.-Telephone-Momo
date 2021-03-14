@@ -44,6 +44,7 @@ let pen = {
         ctx.closePath();
     },
     drawMouse(e) {
+        ctxf.fillStyle = 'transparent';
         ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
         ctxf.beginPath();
         ctxf.setLineDash([2, 3]);
@@ -77,6 +78,7 @@ let eraser = {
         ctx.globalCompositeOperation = "source-over";
     },
     drawMouse(e) {
+        ctxf.fillStyle = 'transparent';
         ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
         ctxf.beginPath();
         ctxf.setLineDash([2, 2]);
