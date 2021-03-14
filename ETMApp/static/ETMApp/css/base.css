@@ -10,3 +10,11 @@ body, html{
 #test{
     /*margin-top: 30%;*/
 }
+
+#history_table{
+    table-layout: fixed;
+}
+
+#history_table th:first-child{
+    width: 100px;
+}

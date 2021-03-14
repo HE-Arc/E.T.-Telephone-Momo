@@ -50,13 +50,13 @@ function lobbyPlayers(players) {
     table.innerHTML = '';
 
     //Add players in element then in the html table
-    document.getElementById('players').innerHTML = "";
+    table.innerHTML = "";
     for (let player of players) {
         let tr = document.createElement('tr');
 
         //If it's the actual client, put it in evidence
         if(me.id === player.id) {
-            tr.classList.add("bg-success")
+            tr.classList.add("bg-success");
         }
 
         let td = document.createElement('td');

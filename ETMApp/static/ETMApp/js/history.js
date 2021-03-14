@@ -1,102 +1,42 @@
-/*const game_url = JSON.parse(document.getElementById('game_url').textContent);
+function listParties(parties) {
 
-let protocol = "ws";
-if (window.location.protocol === "https:") {
-    protocol = "wss";
-}
-const chatSocket = new WebSocket(
-    protocol + '://'
-    + window.location.host
-    + '/ws/chat/'
-    + game_url
-    + '/'
-);
-
-chatSocket.onmessage = function(e) {
-    e = JSON.parse(e.data);
-
-    switch (e.type) {
-        case "lobby_players":
-            lobbyPlayers(e.data);
-            break;
-        case "init_player":
-            initPlayer(e.data);
-            break;
-        case "game_start":
-            gameStarted();
-    
-        default:
-            console.error("Unknown event type", e);
-            break;
-    }
-};
-
-chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
-};
-
-function sendMessage() {
-    chatSocket.send(JSON.stringify({
-        'message': "yo"
-    }));
-    console.log("sended yo");
-}
-
-function lobbyPlayers(players) {
-
-    let table = document.getElementById('players');
+    let table = document.getElementById('games');
 
     //Clear the current table
     table.innerHTML = '';
 
-    //Add players in element then in the html table
-    document.getElementById('players').innerHTML = "";
-    for (let player of players) {
+    //Add parties in element then in the html table
+    for (let game of games) {
         let tr = document.createElement('tr');
 
-        //If it's the actual client, put it in evidence
-        if(me.id === player.id) {
-            tr.classList.add("bg-success")
-        }
+        //Number of players
+        let td1 = document.createElement('td');
+        td1.innerHTML = game.players.length;
+        
+        //Names of players
+        let td2 = document.createElement('td');
+        td2.innerHTML = game.players.join(', ');
+        td2.classList.add("text-truncate");
 
-        let td = document.createElement('td');
-        td.innerHTML = player.pseudo;
-        tr.appendChild(td);
+        //Date
+        let td3 = document.createElement('td');
+        td3.innerHTML = game.date;
+
+        //Add to the row
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+
+        //Add to the table
         table.appendChild(tr);
     }
-
-    //Update the number of players
-    document.getElementById("numberOfPlayers").innerHTML = players.length + ' players ready !';
 }
 
-let me = null;
-function initPlayer(initMe) {
-    me = initMe;
-    document.getElementById('pseudo').value = me.pseudo
-    document.getElementById('pseudo').disabled = false;
-    document.getElementById('btnPseudo').disabled = false;
-}
+let games = [
+    { "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "14.03.2021"},
+    { "players" : ["Gurix", "Yo ?"], "date" : "10.03.2021"},
+    { "players" : ["Gurix", "Momo", "SUCE", "LaouLeLardon", "LaMousseAuLini"], "date" : "27.02.2021"},
+    { "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "10.02.2021"}
+];
 
-function changePseudo() {
-    let pseudo = document.getElementById('pseudo').value;
-    chatSocket.send(JSON.stringify({
-        'type': 'changePseudo',
-        'pseudo': pseudo
-    }));
-    me.pseudo = pseudo;
-}
-
-function startGame() {
-    chatSocket.send(JSON.stringify({
-        'type': 'startGame'
-    }));
-}
-
-//Set on click event
-let btnPseudo = document.getElementById("btnPseudo");
-if(!btnPseudo) addEventListener("click", changePseudo);
-
-function gameStarted() {
-    alert("the game has started");
-}
-*/
+listParties(games);
