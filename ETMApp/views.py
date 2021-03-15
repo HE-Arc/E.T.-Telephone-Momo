@@ -99,6 +99,9 @@ def history(request):
 def rounds(request):
     return render(request, 'ETMApp/rounds.html')
 
+def tmp(request):
+    return render(request, 'ETMApp/tmp.html')
+
 def create_game(request):
     game = Game.create()
     game.save()

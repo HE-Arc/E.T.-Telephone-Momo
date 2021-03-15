@@ -1,0 +1,53 @@
+{% extends "ETMApp/base.html" %}
+{% block content %}
+{% load static %}
+
+<div id="drawingContainer" style="display: block">
+  <button onclick="tool = pen">Pen</button>
+  <button onclick="tool = eraser">eraser</button>
+  <button onclick="tool = bucket">Bucket</button>
+  <button onclick="tool = line">Line</button>
+  <button onclick="tool = rect">rect</button>
+  <button onclick="undo()">undo</button>
+  <button onclick="redo()">redo</button>
+  <input type="file" value="upload" id="imageUpload"/>
+</div>
+
+<div class="container">
+  <div class="row mt-3">
+    <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
+      <button type="button" class="btn btn-success">Pen</button>
+      <button type="button" class="btn btn-primary">Eraser</button>
+      <button type="button" class="btn btn-danger">Bucket</button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
+      <button type="button" class="btn btn-success">Line</button>
+      <button type="button" class="btn btn-primary">Rect</button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
+      <button type="button" class="btn btn-success">Undo</button>
+      <button type="button" class="btn btn-primary">Redo</button>
+    </div>
+  </div>
+</div>
+
+<div id="canvasContainer">
+    <canvas id="cnvb"></canvas>
+    <canvas id="cnv"></canvas>
+    <canvas id="cnvf"></canvas>
+</div>
+
+<script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Draw !
+{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'ETMApp/css/drawer.css' %}">
+{% endblock %}
