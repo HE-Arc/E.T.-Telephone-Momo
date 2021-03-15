@@ -2,36 +2,29 @@
 {% block content %}
 {% load static %}
 
-<div id="drawingContainer" style="display: block">
-  <button onclick="tool = pen">Pen</button>
-  <button onclick="tool = eraser">eraser</button>
-  <button onclick="tool = bucket">Bucket</button>
-  <button onclick="tool = line">Line</button>
-  <button onclick="tool = rect">rect</button>
-  <button onclick="undo()">undo</button>
-  <button onclick="redo()">redo</button>
-  <input type="file" value="upload" id="imageUpload"/>
-</div>
-
 <div class="container">
   <div class="row mt-3">
     <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-      <button type="button" class="btn btn-success">Pen</button>
-      <button type="button" class="btn btn-primary">Eraser</button>
-      <button type="button" class="btn btn-danger">Bucket</button>
+      <button id="penButton" type="button" class="btn btn-success"><span class="material-icons md-36">border_color</span></button>
+      <button id="eraserButton" type="button" class="btn btn-primary"><span class="material-icons md-36">rice_bowl</span></button>
+      <button id="bucketButton" type="button" class="btn btn-danger"><span class="material-icons md-36">format_color_fill</span></button>
     </div>
   </div>
   <div class="row mt-3">
     <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-      <button type="button" class="btn btn-success">Line</button>
-      <button type="button" class="btn btn-primary">Rect</button>
+      <button id="penLine" type="button" class="btn btn-success"><span class="material-icons md-36">horizontal_rule</span></button>
+      <button id="penRect" type="button" class="btn btn-primary"><span class="material-icons md-36">crop_5_4</span></button>
     </div>
   </div>
   <div class="row mt-3">
     <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-      <button type="button" class="btn btn-success">Undo</button>
-      <button type="button" class="btn btn-primary">Redo</button>
+      <button id="undoButton" type="button" class="btn btn-success"><span class="material-icons md-36">chevron_left</span></button>
+      <button id="redoButton" type="button" class="btn btn-primary"><span class="material-icons md-36">chevron_right</span></button>
     </div>
+  </div>
+  <div class="row mt-3">
+    <label for="imageUpload"><span class="material-icons md-36">insert_photo</span></label>
+    <input type="file" class="form-control-file" id="imageUpload" value="upload">
   </div>
 </div>
 
@@ -41,7 +34,12 @@
     <canvas id="cnvf"></canvas>
 </div>
 
+<div id="plsTurnUrPhone">
+  <span class="material-icons md-48">wheelchair_pickup</span>
+  <p>Please turn ur phone</p>
+</div>
 <script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
+<script type="application/javascript" src="{% static 'ETMApp/js/tmp.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -49,5 +47,5 @@ Draw !
 {% endblock %}
 
 {% block link %}
-<link rel="stylesheet" href="{% static 'ETMApp/css/drawer.css' %}">
+<link rel="stylesheet" href="{% static 'ETMApp/css/game.css' %}">
 {% endblock %}

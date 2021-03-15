@@ -9,7 +9,6 @@ let ctxb = cnvb.getContext('2d');
 
 //TODO add shortcut
 
-
 let lineWidth = 10;
 
 ctx.lineCap = 'round';
