@@ -12,7 +12,20 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
-chatSocket.onmessage = function(e) {
+//Set on click event
+let btnPseudo = document.getElementById("btnPseudo");
+if (btnPseudo)
+    addEventListener("click", changePseudo);
+
+let pageTitle = document.getElementById('pageTitle');
+let sliderRound = document.getElementById('sliderRound');
+let lobbyContainer = document.getElementById('lobbyContainer');
+let textContainer = document.getElementById('textContainer');
+let drawingContainer = document.getElementById('drawingContainer');
+
+let textContent = document.getElementById('textContent');
+
+chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
 
     switch (e.type) {
@@ -24,14 +37,14 @@ chatSocket.onmessage = function(e) {
             break;
         case "game_start":
             gameStarted();
-    
+            break;
         default:
             console.error("Unknown event type", e);
             break;
     }
 };
 
-chatSocket.onclose = function(e) {
+chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
 
@@ -43,7 +56,7 @@ function sendMessage() {
 }
 
 function lobbyPlayers(players) {
-
+    sliderRound.max = players.length;
     let table = document.getElementById('players');
 
     //Clear the current table
@@ -52,17 +65,19 @@ function lobbyPlayers(players) {
     //Add players in element then in the html table
     table.innerHTML = "";
     for (let player of players) {
-        let tr = document.createElement('tr');
+        if (!player.isDisconnected) {
+            let tr = document.createElement('tr');
 
-        //If it's the actual client, put it in evidence
-        if(me.id === player.id) {
-            tr.classList.add("bg-success");
+            //If it's the actual client, put it in evidence
+            if (me.id === player.id) {
+                tr.classList.add("bg-success")
+            }
+
+            let td = document.createElement('td');
+            td.innerHTML = player.pseudo;
+            tr.appendChild(td);
+            table.appendChild(tr);
         }
-
-        let td = document.createElement('td');
-        td.innerHTML = player.pseudo;
-        tr.appendChild(td);
-        table.appendChild(tr);
     }
 
     //Update the number of players
@@ -72,9 +87,14 @@ function lobbyPlayers(players) {
 let me = null;
 function initPlayer(initMe) {
     me = initMe;
-    document.getElementById('pseudo').value = me.pseudo
-    document.getElementById('pseudo').disabled = false;
-    document.getElementById('btnPseudo').disabled = false;
+    if (btnPseudo) {
+        document.getElementById('pseudo').value = me.pseudo
+        document.getElementById('pseudo').disabled = false;
+        document.getElementById('btnPseudo').disabled = false;
+    }
+    if (initMe.isAdmin === true) {
+        document.getElementById('roundContainer').style.display = "block";
+    }
 }
 
 function changePseudo() {
@@ -92,10 +112,9 @@ function startGame() {
     }));
 }
 
-//Set on click event
-let btnPseudo = document.getElementById("btnPseudo");
-if(!btnPseudo) addEventListener("click", changePseudo);
-
 function gameStarted() {
     alert("the game has started");
+    lobbyContainer.style.display = 'none';
+    textContainer.style.display = 'block';
+    pageTitle.innerHTML = 'Write a text to draw';
 }

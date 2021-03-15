@@ -13,11 +13,20 @@ class GameLogic:
         self.group_send = async_to_sync(self.channel_layer.group_send)
 
     def add_player(self, member):
+        if len(self.players) == 0:
+            member.isAdmin = True
+        if member.id in self.players:
+            member.isAdmin = self.players[member.id].isAdmin
         self.players[member.id] = member
+        
+        #self.players[member.id] = member
         self.update_player()
 
     def remove_player(self, member):
-        del self.players[member.id]
+        #del self.players[member.id]
+        
+        #if member.isAdmin:
+        member.isDisconnected = True
         self.update_player()
 
     def update_player(self):

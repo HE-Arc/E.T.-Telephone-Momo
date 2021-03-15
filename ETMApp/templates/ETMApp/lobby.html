@@ -1,40 +1,80 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
 {% load static %}
-{% if not user.is_authenticated %}
-<div class="form-inline">
-  <div class="form-group row">
-    <label for="pseudo"  class="col-sm-2 col-form-label">Change your pseudo</label>
-    <div class="col-sm-6">
-      <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
-    </div>
-    <div class="col-sm-4 text-center">
-      <button id="btnPseudo" class="btn btn-primary mb-2">Change pseudo</button>
+
+<div id="lobbyContainer">
+  {% if not user.is_authenticated %}
+  <div class="form-inline">
+    <div class="form-group row">
+      <label for="pseudo" class="col-sm-2 col-form-label">Change your pseudo</label>
+      <div class="col-sm-6">
+        <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
+      </div>
+      <div class="col-sm-4 text-center">
+        <button id="btnPseudo" class="btn btn-primary mb-2">Change pseudo</button>
+      </div>
     </div>
   </div>
+  {% endif %}
+
+
+  <div id="roundContainer" style="display: none">
+    <!--todo marty-->
+    <label for="nbRound">Nombre de round: <span id="nbRound">3</span></label>
+    <input type="range" id="sliderRound" min="3" max="3">
+  </div>
+
+  <table class="table mt-5 table-striped table-hover table-sm">
+    <thead>
+      <tr>
+        <th>Connected</th>
+      </tr>
+    </thead>
+    <tbody class="text-danger" id="players">
+
+    </tbody>
+  </table>
+
+
+  <p id="numberOfPlayers" class="text-primary text-center">1 players ready !</p>
+
+  <button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()">Start !</button>
 </div>
-{% endif %}
 
-<table class="table mt-5 table-striped table-hover table-sm">
-  <thead>
-    <tr>
-      <th>Connected</th>
-    </tr>
-  </thead>
-  <tbody class="text-danger" id="players">
+<div id="textContainer" style="display: block">
+  <div>
+    <p>js bad</p>
+    <label for="">Enter a text</label>
+    <input type="text" id="textContent">
+    <button>Valider</button>
+  </div>
+</div>
 
-  </tbody>
-</table>
-
-
-<p id="numberOfPlayers" class="text-primary text-center">1 players ready !</p>
-
-<button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()">Start !</button>
+<div id="drawingContainer" style="display: block">
+  <button onclick="tool = pen">Pen</button>
+  <button onclick="tool = eraser">eraser</button>
+  <button onclick="tool = bucket">Bucket</button>
+  <button onclick="tool = line">Line</button>
+  <button onclick="tool = rect">rect</button>
+  <button onclick="undo()">undo</button>
+  <button onclick="redo()">redo</button>
+  <input type="file" value="upload" id="imageUpload"/>
+  <div class="canvas-container">
+    <canvas width="500" height="500" id="cnvb"></canvas>
+    <canvas width="500" height="500" id="cnv"></canvas>
+    <canvas width="500" height="500" id="cnvf"></canvas>
+  </div>
+</div>
 
 {{ game_url|json_script:"game_url" }}
 <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
+<script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
 {% endblock %}
 
 {% block title %}
 Create a party
+{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'ETMApp/css/drawer.css' %}">
 {% endblock %}
