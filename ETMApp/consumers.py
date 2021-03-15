@@ -7,6 +7,8 @@ from ETMApp.game.game_logic import GameLogic
 from ETMApp.game.member import Member
 
 from ETMApp.models import UserAnonyme
+from ETMApp.models import Message
+from ETMApp.models import Conversation
 import requests
 import random
 import logging
@@ -19,8 +21,6 @@ class ChatConsumer(WebsocketConsumer):
         super().__init__()
 
     def connect(self):
-        print("new connexion")
-        logger.error("new connexion log");
         self.room_name = self.scope['url_route']['kwargs']['game_url']
 
         user = self.scope["user"]
@@ -78,24 +78,19 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        data = json.loads(text_data)
+        message = json.loads(text_data)
         # message = data['message']
+        print(message)
+        if message['type'] == 'changePseudo':
+            self.change_pseudo(message['data'])
+        elif message['type'] == 'startGame':
+            if self.me.is_admin:
+                self.game.start()
+        elif message['type'] == 'message':
+            self.game.send_round_message(self.me, message['data'])
 
-        if data['type'] == 'changePseudo':
-            self.changePseudo(data['pseudo'])
-        if data['type'] == 'startGame':
-            self.game.start()
 
-        # Send message to room group
-        """async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )"""
-
-    def changePseudo(self, pseudo):
+    def change_pseudo(self, pseudo):
         if 'anonID' in self.scope['session']:
             self.me.pseudo = pseudo
             self.game.update_player()
