@@ -5,20 +5,36 @@
     <div class="container">
         <div class="row mt-3">
             <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-                <button id="penButton" type="button" class="btn btn-success"><span class="material-icons md-36">border_color</span>
+
+                <input type="radio" class="btn-check" id="penButton" name="tool" checked>
+                <label class="btn btn-outline-primary" for="penButton"><span class="material-icons md-36">border_color</span></label>
+
+                <input type="radio" class="btn-check" id="eraserButton" name="tool">
+                <label class="btn btn-outline-primary" for="eraserButton"><span class="material-icons md-36">rice_bowl</span></label>
+
+                <input type="radio" class="btn-check" id="bucketButton" name="tool">
+                <label class="btn btn-outline-primary" for="bucketButton"><span class="material-icons md-36">format_color_fill</span></label>
+
+
+                <!--<button id="penButton" type="button" class="btn btn-success"><span class="material-icons md-36">border_color</span>
                 </button>
                 <button id="eraserButton" type="button" class="btn btn-primary"><span class="material-icons md-36">rice_bowl</span>
                 </button>
                 <button id="bucketButton" type="button" class="btn btn-danger"><span class="material-icons md-36">format_color_fill</span>
-                </button>
+                </button>-->
             </div>
         </div>
         <div class="row mt-3">
             <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-                <button id="penLine" type="button" class="btn btn-success"><span class="material-icons md-36">horizontal_rule</span>
+                <input type="radio" class="btn-check" id="lineButton" name="tool">
+                <label class="btn btn-outline-primary" for="lineButton"><span class="material-icons md-36">horizontal_rule</span></label>
+
+                <input type="radio" class="btn-check" id="rectButton" name="tool">
+                <label class="btn btn-outline-primary" for="rectButton"><span class="material-icons md-36">crop_5_4</span></label>
+                <!--<button id="penLine" type="button" class="btn btn-success"><span class="material-icons md-36">horizontal_rule</span>
                 </button>
                 <button id="penRect" type="button" class="btn btn-primary"><span
-                        class="material-icons md-36">crop_5_4</span></button>
+                        class="material-icons md-36">crop_5_4</span></button>-->
             </div>
         </div>
         <div class="row mt-3">
@@ -30,8 +46,8 @@
             </div>
         </div>
         <div class="row mt-3">
-            <label for="imageUpload"><span class="material-icons md-36">insert_photo</span></label>
-            <input type="file" class="form-control-file" id="imageUpload" value="upload">
+            <label for="imageUpload" class="btn btn-primary"><span class="material-icons md-36">insert_photo</span></label>
+            <input type="file" class="form-control-file" id="imageUpload" value="upload" style="opacity: 0">
         </div>
         <div class="text-center">
             <div id="canvasContainer">
