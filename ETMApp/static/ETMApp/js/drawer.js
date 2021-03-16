@@ -317,9 +317,11 @@ function displayImage(url) {
 
 function getMousePos(evt) {
     let rect = cnv.getBoundingClientRect();
+    let ratioWith = cnv.width / rect.width;
+    let ratioHeight = cnv.height / rect.height;
     return {
-        x: Math.round(evt.clientX - rect.left),
-        y: Math.round(evt.clientY - rect.top)
+        x: Math.round(evt.clientX - rect.left) * ratioWith,
+        y: Math.round(evt.clientY - rect.top) * ratioHeight
     };
 }
 

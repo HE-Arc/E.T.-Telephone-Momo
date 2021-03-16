@@ -1,4 +1,4 @@
-#plsTurnUrPhone{
+/*#plsTurnUrPhone{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -6,12 +6,14 @@
     text-align: center;
     left: 0;
     top: 0;
-}
+}*/
 
+
+/* n'importe quoi !!!! */
 /* Horizontal orientation for game */
 @media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) { 
 
-    #plsTurnUrPhone{
+    /*#plsTurnUrPhone{
         display: none;
     }
 
@@ -35,9 +37,26 @@
         width: 100%;
         height: 100%;
     }
-    
+    */
 }
 
 /* Ask the user to rotate the device */
 @media screen and (min-width:320px) and (max-width:767px) and (orientation:portrait) { 
+}
+
+#canvasContainer {
+    /*height: 500px;*/
+    width: min(min(600px, 100%), 90vh);
+    padding-top: min(min(600px, 100%), 90vh);
+    background-color: red;
+    position: relative;
+    display: inline-block;
+}
+
+canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
 }
