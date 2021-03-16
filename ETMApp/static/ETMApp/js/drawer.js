@@ -90,6 +90,8 @@ let eraser = {
 
 let bucket = {
     mousedown(e) {
+        e.x = Math.round(e.x);
+        e.y = Math.round(e.y);
         let stack = [];
         let color = {
             r: 255,
@@ -115,7 +117,7 @@ let bucket = {
         }
 
 
-        while (stack.length > 0) {
+        while (stack.length > 0 && i < cnv.width * cnv.height) {
             let cPos = stack.shift();
 
 
@@ -129,6 +131,9 @@ let bucket = {
         ctx.putImageData(id, 0, 0);
 
         function addToStack(x, y) {
+            if (!(x >= 0 && x < cnv.width && y >= 0 && y < cnv.height)) {
+                return;
+            }
             let off = (y * id.width + x) * 4;
             let ccolor = {
                 r: pixels[off],
@@ -139,7 +144,6 @@ let bucket = {
 
 
             if (ccolor.r === startColor.r && ccolor.g === startColor.g && ccolor.b === startColor.b && ccolor.a === startColor.a) {
-
                 stack.push({x, y});
             }
             pixels[off] = color.r;
@@ -320,10 +324,11 @@ function getMousePos(evt) {
     let ratioWith = cnv.width / rect.width;
     let ratioHeight = cnv.height / rect.height;
     return {
-        x: Math.round(evt.clientX - rect.left) * ratioWith,
-        y: Math.round(evt.clientY - rect.top) * ratioHeight
+        x: Math.round((evt.clientX - rect.left) * ratioWith),
+        y: Math.round((evt.clientY - rect.top) * ratioHeight)
     };
 }
+
 
 cnvf.addEventListener('mousedown', (e) => {
     saveUndo();
@@ -344,3 +349,26 @@ window.addEventListener('mouseup', (e) => {
     ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
 });
 
+let lastTouch;
+
+cnvf.addEventListener('touchstart', (e) => {
+    lastTouch = e.touches[0];
+    saveUndo();
+    tool.mousedown(getMousePos(e.touches[0]));
+    isDragging = true;
+});
+cnvf.addEventListener('touchmove', (e) => {
+    if (isDragging)
+        tool.mousemove(getMousePos(e.touches[0]));
+    if (tool.drawMouse !== undefined)
+        tool.drawMouse(getMousePos(e.touches[0]));
+    e.preventDefault();
+    lastTouch = e.touches[0];
+});
+window.addEventListener('touchend', (e) => {
+    if (isDragging) {
+        tool.mouseup(getMousePos(lastTouch));
+        isDragging = false;
+    }
+    ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
+});
