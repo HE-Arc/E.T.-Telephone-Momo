@@ -31,10 +31,6 @@
 
                 <input type="radio" class="btn-check" id="rectButton" name="tool">
                 <label class="btn btn-outline-primary" for="rectButton"><span class="material-icons md-36">crop_5_4</span></label>
-                <!--<button id="penLine" type="button" class="btn btn-success"><span class="material-icons md-36">horizontal_rule</span>
-                </button>
-                <button id="penRect" type="button" class="btn btn-primary"><span
-                        class="material-icons md-36">crop_5_4</span></button>-->
             </div>
         </div>
         <div class="row mt-3">
@@ -49,12 +45,11 @@
             <label for="imageUpload" class="btn btn-primary"><span class="material-icons md-36">insert_photo</span></label>
             <input type="file" class="form-control-file" id="imageUpload" value="upload" style="opacity: 0">
         </div>
-        <div class="text-center">
-            <div id="canvasContainer">
-                <canvas width="1000" height="1000" id="cnvb"></canvas>
-                <canvas width="1000" height="1000" id="cnv"></canvas>
-                <canvas width="1000" height="1000" id="cnvf"></canvas>
-            </div>
+
+        <div id="canvasContainer">
+            <canvas width="1000" height="1000" id="cnvb"></canvas>
+            <canvas width="1000" height="1000" id="cnv"></canvas>
+            <canvas width="1000" height="1000" id="cnvf"></canvas>
         </div>
 
     </div>
