@@ -23,6 +23,19 @@ class UserAnonyme(models.Model):
 class Conversation(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
     url_conversation = models.CharField(max_length=8, unique=True)
+    messages = [
+        
+    ]
+    def add_message(self, msg):
+        self.messages.append(msg)
+    def nb_message(self):
+        return len(self.messages)
+        
+    @classmethod
+    def create(cls, id_game):
+        return cls(id_game=id_game, url_conversation=id_generator(8))
+
+
 
 
 class Message(models.Model):
@@ -32,6 +45,21 @@ class Message(models.Model):
     description = models.CharField(max_length=100, null=True)
     url_drawing = models.CharField(max_length=8, null=True)
     order = models.PositiveIntegerField()
+
+    @classmethod
+    def create_message(cls, id_conversation, id_user, is_connected, text, order):
+        if is_connected:
+            return cls(id_conversation=id_conversation, id_user=id_user, description=text, order=order)
+        else:
+            return cls(id_conversation=id_conversation, id_userAnonyme=id_user, description=text, order=order)
+
+    @classmethod
+    def create_image(cls, id_conversation, id_user, is_connected, image, order):
+        #todo image
+        if is_connected:
+            return cls(id_conversation=id_conversation, id_user=id_user)
+        else:
+            return cls(id_conversation=id_conversation, id_userAnonyme=id_user)
 
 
 class UserLike(models.Model):

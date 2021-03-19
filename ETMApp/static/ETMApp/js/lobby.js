@@ -15,7 +15,7 @@ const chatSocket = new WebSocket(
 //Set on click event
 let btnPseudo = document.getElementById("btnPseudo");
 if (btnPseudo)
-    addEventListener("click", changePseudo);
+    btnPseudo.addEventListener("click", changePseudo);
 
 let pageTitle = document.getElementById('pageTitle');
 let sliderRound = document.getElementById('sliderRound');
@@ -24,6 +24,9 @@ let textContainer = document.getElementById('textContainer');
 let drawingContainer = document.getElementById('drawingContainer');
 
 let textContent = document.getElementById('textContent');
+let btnValidate = document.getElementById("btnValidate");
+
+btnValidate.addEventListener('click', sendMessage);
 
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
@@ -48,12 +51,6 @@ chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-function sendMessage() {
-    chatSocket.send(JSON.stringify({
-        'message': "yo"
-    }));
-    console.log("sended yo");
-}
 
 function lobbyPlayers(players) {
     sliderRound.max = players.length;
@@ -101,7 +98,7 @@ function changePseudo() {
     let pseudo = document.getElementById('pseudo').value;
     chatSocket.send(JSON.stringify({
         'type': 'changePseudo',
-        'pseudo': pseudo
+        'data': pseudo
     }));
     me.pseudo = pseudo;
 }
@@ -113,8 +110,23 @@ function startGame() {
 }
 
 function gameStarted() {
-    alert("the game has started");
     lobbyContainer.style.display = 'none';
     textContainer.style.display = 'block';
     pageTitle.innerHTML = 'Write a text to draw';
+}
+
+function sendMessage() {
+    console.log(textContent.value);
+    chatSocket.send(JSON.stringify({
+        'type': 'message',
+        'data': textContent.value
+    }));
+}
+
+
+function sendCanvas() {
+    chatSocket.send(JSON.stringify({
+        'type': 'image',
+        'data': cnv.toDataURL()
+    }));
 }
