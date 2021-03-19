@@ -60,7 +60,7 @@ function lobbyPlayers(players) {
     table.innerHTML = '';
 
     //Add players in element then in the html table
-    document.getElementById('players').innerHTML = "";
+    table.innerHTML = "";
     for (let player of players) {
         if (!player.isDisconnected) {
             let tr = document.createElement('tr');

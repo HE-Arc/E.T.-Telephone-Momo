@@ -93,6 +93,14 @@ def disconnect(request):
     logout(request)
     return redirect('/')
 
+def history(request):
+    return render(request, 'ETMApp/history.html')
+
+def rounds(request):
+    return render(request, 'ETMApp/rounds.html')
+
+def tmp(request):
+    return render(request, 'ETMApp/tmp.html')
 
 def create_game(request):
     game = Game.create()

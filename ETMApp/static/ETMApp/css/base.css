@@ -7,6 +7,10 @@ body, html{
     width: 50px;
 }
 
-#test{
-    /*margin-top: 30%;*/
+#history_table, #rounds_table{
+    table-layout: fixed;
+}
+
+#history_table th:first-child{
+    width: 100px;
 }

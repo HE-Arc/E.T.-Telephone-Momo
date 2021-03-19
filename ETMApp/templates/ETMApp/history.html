@@ -1,0 +1,26 @@
+{% extends "ETMApp/base.html" %}
+{% block content %}
+{% load static %}
+{% if not user.is_authenticated %}
+<p>Your are not connected</p>
+{% endif %}
+
+<table id="history_table" class="table mt-5 table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th># Players</th>
+      <th>Players</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody class="text-danger" id="games">
+  </tbody>
+</table>
+
+{{ game_url|json_script:"game_url" }}
+<script type="application/javascript" src="{% static 'ETMApp/js/history.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+History of your games
+{% endblock %}
