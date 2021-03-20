@@ -12,6 +12,9 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
+let drawing = false;
+let sent = false;
+
 //Set on click event
 let btnPseudo = document.getElementById("btnPseudo");
 if (btnPseudo)
@@ -26,7 +29,7 @@ let drawingContainer = document.getElementById('drawingContainer');
 let textContent = document.getElementById('textContent');
 let btnValidate = document.getElementById("btnValidate");
 
-btnValidate.addEventListener('click', sendMessage);
+btnValidate.addEventListener('click', sendCurrent);
 
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
@@ -40,6 +43,9 @@ chatSocket.onmessage = function (e) {
             break;
         case "game_start":
             gameStarted();
+            break;
+        case "round_end":
+            roundEnded();
             break;
         default:
             console.error("Unknown event type", e);
@@ -110,13 +116,15 @@ function startGame() {
 }
 
 function gameStarted() {
+    textContent.disabled = false;
+    btnValidate.disabled = false;
     lobbyContainer.style.display = 'none';
     textContainer.style.display = 'block';
     pageTitle.innerHTML = 'Write a text to draw';
 }
 
+
 function sendMessage() {
-    console.log(textContent.value);
     chatSocket.send(JSON.stringify({
         'type': 'message',
         'data': textContent.value
@@ -129,4 +137,34 @@ function sendCanvas() {
         'type': 'image',
         'data': cnv.toDataURL()
     }));
+}
+
+
+function sendCurrent(sentByServer) {
+    if (!sent) {
+        if(drawing) {
+            canDraw = false;
+            sendCanvas();
+        } else {
+            textContent.disabled = true;
+            sendMessage();
+        }
+
+        btnValidate.disabled = true;
+        
+        //todo marty page en attente d'autre joueurs
+    }
+
+    if(sentByServer) {
+        //todo marty round finishing soon
+    }
+}
+
+function nextRound() {
+    canDraw = true;
+    textContent.disabled = false;
+    btnValidate.disabled = false;
+
+    drawing = !drawing;
+    sent = false;
 }

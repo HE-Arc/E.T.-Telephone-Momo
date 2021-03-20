@@ -43,10 +43,8 @@
 
 <div id="textContainer" style="display: block">
   <div>
-    <p>js bad</p>
-    <label for="">Enter a text</label>
+    <label for="textContent">Enter a text</label>
     <input type="text" id="textContent">
-    <button id="btnValidate">Valider</button>
   </div>
 </div>
 
@@ -65,6 +63,8 @@
     <canvas width="500" height="500" id="cnvf"></canvas>
   </div>
 </div>
+
+<button class="btn btn-primary" id="btnValidate">Valider</button>
 
 {{ game_url|json_script:"game_url" }}
 <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>

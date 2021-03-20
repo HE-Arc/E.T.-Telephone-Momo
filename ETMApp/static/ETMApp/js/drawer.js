@@ -11,6 +11,8 @@ let ctxb = cnvb.getContext('2d');
 
 let lineWidth = 10;
 
+let canDraw = true;
+
 ctx.lineCap = 'round';
 ctx.lineJoin = 'round';
 ctxf.lineCap = 'round';
@@ -331,9 +333,11 @@ function getMousePos(evt) {
 
 
 cnvf.addEventListener('mousedown', (e) => {
-    saveUndo();
-    tool.mousedown(getMousePos(e));
-    isDragging = true;
+    if (canDraw) {
+        saveUndo();
+        tool.mousedown(getMousePos(e));
+        isDragging = true;
+    }
 });
 cnvf.addEventListener('mousemove', (e) => {
     if (isDragging)
@@ -352,10 +356,12 @@ window.addEventListener('mouseup', (e) => {
 let lastTouch;
 
 cnvf.addEventListener('touchstart', (e) => {
-    lastTouch = e.touches[0];
-    saveUndo();
-    tool.mousedown(getMousePos(e.touches[0]));
-    isDragging = true;
+    if (canDraw) {
+        lastTouch = e.touches[0];
+        saveUndo();
+        tool.mousedown(getMousePos(e.touches[0]));
+        isDragging = true;
+    }
 });
 cnvf.addEventListener('touchmove', (e) => {
     if (isDragging)
