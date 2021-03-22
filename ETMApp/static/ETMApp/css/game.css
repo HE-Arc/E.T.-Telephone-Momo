@@ -2,10 +2,6 @@
 /* Horizontal orientation for game */
 @media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) { 
 
-    #plsTurnUrPhone{
-        display: none;
-    }
-
     #main_container {
         margin-left: 0;
         width: 40%;
@@ -25,10 +21,6 @@
     }
 }
 
-/* Ask the user to rotate the device */
-@media screen and (min-width:320px) and (max-width:767px) and (orientation:portrait) { 
-}
-
 #canvasContainer {
     /*height: 500px;*/
     width: min(min(600px, 100%), 90vh);
@@ -36,6 +28,8 @@
     background-color: red;
     position: relative;
     display: inline-block;
+    animation-duration: 2s;
+    animation-name: slidefromright;
 }
 
 canvas {
@@ -53,4 +47,37 @@ canvas {
 
 #colorPicker{
     height: 100%;
+}
+
+/*Animations*/
+#drawContainer{
+    animation-duration: 2s;
+    animation-name: slidefromleft;
+}
+
+#findContainer{
+    animation-duration: 2s;
+    animation-name: slidefromleft;
+}
+
+@keyframes slidefromleft {
+    from {
+      margin-left: -150%;
+    }
+  
+    to {
+      margin-left: 0%;
+    }
+}
+
+@keyframes slidefromright {
+    from {
+      margin-left: 200%;
+      left: 100%;
+    }
+  
+    to {
+      margin-left: 0%;
+      left: 0;
+    }
 }
