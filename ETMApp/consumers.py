@@ -9,7 +9,7 @@ from ETMApp.game.member import Member
 from ETMApp.models import UserAnonyme
 from ETMApp.models import Message
 from ETMApp.models import Conversation
-import requests
+#import requests
 import random
 import logging
 
@@ -39,7 +39,7 @@ class ChatConsumer(WebsocketConsumer):
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
-                                 self.channel_name)
+                                 self.channel_name, self)
                 self.scope["session"].save()
                 #for attr in dir(self.scope):
                 #    print("obj.%s = %r" % (attr, getattr(self.scope, attr)))

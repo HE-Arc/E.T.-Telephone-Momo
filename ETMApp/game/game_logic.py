@@ -1,3 +1,6 @@
+import random
+import json
+
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -16,8 +19,10 @@ class GameLogic:
 
         self.channel_layer = get_channel_layer()
         self.group_send = async_to_sync(self.channel_layer.group_send)
+        self.current_round = 0
 
         self.conversations = []
+        self.all_messages = []
 
     def add_player(self, member):
         if len(self.players) == 0:
@@ -54,7 +59,7 @@ class GameLogic:
             #self.round_choose_word()
             
             # Remove disconnected players
-            self.players = {p.id: p for p in self.players if not p.is_disconnected}
+            self.players = {p.id: p for p in self.players.values() if not p.is_disconnected}
 
             nbPlayer = len(self.players)
             randNumbers = [i for i in range(nbPlayer)]
@@ -68,25 +73,32 @@ class GameLogic:
                 conv.save()
                 #conv.addRound()
                 self.conversations.append(conv)
+                self.all_messages.append([])
                 self.players[m].current_conversation = self.players[m].index
                 #rounds
 
     def send_round_message(self, user, text):
         conv = self.conversations[user.current_conversation]
-        m = Message.create_message(conv, user.getUser(), user.is_connected, text, conv.nb_message())
+        m = Message.create_message(conv, user.getUser(), user.is_connected, text, len(conv.messages))
         m.save()
-        conv.add_message(m)
+        # conv.messages.append(m)
         user.is_ready = True
+        # print("insert message")
+        # print(conv.id)
+        # print(conv.messages)
+        self.all_messages[user.current_conversation].append(m)
+
+
         if self.all_players_ready():
             self.timer.cancel()
-            next_round()
+            self.next_round()
         
     def all_players_ready(self):
         all_ready = True
         for m in self.players:
-                if not self.players[m].is_disconnected:
-                    if not user.is_ready:
-                        all_ready = False
+            if not self.players[m].is_disconnected:
+                if not self.players[m].is_ready:
+                    all_ready = False
         return all_ready
 
 
@@ -96,6 +108,17 @@ class GameLogic:
 
     def next_round(self):
         print("next round")
+        self.current_round += 1
+        print(self.conversations)
+
+        for p in self.players.values():
+            p.current_conversation = (p.index + self.current_round) % len(self.conversations)
+
+            p.socket.send(text_data=json.dumps({
+                 'type': 'new_round',
+                 'data': self.all_messages[p.current_conversation][-1].description
+            }))
+
 
         # todo conversations[index + currentRound] ou
         # un truc comme ca et envoyé le text a l'utilisateur

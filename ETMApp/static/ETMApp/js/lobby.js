@@ -45,7 +45,7 @@ chatSocket.onmessage = function (e) {
             gameStarted();
             break;
         case "round_end":
-            roundEnded();
+            sendCurrent();
             break;
         default:
             console.error("Unknown event type", e);
