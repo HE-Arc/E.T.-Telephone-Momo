@@ -1,0 +1,19 @@
+{% extends "ETMApp/base.html" %}
+{% load static %}
+
+{% block content %}
+    {% include 'ETMApp/draw.html' %}
+
+    {% include 'ETMApp/find.html' %}
+
+    <script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
+    <script type="application/javascript" src="{% static 'ETMApp/js/game.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+PLAY
+{% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'ETMApp/css/game.css' %}">
+{% endblock %}
