@@ -10,4 +10,22 @@ document.getElementById('rectButton').addEventListener('change', () => tool = re
 document.getElementById('undoButton').addEventListener('click', undo);
 document.getElementById('redoButton').addEventListener('click', redo);
 
-//Pass to draw gameplay to
+//Get the draw and find div
+let drawDiv = document.getElementById('drawContainer');
+let findDiv = document.getElementById('findContainer');
+
+//TO REMOVE
+displayDraw();
+
+//Pass to draw gameplay to find gameplay
+function displayDraw()
+{
+    findDiv.style.display = 'none'
+    drawDiv.style.display = 'block';
+}
+
+function displayFind()
+{
+    findDiv.style.display = 'block';
+    drawDiv.style.display = 'none';
+}
