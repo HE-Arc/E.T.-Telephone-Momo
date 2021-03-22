@@ -79,5 +79,6 @@ canvas {
     to {
       margin-left: 0%;
       left: 0;
+      display: none;
     }
 }
