@@ -9,7 +9,7 @@ from ETMApp.game.member import Member
 from ETMApp.models import UserAnonyme
 from ETMApp.models import Message
 from ETMApp.models import Conversation
-import requests
+#import requests
 import random
 import logging
 
@@ -30,7 +30,7 @@ class ChatConsumer(WebsocketConsumer):
             if "anonID" in self.scope["session"]:
                 # Already have a session
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
-                                 self.channel_name)
+                                 self.channel_name, self)
             else:
                 #r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
                 r = "anon" + str(random.randint(0, 1000))
@@ -39,12 +39,12 @@ class ChatConsumer(WebsocketConsumer):
                 self.scope["session"]["pseudo"] = anon.pseudo
                 self.scope["session"]["anonID"] = anon.id
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
-                                 self.channel_name)
+                                 self.channel_name, self)
                 self.scope["session"].save()
-                for attr in dir(self.scope):
-                    print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
+                #for attr in dir(self.scope):
+                #    print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
         else:
-            self.me = Member(user.username, user.id, True, self.channel_name)
+            self.me = Member(user.username, user.id, True, self.channel_name, self)
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -63,7 +63,7 @@ class ChatConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps({
             'type': 'init_player',
-            'data': self.me.__dict__
+            'data': self.me.get_serializable()
         }))
 
     def disconnect(self, close_code):

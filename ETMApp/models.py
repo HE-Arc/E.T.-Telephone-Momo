@@ -23,14 +23,7 @@ class UserAnonyme(models.Model):
 class Conversation(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
     url_conversation = models.CharField(max_length=8, unique=True)
-    messages = [
-        
-    ]
-    def add_message(self, msg):
-        self.messages.append(msg)
-    def nb_message(self):
-        return len(self.messages)
-        
+
     @classmethod
     def create(cls, id_game):
         return cls(id_game=id_game, url_conversation=id_generator(8))

@@ -10,6 +10,9 @@ document.getElementById('rectButton').addEventListener('change', () => tool = re
 document.getElementById('undoButton').addEventListener('click', undo);
 document.getElementById('redoButton').addEventListener('click', redo);
 
+document.getElementById('colorPicker').addEventListener('change', e => color = e.target.value);
+document.getElementById('thicknessSelector').addEventListener('change', e => lineWidth = e.target.value);
+
 //Get the draw and find div
 let drawDiv = document.getElementById('drawContainer');
 let findDiv = document.getElementById('findContainer');

@@ -10,6 +10,9 @@ let ctxb = cnvb.getContext('2d');
 //TODO add shortcut
 
 let lineWidth = 10;
+let color = "#000000";
+
+let canDraw = true;
 
 ctx.lineCap = 'round';
 ctx.lineJoin = 'round';
@@ -24,8 +27,8 @@ let isDragging = false;
 
 let pen = {
     mousedown(e) {
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "black";
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
         ctx.lineWidth = lineWidth;
         ctx.arc(e.x, e.y, ctx.lineWidth / 2, 0, 2 * Math.PI);
         ctx.fill();
@@ -44,8 +47,10 @@ let pen = {
     },
     drawMouse(e) {
         ctxf.fillStyle = 'transparent';
+        ctxf.lineCap = 'round';
+        ctxf.lineJoin = 'round';
+        ctxf.lineWidth = 1;
         ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
-        ctxf.beginPath();
         ctxf.setLineDash([2, 3]);
         ctxf.beginPath();
         ctxf.arc(e.x, e.y, lineWidth / 2, 0, Math.PI * 2);
@@ -60,7 +65,7 @@ let eraser = {
         ctx.fillStyle = "black";
         ctx.lineWidth = lineWidth;
         ctx.globalCompositeOperation = "destination-out";
-        ctx.arc(e.x, e.y, ctx.lineWidth / 2, 0, Math.PI * 2, false);
+        ctx.arc(e.x, e.y, ctx.lineWidth / 1.8, 0, Math.PI * 2, false);
         ctx.fill();
         ctx.beginPath();
         ctx.moveTo(e.x, e.y);
@@ -78,8 +83,10 @@ let eraser = {
     },
     drawMouse(e) {
         ctxf.fillStyle = 'transparent';
+        ctxf.lineCap = 'round';
+        ctxf.lineJoin = 'round';
+        ctxf.lineWidth = 1;
         ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
-        ctxf.beginPath();
         ctxf.setLineDash([2, 2]);
         ctxf.beginPath();
         ctxf.arc(e.x, e.y, lineWidth / 2, 0, Math.PI * 2);
@@ -93,11 +100,14 @@ let bucket = {
         e.x = Math.round(e.x);
         e.y = Math.round(e.y);
         let stack = [];
-        let color = {
-            r: 255,
-            g: 0,
-            b: 255
+        var hex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+        let rgb = {
+            r: parseInt(hex[1], 16),
+            g: parseInt(hex[2], 16),
+            b: parseInt(hex[3], 16)
         }
+        console.log(hex);
+        console.log(rgb);
         ctx.shadowBlur = 0;
         let id = ctx.getImageData(0, 0, cnv.width, cnv.height);
         let pixels = id.data;
@@ -112,7 +122,7 @@ let bucket = {
 
         let i = 0;
 
-        if (!(color.r === startColor.r && color.g === startColor.g && color.b === startColor.b)) {
+        if (!(rgb.r === startColor.r && rgb.g === startColor.g && rgb.b === startColor.b)) {
             stack.push(e);
         }
 
@@ -146,9 +156,9 @@ let bucket = {
             if (ccolor.r === startColor.r && ccolor.g === startColor.g && ccolor.b === startColor.b && ccolor.a === startColor.a) {
                 stack.push({x, y});
             }
-            pixels[off] = color.r;
-            pixels[off + 1] = color.g;
-            pixels[off + 2] = color.b;
+            pixels[off] = rgb.r;
+            pixels[off + 1] = rgb.g;
+            pixels[off + 2] = rgb.b;
             pixels[off + 3] = 255;
         }
     },
@@ -163,8 +173,8 @@ let bucket = {
 let line = {
     startPos: {x: 0, y: 0},
     mousedown(e) {
-        ctxf.strokeStyle = "black";
-        ctxf.fillStyle = "black";
+        ctxf.strokeStyle = color;
+        ctxf.fillStyle = color;
         ctxf.lineWidth = lineWidth;
         this.startPos.x = e.x;
         this.startPos.y = e.y;
@@ -178,8 +188,8 @@ let line = {
         ctxf.closePath();
     },
     mouseup(e) {
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "black";
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
         ctx.moveTo(this.startPos.x, this.startPos.y);
@@ -193,7 +203,7 @@ let line = {
 let rect = {
     startPos: {x: 0, y: 0},
     mousedown(e) {
-        ctxf.fillStyle = "black";
+        ctxf.fillStyle = color;
         this.startPos.x = e.x;
         this.startPos.y = e.y;
     },
@@ -202,7 +212,7 @@ let rect = {
         ctxf.fillRect(this.startPos.x, this.startPos.y, e.x - this.startPos.x, e.y - this.startPos.y);
     },
     mouseup(e) {
-        ctx.fillStyle = "black";
+        ctx.fillStyle = color;
         ctx.fillRect(this.startPos.x, this.startPos.y, e.x - this.startPos.x, e.y - this.startPos.y);
     }
 };
@@ -210,7 +220,7 @@ let rect = {
 let tool = pen;
 
 
-let maxUndo = 5;
+let maxUndo = 15;
 let undoStack = [];
 let redoStack = [];
 
@@ -268,6 +278,14 @@ window.addEventListener('drop', (e) => {
     }
 }, false);
 
+function resetCanvas() {
+    ctxf.clearRect(0, 0, cnvf.width, cnvf.height);
+    ctx.clearRect(0, 0, cnvf.width, cnvf.height);
+}
+
+function resetBackground() {
+    ctxb.clearRect(0, 0, cnvf.width, cnvf.height);
+}
 
 function uploadImage(e) {
     readImage(e.target.files[0]);
@@ -331,9 +349,11 @@ function getMousePos(evt) {
 
 
 cnvf.addEventListener('mousedown', (e) => {
-    saveUndo();
-    tool.mousedown(getMousePos(e));
-    isDragging = true;
+    if (canDraw) {
+        saveUndo();
+        tool.mousedown(getMousePos(e));
+        isDragging = true;
+    }
 });
 cnvf.addEventListener('mousemove', (e) => {
     if (isDragging)
@@ -352,10 +372,12 @@ window.addEventListener('mouseup', (e) => {
 let lastTouch;
 
 cnvf.addEventListener('touchstart', (e) => {
-    lastTouch = e.touches[0];
-    saveUndo();
-    tool.mousedown(getMousePos(e.touches[0]));
-    isDragging = true;
+    if (canDraw) {
+        lastTouch = e.touches[0];
+        saveUndo();
+        tool.mousedown(getMousePos(e.touches[0]));
+        isDragging = true;
+    }
 });
 cnvf.addEventListener('touchmove', (e) => {
     if (isDragging)
