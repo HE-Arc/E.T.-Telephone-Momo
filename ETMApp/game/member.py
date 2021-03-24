@@ -27,8 +27,8 @@ class Member:
         return {
             'pseudo': self.pseudo,
             'id': self.id,
-            'is_admin': self.is_admin,
-            'is_disconnected': self.is_disconnected}
+            'isAdmin': self.is_admin,
+            'isDisconnected': self.is_disconnected}
 
 
             

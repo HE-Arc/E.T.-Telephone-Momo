@@ -55,7 +55,7 @@ canvas {
     animation-name: slidefromleft;
 }
 
-#findContainer{
+#findContainer, #chooseContainer {
     animation-duration: 2s;
     animation-name: slidefromleft;
 }
