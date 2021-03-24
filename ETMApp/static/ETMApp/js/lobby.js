@@ -23,16 +23,17 @@ if (btnPseudo)
 let pageTitle = document.getElementById('pageTitle');
 let sliderRound = document.getElementById('sliderRound');
 let lobbyContainer = document.getElementById('lobbyContainer');
-let textContainer = document.getElementById('textContainer');
-let drawingContainer = document.getElementById('drawingContainer');
+let chooseContainer = document.getElementById('chooseContainer');
+let drawContainer = document.getElementById('drawContainer');
 
 let textContent = document.getElementById('textContent');
-let btnValidate = document.getElementById("btnValidate");
+let btnValidateChoose = document.getElementById("btnValidateChoose");
 
-btnValidate.addEventListener('click', sendCurrent);
+btnValidateChoose.addEventListener('click', sendCurrent);
 
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
+    console.log("received", e);
 
     switch (e.type) {
         case "lobby_players":
@@ -46,6 +47,9 @@ chatSocket.onmessage = function (e) {
             break;
         case "round_end":
             sendCurrent();
+            break;
+        case "new_round_draw":
+            displayDraw(e.data)
             break;
         default:
             console.error("Unknown event type", e);
@@ -74,6 +78,7 @@ function lobbyPlayers(players) {
             //If it's the actual client, put it in evidence
             if (me.id === player.id) {
                 tr.classList.add("bg-success")
+                initPlayer(me);
             }
 
             let td = document.createElement('td');
@@ -95,8 +100,10 @@ function initPlayer(initMe) {
         document.getElementById('pseudo').disabled = false;
         document.getElementById('btnPseudo').disabled = false;
     }
+    console.log(me);
     if (initMe.isAdmin === true) {
         document.getElementById('roundContainer').style.display = "block";
+        document.getElementById('btnStartGame').disabled = false;
     }
 }
 
@@ -117,10 +124,8 @@ function startGame() {
 
 function gameStarted() {
     textContent.disabled = false;
-    btnValidate.disabled = false;
-    lobbyContainer.style.display = 'none';
-    textContainer.style.display = 'block';
-    pageTitle.innerHTML = 'Write a text to draw';
+    btnValidateChoose.disabled = false;
+    displayChoose();
 }
 
 
@@ -150,7 +155,7 @@ function sendCurrent(sentByServer) {
             sendMessage();
         }
 
-        btnValidate.disabled = true;
+        btnValidateChoose.disabled = true;
         
         //todo marty page en attente d'autre joueurs
     }
@@ -163,7 +168,7 @@ function sendCurrent(sentByServer) {
 function nextRound() {
     canDraw = true;
     textContent.disabled = false;
-    btnValidate.disabled = false;
+    btnValidateChoose.disabled = false;
 
     drawing = !drawing;
     sent = false;

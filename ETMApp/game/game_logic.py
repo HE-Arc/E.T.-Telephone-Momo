@@ -10,6 +10,7 @@ from ETMApp.models import Conversation
 
 from threading import Timer
 
+
 class GameLogic:
     def __init__(self, url):
         self.url = url
@@ -30,14 +31,14 @@ class GameLogic:
         if member.id in self.players:
             member.is_admin = self.players[member.id].is_admin
         self.players[member.id] = member
-        
-        #self.players[member.id] = member
+
+        # self.players[member.id] = member
         self.update_player()
 
     def remove_player(self, member):
-        #del self.players[member.id]
-        
-        #if member.isAdmin:
+        # del self.players[member.id]
+
+        # if member.isAdmin:
         member.is_disconnected = True
         self.update_player()
 
@@ -56,30 +57,29 @@ class GameLogic:
             self.send('game_start', {})
             self.game_model.has_started = True
             self.game_model.save()
-            #self.round_choose_word()
-            
+            # self.round_choose_word()
+
             # Remove disconnected players
             self.players = {p.id: p for p in self.players.values() if not p.is_disconnected}
 
             nbPlayer = len(self.players)
             randNumbers = [i for i in range(nbPlayer)]
             random.shuffle(randNumbers)
-            
 
             for m in self.players:
                 self.players[m].index = randNumbers.pop()
                 self.players[m].is_ready = False
                 conv = Conversation.create(self.game_model)
                 conv.save()
-                #conv.addRound()
+                # conv.addRound()
                 self.conversations.append(conv)
                 self.all_messages.append([])
                 self.players[m].current_conversation = self.players[m].index
-                #rounds
+                # rounds
 
     def send_round_message(self, user, text):
         conv = self.conversations[user.current_conversation]
-        m = Message.create_message(conv, user.getUser(), user.is_connected, text, len(conv.messages))
+        m = Message.create_message(conv, user.getUser(), user.is_connected, text, len(self.all_messages[user.current_conversation]))
         m.save()
         # conv.messages.append(m)
         user.is_ready = True
@@ -88,11 +88,10 @@ class GameLogic:
         # print(conv.messages)
         self.all_messages[user.current_conversation].append(m)
 
-
         if self.all_players_ready():
             self.timer.cancel()
             self.next_round()
-        
+
     def all_players_ready(self):
         all_ready = True
         for m in self.players:
@@ -100,7 +99,6 @@ class GameLogic:
                 if not self.players[m].is_ready:
                     all_ready = False
         return all_ready
-
 
     def round_end(self):
         print("round end called")
@@ -115,19 +113,10 @@ class GameLogic:
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)
 
             p.socket.send(text_data=json.dumps({
-                 'type': 'new_round',
-                 'data': self.all_messages[p.current_conversation][-1].description
+                'type': 'new_round_draw',
+                'data': self.all_messages[p.current_conversation][-1].description
             }))
-
 
         # todo conversations[index + currentRound] ou
         # un truc comme ca et envoyé le text a l'utilisateur
         # tester le code qu'on a fait a la ligne 57
-
-    
-        
-        
-
-        
-
-

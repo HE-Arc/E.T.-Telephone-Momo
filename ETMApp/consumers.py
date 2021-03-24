@@ -9,12 +9,13 @@ from ETMApp.game.member import Member
 from ETMApp.models import UserAnonyme
 from ETMApp.models import Message
 from ETMApp.models import Conversation
-#import requests
+# import requests
 import random
 import logging
 
 games = {}
 logger = logging.getLogger(__name__)
+
 
 class ChatConsumer(WebsocketConsumer):
     def __init__(self):
@@ -32,7 +33,7 @@ class ChatConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name, self)
             else:
-                #r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
+                # r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
                 r = "anon" + str(random.randint(0, 1000))
                 anon = UserAnonyme(pseudo=r)
                 anon.save()
@@ -41,7 +42,7 @@ class ChatConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name, self)
                 self.scope["session"].save()
-                #for attr in dir(self.scope):
+                # for attr in dir(self.scope):
                 #    print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
         else:
             self.me = Member(user.username, user.id, True, self.channel_name, self)
@@ -51,7 +52,6 @@ class ChatConsumer(WebsocketConsumer):
             self.room_name,
             self.channel_name
         )
-
 
         if self.room_name not in games:
             games[self.room_name] = GameLogic(self.room_name)
@@ -72,7 +72,6 @@ class ChatConsumer(WebsocketConsumer):
             self.room_name,
             self.channel_name
         )
-        
 
         self.game.remove_player(self.me)
 
@@ -88,7 +87,6 @@ class ChatConsumer(WebsocketConsumer):
                 self.game.start()
         elif message['type'] == 'message':
             self.game.send_round_message(self.me, message['data'])
-
 
     def change_pseudo(self, pseudo):
         if 'anonID' in self.scope['session']:

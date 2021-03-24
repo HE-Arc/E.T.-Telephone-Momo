@@ -16,19 +16,40 @@ document.getElementById('thicknessSelector').addEventListener('change', e => lin
 //Get the draw and find div
 let drawDiv = document.getElementById('drawContainer');
 let findDiv = document.getElementById('findContainer');
+let chooseDiv = document.getElementById('chooseContainer');
+let lobbyDiv = document.getElementById('lobbyContainer');
 
 //TO REMOVE
-displayDraw();
+//displayDraw();
+
+drawDiv.style.display = 'none';
+findDiv.style.display = 'none';
+chooseDiv.style.display = 'none';
+lobbyDiv.style.display = 'block';
 
 //Pass to draw gameplay to find gameplay
-function displayDraw()
-{
-    findDiv.style.display = 'none'
+function displayDraw(description = "") {
+    findDiv.style.display = 'none';
     drawDiv.style.display = 'block';
+    chooseDiv.style.display = 'none';
+    lobbyDiv.style.display = 'none';
+
+    document.getElementById('drawDescription').value = description;
+    pageTitle.innerHTML = 'Draw';
 }
 
-function displayFind()
-{
+function displayFind() {
     findDiv.style.display = 'block';
     drawDiv.style.display = 'none';
+    chooseDiv.style.display = 'none';
+    lobbyDiv.style.display = 'none';
+    pageTitle.innerHTML = 'Find';
+}
+
+function displayChoose() {
+    findDiv.style.display = 'none';
+    drawDiv.style.display = 'none';
+    chooseDiv.style.display = 'block';
+    lobbyDiv.style.display = 'none';
+    pageTitle.innerHTML = 'Choose';
 }
