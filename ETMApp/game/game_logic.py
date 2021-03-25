@@ -92,6 +92,22 @@ class GameLogic:
             self.timer.cancel()
             self.next_round()
 
+    def send_round_image(self, user, image):
+        conv = self.conversations[user.current_conversation]
+        # TODO
+        m = Message.create_image(conv, user.getUser(), user.is_connected, text, len(self.all_messages[user.current_conversation]))
+        m.save()
+        # conv.messages.append(m)
+        user.is_ready = True
+        # print("insert message")
+        # print(conv.id)
+        # print(conv.messages)
+        self.all_messages[user.current_conversation].append(m)
+
+        if self.all_players_ready():
+            self.timer.cancel()
+            self.next_round()
+
     def all_players_ready(self):
         all_ready = True
         for m in self.players:
@@ -116,6 +132,8 @@ class GameLogic:
                 'type': 'new_round_draw',
                 'data': self.all_messages[p.current_conversation][-1].description
             }))
+            p.is_ready = False
+        self.timer = Timer(10, self.round_end)
 
         # todo conversations[index + currentRound] ou
         # un truc comme ca et envoyé le text a l'utilisateur
