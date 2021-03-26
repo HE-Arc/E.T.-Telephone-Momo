@@ -1,41 +1,67 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
-{% load static %}
+    {% load static %}
 
-{% if not user.is_authenticated %}
-<div class="form-inline">
-  <div class="form-group row">
-    <label for="pseudo"  class="col-sm-2 col-form-label">Change your pseudo</label>
-    <div class="col-sm-6">
-      <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
+    <div id="lobbyContainer">
+        {% if not user.is_authenticated %}
+            <div class="form-inline">
+                <div class="form-group row">
+                    <label for="pseudo" class="col-md-4 col-form-label">Change your pseudo</label>
+                    <div class="col-md-5">
+                        <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
+                    </div>
+                    <button id="btnPseudo" class="btn btn-primary col-md-3">Change pseudo</button>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div id="roundContainer" style="display: none">
+            <!--todo marty-->
+            <label for="nbRound">Nombre de round: <span id="nbRound">3</span></label>
+            <input type="range" id="sliderRound" min="3" max="3">
+        </div>
+
+        <table class="table mt-5 table-striped table-hover table-sm">
+            <thead>
+            <tr>
+                <th>Connected</th>
+            </tr>
+            </thead>
+            <tbody class="text-danger" id="players">
+
+            </tbody>
+        </table>
+
+
+        <p id="numberOfPlayers" class="text-primary text-center">1 players ready !</p>
+
+        <button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()" id="btnStartGame" disabled>Start !</button>
     </div>
-    <div class="col-sm-4 text-center">
-      <button id="btnPseudo" class="btn btn-primary mb-2">Change pseudo</button>
-    </div>
-  </div>
-</div>
-{% endif %}
-
-<table class="table mt-5 table-striped table-hover table-sm">
-  <thead>
-    <tr>
-      <th>Connected</th>
-    </tr>
-  </thead>
-  <tbody class="text-danger" id="players">
-
-  </tbody>
-</table>
 
 
-<p id="numberOfPlayers" class="text-primary text-center">1 players ready !</p>
+    {% include 'ETMApp/game/choose.html' %}
 
-<button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()">Start !</button>
+    {% include 'ETMApp/game/draw.html' %}
 
-{{ game_url|json_script:"game_url" }}
-<script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
+    {% include 'ETMApp/game/find.html' %}
+
+    {{ game_url|json_script:"game_url" }}
+
+
+    <script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
+    <script type="application/javascript" src="{% static 'ETMApp/js/game.js' %}"></script>
+    <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
+
+
+
 {% endblock %}
 
 {% block title %}
-Create a party
+    Create a party
 {% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'ETMApp/css/game.css' %}">
+{% endblock %}
+

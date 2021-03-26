@@ -1,28 +1,28 @@
-name: Deploy to production
+# name: Deploy to production
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v2
-      - name: Set up Ruby 2.0.x
-        uses ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.1
-        with:
-          ssh private-key: ${{ secrets.KES_SSH}}
-      - name: Add known host
-        run: |
-          ssh keyscan -p ${{ secrets.DEPLOY_HOST_SSH_PORT }} ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-      - name: Deploy
-        runs: |
-          bundle exec cap production deploy
+#     steps:
+#       - name: "Checkout repository"
+#         uses: actions/checkout@v2
+#       - name: Set up Ruby 2.0.x
+#         uses ruby/setup-ruby@v1
+#         with:
+#           bundler-cache: true
+#       - name: Install SSH key
+#         uses: webfactory/ssh-agent@v0.5.1
+#         with:
+#           ssh private-key: ${{ secrets.KES_SSH}}
+#       - name: Add known host
+#         run: |
+#           ssh keyscan -p ${{ secrets.DEPLOY_HOST_SSH_PORT }} ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+#       - name: Deploy
+#         runs: |
+#           bundle exec cap production deploy

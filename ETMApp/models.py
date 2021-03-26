@@ -24,14 +24,34 @@ class Conversation(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
     url_conversation = models.CharField(max_length=8, unique=True)
 
+    @classmethod
+    def create(cls, id_game):
+        return cls(id_game=id_game, url_conversation=id_generator(8))
+
+
+
 
 class Message(models.Model):
     id_conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     id_userAnonyme = models.ForeignKey(UserAnonyme, on_delete=models.DO_NOTHING, null=True)
     description = models.CharField(max_length=100, null=True)
-    url_drawing = models.CharField(max_length=8, null=True)
+    url_drawing = models.CharField(max_length=50, null=True)
     order = models.PositiveIntegerField()
+
+    @classmethod
+    def create_message(cls, id_conversation, id_user, is_connected, text, order):
+        if is_connected:
+            return cls(id_conversation=id_conversation, id_user=id_user, description=text, order=order)
+        else:
+            return cls(id_conversation=id_conversation, id_userAnonyme=id_user, description=text, order=order)
+
+    @classmethod
+    def create_image(cls, id_conversation, id_user, is_connected, image, order):
+        if is_connected:
+            return cls(id_conversation=id_conversation, id_user=id_user, url_drawing=image, order=order)
+        else:
+            return cls(id_conversation=id_conversation, id_userAnonyme=id_user, url_drawing=image, order=order)
 
 
 class UserLike(models.Model):

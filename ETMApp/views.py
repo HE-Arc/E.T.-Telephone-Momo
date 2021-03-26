@@ -27,7 +27,7 @@ def signup(request):
 
 def lobby(request, url):
 
-    logger.error("test lobbby")
+    #logger.error("test lobbby")
     request.session['isWorking'] = 1  # necessary to make session work
 
     game = Game.objects.get(url_game=url)
@@ -93,6 +93,21 @@ def disconnect(request):
     logout(request)
     return redirect('/')
 
+def history(request):
+    return render(request, 'ETMApp/history.html')
+
+def rounds(request):
+    return render(request, 'ETMApp/rounds.html')
+
+# TMP PAGES
+def draw(request):
+    return render(request, 'ETMApp/game/draw.html')
+
+def find(request):
+    return render(request, 'ETMApp/game/find.html')
+
+def base_game(request):
+    return render(request, 'ETMApp/base_game.html')
 
 def create_game(request):
     game = Game.create()
