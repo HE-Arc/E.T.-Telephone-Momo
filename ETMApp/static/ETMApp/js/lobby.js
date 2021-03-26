@@ -27,9 +27,11 @@ let chooseContainer = document.getElementById('chooseContainer');
 let drawContainer = document.getElementById('drawContainer');
 
 let textContent = document.getElementById('textContent');
-let btnValidateChoose = document.getElementById("btnValidateChoose");
+let btnValidateChoose = document.getElementById('btnValidateChoose');
+let btnStartGame = document.getElementById('btnStartGame');
 
 btnValidateChoose.addEventListener('click', sendCurrent);
+btnStartGame.addEventListener('click', startGame);
 
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
@@ -101,9 +103,9 @@ function initPlayer(initMe) {
         document.getElementById('btnPseudo').disabled = false;
     }
     console.log(me);
-    if (initMe.isAdmin === true) {
-        document.getElementById('roundContainer').style.display = "block";
-        document.getElementById('btnStartGame').disabled = false;
+    if (initMe.isAdmin !== true) {
+        document.getElementById('roundContainer').style.display = "none";
+        document.getElementById('btnStartGame').disabled = true;
     }
 }
 

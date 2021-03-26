@@ -3,8 +3,8 @@
     {% load static %}
 
     <div id="lobbyContainer">
-        {% if not user.is_authenticated %}
-            <div class="form-inline">
+        <div class="form-inline">
+            {% if not user.is_authenticated %}
                 <div class="form-group row">
                     <label for="pseudo" class="col-md-4 col-form-label">Change your pseudo</label>
                     <div class="col-md-5">
@@ -12,16 +12,14 @@
                     </div>
                     <button id="btnPseudo" class="btn btn-primary col-md-3">Change pseudo</button>
                 </div>
-            </div>
-        {% endif %}
-
-
-        <div id="roundContainer" style="display: none">
-            <!--todo marty-->
-            <label for="nbRound">Nombre de round: <span id="nbRound">3</span></label>
-            <input type="range" id="sliderRound" min="3" max="3">
+                <div id="roundContainer" class="row">
+                    <label class="form-label" for="sliderRound">Nombre de round: <span id="nbRound">3</span></label>
+                    <div class="range">
+                        <input type="range" min="1" max="1" value="1" class="form-range" id="sliderRound" />
+                    </div>
+                </div>
+            {% endif %}
         </div>
-
         <table class="table mt-5 table-striped table-hover table-sm">
             <thead>
             <tr>
@@ -36,7 +34,7 @@
 
         <p id="numberOfPlayers" class="text-primary text-center">1 players ready !</p>
 
-        <button type="button" class="btn btn-primary btn-lg w-100" onclick="startGame()" id="btnStartGame" disabled>Start !</button>
+        <button type="button" class="btn btn-primary btn-lg w-100" id="btnStartGame">Start !</button>
     </div>
 
 
