@@ -156,7 +156,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-LOGGING = {
+"""LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -176,6 +176,6 @@ LOGGING = {
         'level': 'ERROR',
         'propagate': True,
     },
-}
+}"""
 
 #django.setup()
