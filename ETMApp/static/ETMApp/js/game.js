@@ -24,14 +24,14 @@ let lobbyDiv = document.getElementById('lobbyContainer');
 
 drawDiv.style.display = 'none';
 findDiv.style.display = 'none';
-chooseDiv.style.display = 'none';
-lobbyDiv.style.display = 'block';
+//chooseDiv.style.display = 'none';
+//lobbyDiv.style.display = 'block';
 
 //Pass to draw gameplay to find gameplay
 function displayDraw(description = "") {
     findDiv.style.display = 'none';
     drawDiv.style.display = 'block';
-    chooseDiv.style.display = 'none';
+    //chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
 
     document.getElementById('drawDescription').value = description;
@@ -41,7 +41,7 @@ function displayDraw(description = "") {
 function displayFind() {
     findDiv.style.display = 'block';
     drawDiv.style.display = 'none';
-    chooseDiv.style.display = 'none';
+    //chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Find';
 }
@@ -49,7 +49,27 @@ function displayFind() {
 function displayChoose() {
     findDiv.style.display = 'none';
     drawDiv.style.display = 'none';
-    chooseDiv.style.display = 'block';
+    //chooseDiv.style.display = 'block';
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Choose';
 }
+
+var lock = false;
+function startTimerGUI(totalTime) {
+    if (!lock) {
+        lock=true;
+        let elem = document.getElementById("timeLeftBar");
+        let currentTime = 0;
+        let id = setInterval(() => {
+            if (currentTime >= totalTime) {
+                clearInterval(id);
+                lock = false;
+            } else {
+                currentTime++;
+                console.log("test")
+                elem.style.width = currentTime/totalTime * 100 + "%";
+                elem.innerHTML = totalTime - currentTime + " s left";
+            }
+        }, 1000);
+    }
+}  
