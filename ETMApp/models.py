@@ -36,7 +36,7 @@ class Message(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     id_userAnonyme = models.ForeignKey(UserAnonyme, on_delete=models.DO_NOTHING, null=True)
     description = models.CharField(max_length=100, null=True)
-    url_drawing = models.CharField(max_length=8, null=True)
+    url_drawing = models.CharField(max_length=50, null=True)
     order = models.PositiveIntegerField()
 
     @classmethod
@@ -48,11 +48,10 @@ class Message(models.Model):
 
     @classmethod
     def create_image(cls, id_conversation, id_user, is_connected, image, order):
-        #todo image
         if is_connected:
-            return cls(id_conversation=id_conversation, id_user=id_user)
+            return cls(id_conversation=id_conversation, id_user=id_user, url_drawing=image, order=order)
         else:
-            return cls(id_conversation=id_conversation, id_userAnonyme=id_user)
+            return cls(id_conversation=id_conversation, id_userAnonyme=id_user, url_drawing=image, order=order)
 
 
 class UserLike(models.Model):

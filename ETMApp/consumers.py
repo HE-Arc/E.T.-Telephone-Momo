@@ -79,7 +79,7 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         message = json.loads(text_data)
         # message = data['message']
-        print(message)
+        #print(message)
         if message['type'] == 'changePseudo':
             self.change_pseudo(message['data'])
         elif message['type'] == 'startGame':
@@ -87,6 +87,8 @@ class ChatConsumer(WebsocketConsumer):
                 self.game.start()
         elif message['type'] == 'message':
             self.game.send_round_message(self.me, message['data'])
+        elif message['type'] == 'image':
+            self.game.send_round_image(self.me, message['data'])
 
     def change_pseudo(self, pseudo):
         if 'anonID' in self.scope['session']:

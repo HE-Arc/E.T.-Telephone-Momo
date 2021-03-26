@@ -7,16 +7,24 @@ from asgiref.sync import async_to_sync
 from ETMApp.models import Game
 from ETMApp.models import Message
 from ETMApp.models import Conversation
+from ETM.settings import BASE_DIR
 
 from threading import Timer
+import base64
+import os
+
 
 
 class GameLogic:
     def __init__(self, url):
+        print("=====================")
+        print("http://localhost:8000/play/" + url)
+        print("=====================")
         self.url = url
         self.players = {}
         self.has_started = False
         self.game_model = Game.objects.get(url_game=url)
+        self.timer_time = 10
 
         self.channel_layer = get_channel_layer()
         self.group_send = async_to_sync(self.channel_layer.group_send)
@@ -51,7 +59,7 @@ class GameLogic:
 
     def start(self):
         if not self.has_started:
-            self.timer = Timer(10, self.round_end)
+            self.timer = Timer(self.timer_time, self.round_end)
             self.timer.start()
             self.has_started = True
             self.send('game_start', {})
@@ -81,11 +89,8 @@ class GameLogic:
         conv = self.conversations[user.current_conversation]
         m = Message.create_message(conv, user.getUser(), user.is_connected, text, len(self.all_messages[user.current_conversation]))
         m.save()
-        # conv.messages.append(m)
         user.is_ready = True
-        # print("insert message")
-        # print(conv.id)
-        # print(conv.messages)
+
         self.all_messages[user.current_conversation].append(m)
 
         if self.all_players_ready():
@@ -95,13 +100,26 @@ class GameLogic:
     def send_round_image(self, user, image):
         conv = self.conversations[user.current_conversation]
         # TODO
-        m = Message.create_image(conv, user.getUser(), user.is_connected, text, len(self.all_messages[user.current_conversation]))
+
+
+        image_base = str(BASE_DIR) + "/ETMApp/static/"
+        image_folder = "ETMApp/games/" + self.url + "/" + conv.url_conversation
+        image_name = str(self.current_round) + ".png"
+        image_url = image_folder + "/" + image_name
+        image_path = image_base + image_url
+
+        os.makedirs(image_base + image_folder)
+
+        print(image_path)
+
+        format, imgstr = image.split(';base64,')
+        with open(image_path, "wb") as fh:
+            fh.write(base64.b64decode(imgstr))
+
+        m = Message.create_image(conv, user.getUser(), user.is_connected, image_url, len(self.all_messages[user.current_conversation]))
         m.save()
-        # conv.messages.append(m)
         user.is_ready = True
-        # print("insert message")
-        # print(conv.id)
-        # print(conv.messages)
+
         self.all_messages[user.current_conversation].append(m)
 
         if self.all_players_ready():
@@ -118,6 +136,7 @@ class GameLogic:
 
     def round_end(self):
         print("round end called")
+        self.timer.cancel()
         self.send('round_end', None)
 
     def next_round(self):
@@ -133,7 +152,8 @@ class GameLogic:
                 'data': self.all_messages[p.current_conversation][-1].description
             }))
             p.is_ready = False
-        self.timer = Timer(10, self.round_end)
+        self.timer = Timer(self.timer_time, self.round_end)
+        self.timer.start()
 
         # todo conversations[index + currentRound] ou
         # un truc comme ca et envoyé le text a l'utilisateur

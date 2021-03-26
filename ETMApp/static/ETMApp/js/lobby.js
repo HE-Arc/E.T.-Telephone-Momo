@@ -49,6 +49,7 @@ chatSocket.onmessage = function (e) {
             sendCurrent();
             break;
         case "new_round_draw":
+            nextRound()
             displayDraw(e.data)
             break;
         default:
@@ -130,6 +131,7 @@ function gameStarted() {
 
 
 function sendMessage() {
+    textContent.disabled = true;
     chatSocket.send(JSON.stringify({
         'type': 'message',
         'data': textContent.value
@@ -138,20 +140,24 @@ function sendMessage() {
 
 
 function sendCanvas() {
+    ctxb.drawImage(cnv, 0, 0);
+    canDraw = false;
     chatSocket.send(JSON.stringify({
         'type': 'image',
-        'data': cnv.toDataURL()
+        'data': cnvb.toDataURL()
     }));
 }
 
 
 function sendCurrent(sentByServer) {
+    console.log(sent, drawing);
     if (!sent) {
         if(drawing) {
-            canDraw = false;
+
             sendCanvas();
+            console.log('send canvas');
         } else {
-            textContent.disabled = true;
+            
             sendMessage();
         }
 
