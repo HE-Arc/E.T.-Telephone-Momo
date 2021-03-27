@@ -41,7 +41,6 @@ canvas {
     /*height: 500px;*/
     width: min(min(600px, 100%), 90vh);
     padding-top: min(min(600px, 100%), 90vh);
-    background-color: red;
     position: relative;
     display: inline-block;
 
@@ -80,4 +79,9 @@ canvas {
       margin-left: 0%;
       left: 0;
     }
+}
+
+#imageToFind img {
+    width: 100%;
+    max-width: 80vh;
 }

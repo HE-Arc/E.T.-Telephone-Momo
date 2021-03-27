@@ -52,6 +52,10 @@ chatSocket.onmessage = function (e) {
             nextRound()
             displayDraw(e.data)
             break;
+        case "new_round_find":
+            nextRound()
+            displayFind(e.data)
+            break;
         default:
             console.error("Unknown event type", e);
             break;
@@ -101,7 +105,6 @@ function initPlayer(initMe) {
         document.getElementById('pseudo').disabled = false;
         document.getElementById('btnPseudo').disabled = false;
     }
-    console.log(me);
     if (initMe.isAdmin === true) {
         document.getElementById('roundContainer').style.display = "block";
         document.getElementById('btnStartGame').disabled = false;

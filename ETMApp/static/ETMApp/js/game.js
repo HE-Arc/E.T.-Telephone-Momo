@@ -38,12 +38,18 @@ function displayDraw(description = "") {
     pageTitle.innerHTML = 'Draw';
 }
 
-function displayFind() {
+function displayFind(imageURL) {
     findDiv.style.display = 'block';
     drawDiv.style.display = 'none';
     chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Find';
+    document.getElementById('imageToFind').innerHTML = "";
+    if (imageURL) {
+        let img = document.createElement('img');
+        img.src = "/static/" + imageURL;
+        document.getElementById('imageToFind').appendChild(img);
+    }
 }
 
 function displayChoose() {

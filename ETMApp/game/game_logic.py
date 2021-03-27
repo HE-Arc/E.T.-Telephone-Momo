@@ -142,15 +142,19 @@ class GameLogic:
     def next_round(self):
         print("next round")
         self.current_round += 1
-        print(self.conversations)
 
         for p in self.players.values():
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)
-
-            p.socket.send(text_data=json.dumps({
-                'type': 'new_round_draw',
-                'data': self.all_messages[p.current_conversation][-1].description
-            }))
+            if self.current_round % 2:
+                p.socket.send(text_data=json.dumps({
+                    'type': 'new_round_draw',
+                    'data': self.all_messages[p.current_conversation][-1].description
+                }))
+            else:
+                p.socket.send(text_data=json.dumps({
+                    'type': 'new_round_find',
+                    'data': self.all_messages[p.current_conversation][-1].url_drawing
+                }))
             p.is_ready = False
         self.timer = Timer(self.timer_time, self.round_end)
         self.timer.start()
