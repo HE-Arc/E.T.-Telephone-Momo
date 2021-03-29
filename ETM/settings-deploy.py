@@ -1,8 +1,8 @@
 from .settings import *
 
 
-DEBUG = False
-DATABASES = {
+#DEBUG = False
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('GROUPNAME', 'ETM'),
@@ -15,6 +15,6 @@ DATABASES = {
             'ssl_mode': 'DISABLED'
         }
     }
-}
+}"""
 
-MEDIA_ROOT = '/var/www/app/public/static/'
+#MEDIA_ROOT = '/var/www/app/public/static/'

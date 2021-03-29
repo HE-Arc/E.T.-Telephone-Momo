@@ -24,8 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ro^e!)p4&1^&%hvr-y*k(n50)@0kzehw68k1wu%xfgxi8_bi_='
 
+IS_PRODUCTION = os.environ.get('PRODUCTION', 'False') == 'True',
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+#if IS_PRODUCTION:
+#    DEBUG = False
 
 ALLOWED_HOSTS = ['momo.srvz-webapp.he-arc.ch', 'localhost']
 
@@ -77,16 +83,9 @@ TEMPLATES = [
 ASGI_APPLICATION = 'ETM.asgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -100,15 +99,11 @@ DATABASES = {
         }
     }
 }
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file':  str(BASE_DIR / 'ETM/mysql.conf'),
-            'ssl_mode': 'DISABLED'
-        }
-    }
-}"""
+
+if IS_PRODUCTION:
+    DATABASES['default']['OPTIONS']['ssl_mode'] = 'DISABLED'
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -152,6 +147,8 @@ STATIC_ROOT = '/var/www/app/public/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')
+if IS_PRODUCTION:
+    MEDIA_ROOT = '/var/www/app/public/media/'
 
 CHANNEL_LAYERS = {
     'default': {
