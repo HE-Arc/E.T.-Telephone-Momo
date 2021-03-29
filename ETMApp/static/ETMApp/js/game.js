@@ -49,7 +49,7 @@ function displayFind(imageURL) {
     document.getElementById('imageToFind').innerHTML = "";
     if (imageURL) {
         let img = document.createElement('img');
-        img.src = "/static/" + imageURL;
+        img.src = "/media/" + imageURL;
         document.getElementById('imageToFind').appendChild(img);
     }
 }

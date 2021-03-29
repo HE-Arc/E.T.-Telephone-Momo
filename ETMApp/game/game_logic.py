@@ -7,7 +7,8 @@ from asgiref.sync import async_to_sync
 from ETMApp.models import Game
 from ETMApp.models import Message
 from ETMApp.models import Conversation
-from ETM.settings import BASE_DIR
+from ETM import settings
+
 
 from threading import Timer
 import base64
@@ -105,7 +106,13 @@ class GameLogic:
     def send_round_image(self, user, image):
         conv = self.conversations[user.current_conversation]
 
-        image_base = str(BASE_DIR) + "/ETMApp/static/"
+        """image_base = str(BASE_DIR) + "/ETMApp/static/"
+        image_folder = "ETMApp/games/" + self.url + "/" + conv.url_conversation
+        image_name = str(self.current_round) + ".png"
+        image_url = image_folder + "/" + image_name
+        image_path = image_base + image_url"""
+
+        image_base = str(settings.MEDIA_ROOT) + "/"
         image_folder = "ETMApp/games/" + self.url + "/" + conv.url_conversation
         image_name = str(self.current_round) + ".png"
         image_url = image_folder + "/" + image_name

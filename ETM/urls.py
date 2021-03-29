@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from ETM import settings
+from django.conf.urls.static import static
 from . import views
 from ETMApp import views as ETMApp
 
@@ -44,3 +45,5 @@ if not settings.DEBUG:
         url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': settings.STATIC_ROOT}),
     ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

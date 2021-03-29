@@ -34,7 +34,8 @@ class ChatConsumer(WebsocketConsumer):
                                  self.channel_name, self)
             else:
                 r = requests.get('http://names.drycodes.com/1?separator=space&format=text').text
-                #r = "anon" + str(random.randint(0, 1000))
+                if len(r) >= 50:
+                    r = "anon" + str(random.randint(0, 1000))
                 anon = UserAnonyme(pseudo=r)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
