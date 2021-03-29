@@ -17,4 +17,4 @@ DATABASES = {
     }
 }
 
-MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')
+MEDIA_ROOT = '/var/www/app/public/static/'
