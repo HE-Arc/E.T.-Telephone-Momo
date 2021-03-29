@@ -139,6 +139,7 @@ function sliderRoundChange() {
 }
 
 function startGame() {
+    console.log('startgame');
     chatSocket.send(JSON.stringify({
         'type': 'startGame',
         'data': {'nbRound': sliderRound.value}
@@ -214,8 +215,6 @@ function clearAll() {
 
 function nextRound() {
     canDraw = true;
-    // textContent.removeAttribute('disabled');
-    // btnValidateChoose.removeAttribute('disabled');
 
     clearAll();
     textFind.value = "";
