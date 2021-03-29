@@ -1,5 +1,7 @@
 from .settings import *
 
+
+DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -14,3 +16,5 @@ DATABASES = {
         }
     }
 }
+
+MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')

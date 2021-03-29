@@ -294,3 +294,5 @@ fabric.properties
 
 ETM/mysql.conf
 */static/games/*
+.vscode/
+ETMApp/static/ETMApp/games/

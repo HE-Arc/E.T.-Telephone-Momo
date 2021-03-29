@@ -150,6 +150,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/app/public/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer'

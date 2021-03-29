@@ -8,6 +8,8 @@ document.getElementById('lineButton').addEventListener('change', () => tool = li
 document.getElementById('rectButton').addEventListener('change', () => tool = rect);
 
 document.getElementById('undoButton').addEventListener('click', undo);
+document.getElementById('clearCanvasButton').addEventListener('click', resetBackground);
+document.getElementById('clearDrawButton').addEventListener('click', resetCanvas);
 document.getElementById('redoButton').addEventListener('click', redo);
 
 document.getElementById('colorPicker').addEventListener('change', e => color = e.target.value);
@@ -38,12 +40,18 @@ function displayDraw(description = "") {
     pageTitle.innerHTML = 'Draw';
 }
 
-function displayFind() {
+function displayFind(imageURL) {
     findDiv.style.display = 'block';
     drawDiv.style.display = 'none';
     chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Find';
+    document.getElementById('imageToFind').innerHTML = "";
+    if (imageURL) {
+        let img = document.createElement('img');
+        img.src = "/media/" + imageURL;
+        document.getElementById('imageToFind').appendChild(img);
+    }
 }
 
 function displayChoose() {
@@ -53,3 +61,17 @@ function displayChoose() {
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Choose';
 }
+
+function startTimerGUI(totalTime) {
+    let elem = document.getElementById("timeLeftBar");
+    let currentTime = 0;
+    let id = setInterval(() => {
+        if (currentTime >= totalTime) {
+            clearInterval(id);
+        } else {
+            currentTime++;
+            elem.style.width = currentTime/totalTime * 100 + "%";
+            elem.innerHTML = totalTime - currentTime + " s left";
+        }
+    }, 1000);
+}  
