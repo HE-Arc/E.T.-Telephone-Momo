@@ -81,6 +81,7 @@ let eraser = {
         ctx.closePath();
         ctx.globalCompositeOperation = "source-over";
     },
+    
     drawMouse(e) {
         ctxf.fillStyle = 'transparent';
         ctxf.lineCap = 'round';
@@ -284,7 +285,9 @@ function resetCanvas() {
 }
 
 function resetBackground() {
-    ctxb.clearRect(0, 0, cnvf.width, cnvf.height);
+    ctxb.fillStyle = "white";
+    ctxb.fillRect(0, 0, cnvb.width, cnvb.height)
+    //ctxb.clearRect(0, 0, cnvf.width, cnvf.height);
 }
 
 function uploadImage(e) {

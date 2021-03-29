@@ -293,3 +293,6 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/django,macos,pycharm,vscode
 
 ETM/mysql.conf
+*/static/games/*
+.vscode/
+ETMApp/static/ETMApp/games/

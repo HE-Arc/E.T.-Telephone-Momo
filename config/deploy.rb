@@ -64,6 +64,8 @@ namespace :python do
 	    execute "python3 -m venv #{venv_path}"
             execute "source #{venv_path}/bin/activate"
 	    execute "#{venv_path}/bin/pip install -r #{release_path}/requirements.txt"
+        execute "#{venv_path}/bin/python3 #{release_path}/manage.py collectstatic --noinput"
         end
     end
 end
+
