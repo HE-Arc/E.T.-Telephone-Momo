@@ -8,6 +8,8 @@ document.getElementById('lineButton').addEventListener('change', () => tool = li
 document.getElementById('rectButton').addEventListener('change', () => tool = rect);
 
 document.getElementById('undoButton').addEventListener('click', undo);
+document.getElementById('clearCanvasButton').addEventListener('click', resetBackground);
+document.getElementById('clearDrawButton').addEventListener('click', resetCanvas);
 document.getElementById('redoButton').addEventListener('click', redo);
 
 document.getElementById('colorPicker').addEventListener('change', e => color = e.target.value);

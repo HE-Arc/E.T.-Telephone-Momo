@@ -5,7 +5,7 @@
     <div id="lobbyContainer">
         <div class="form-inline">
             {% if not user.is_authenticated %}
-                <div class="form-group row">
+                <div class="row">
                     <label for="pseudo" class="col-md-4 col-form-label">Change your pseudo</label>
                     <div class="col-md-5">
                         <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
@@ -20,7 +20,7 @@
                 </div>
             {% endif %}
         </div>
-        <table class="table mt-5 table-striped table-hover table-sm">
+        <table class="table mt-2 table-striped table-hover table-sm">
             <thead>
             <tr>
                 <th>Connected</th>
