@@ -21,15 +21,20 @@ if (btnPseudo)
     btnPseudo.addEventListener("click", changePseudo);
 
 let pageTitle = document.getElementById('pageTitle');
+let nbRound = document.getElementById('nbRound');
 let sliderRound = document.getElementById('sliderRound');
 let lobbyContainer = document.getElementById('lobbyContainer');
 let chooseContainer = document.getElementById('chooseContainer');
 let drawContainer = document.getElementById('drawContainer');
 
 let textContent = document.getElementById('textContent');
+let textFind = document.getElementById('textFind');
 let btnValidateChoose = document.getElementById("btnValidateChoose");
+let btnValidateDraw = document.getElementById("btnValidateDraw");
+let btnValidateFind = document.getElementById("btnValidateFind");
 
 btnValidateChoose.addEventListener('click', sendCurrent);
+sliderRound.addEventListener('input', sliderRoundChange);
 
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
@@ -56,6 +61,9 @@ chatSocket.onmessage = function (e) {
             nextRound()
             displayFind(e.data)
             break;
+        case "end_game":
+            gameEnd()
+            break;
         default:
             console.error("Unknown event type", e);
             break;
@@ -68,7 +76,7 @@ chatSocket.onclose = function (e) {
 
 
 function lobbyPlayers(players) {
-    sliderRound.max = players.length;
+    let nbPlayer = 0;
     let table = document.getElementById('players');
 
     //Clear the current table
@@ -78,6 +86,7 @@ function lobbyPlayers(players) {
     table.innerHTML = "";
     for (let player of players) {
         if (!player.isDisconnected) {
+            nbPlayer++;
             let tr = document.createElement('tr');
 
             //If it's the actual client, put it in evidence
@@ -92,6 +101,8 @@ function lobbyPlayers(players) {
             table.appendChild(tr);
         }
     }
+    
+    sliderRound.max = nbPlayer;
 
     //Update the number of players
     document.getElementById("numberOfPlayers").innerHTML = players.length + ' players ready !';
@@ -120,9 +131,14 @@ function changePseudo() {
     me.pseudo = pseudo;
 }
 
+function sliderRoundChange() {
+    nbRound.innerHTML = sliderRound.value;
+}
+
 function startGame() {
     chatSocket.send(JSON.stringify({
-        'type': 'startGame'
+        'type': 'startGame',
+        'data': {'nbRound': sliderRound.value}
     }));
 }
 
@@ -134,10 +150,17 @@ function gameStarted() {
 
 
 function sendMessage() {
-    textContent.disabled = true;
+    let text;
+    if (chooseContainer.style.display == "block") {
+        text = textContent.value;
+    }
+    else {
+        text = textFind.value;
+    }
+    
     chatSocket.send(JSON.stringify({
         'type': 'message',
-        'data': textContent.value
+        'data': text
     }));
 }
 
@@ -153,14 +176,19 @@ function sendCanvas() {
 
 
 function sendCurrent(sentByServer) {
-    console.log(sent, drawing);
+    console.log("sendCurrent")
+    btnValidateChoose.disabled = true;
+    btnValidateFind.disabled = true;
+    btnValidateDraw.disabled = true;
+    textContent.disabled = true;
+    textFind.disabled = true;
     if (!sent) {
         if(drawing) {
 
             sendCanvas();
             console.log('send canvas');
         } else {
-            
+
             sendMessage();
         }
 
@@ -174,11 +202,31 @@ function sendCurrent(sentByServer) {
     }
 }
 
+function clearAll() {
+    //ctxb.clearRect(0, 0, cnvb.width, cnvb.height);
+    resetBackground();
+    ctxf.clearRect(0, 0, cnvb.width, cnvb.height);
+    ctx.clearRect(0, 0, cnvb.width, cnvb.height);
+}
+
 function nextRound() {
     canDraw = true;
-    textContent.disabled = false;
-    btnValidateChoose.disabled = false;
+    // textContent.removeAttribute('disabled');
+    // btnValidateChoose.removeAttribute('disabled');
 
+    clearAll();
+    textFind.value = "";
+    textContent.value = "";
+    
     drawing = !drawing;
     sent = false;
+    btnValidateChoose.disabled = false;
+    btnValidateFind.disabled = false;
+    btnValidateDraw.disabled = false;
+    textContent.disabled = false;
+    textFind.disabled = false;
+}
+
+function gameEnd() {
+    window.location.replace("/history/" + game_url);
 }

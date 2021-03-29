@@ -9,7 +9,7 @@ from ETMApp.game.member import Member
 from ETMApp.models import UserAnonyme
 from ETMApp.models import Message
 from ETMApp.models import Conversation
-# import requests
+import requests
 import random
 import logging
 
@@ -33,8 +33,8 @@ class ChatConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name, self)
             else:
-                # r = requests.get('http://names.drycodes.com/1?separator=space&format=text')
-                r = "anon" + str(random.randint(0, 1000))
+                r = requests.get('http://names.drycodes.com/1?separator=space&format=text').text
+                #r = "anon" + str(random.randint(0, 1000))
                 anon = UserAnonyme(pseudo=r)
                 anon.save()
                 self.scope["session"]["pseudo"] = anon.pseudo
@@ -54,7 +54,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         if self.room_name not in games:
-            games[self.room_name] = GameLogic(self.room_name)
+            games[self.room_name] = GameLogic(self.room_name, self.remove_game)
 
         self.game = games[self.room_name]
         self.game.add_player(self.me)
@@ -84,7 +84,7 @@ class ChatConsumer(WebsocketConsumer):
             self.change_pseudo(message['data'])
         elif message['type'] == 'startGame':
             if self.me.is_admin:
-                self.game.start()
+                self.game.start(int(message['data']['nbRound']))
         elif message['type'] == 'message':
             self.game.send_round_message(self.me, message['data'])
         elif message['type'] == 'image':
@@ -106,3 +106,7 @@ class ChatConsumer(WebsocketConsumer):
             'type': event['data_type'],
             'data': event['data']
         }))
+
+    def remove_game(self, id):
+        print("remove game " + id)
+        del games[id]

@@ -16,7 +16,7 @@ import os
 
 
 class GameLogic:
-    def __init__(self, url):
+    def __init__(self, url, remove_from_dict):
         print("=====================")
         print("http://localhost:8000/play/" + url)
         print("=====================")
@@ -24,7 +24,7 @@ class GameLogic:
         self.players = {}
         self.has_started = False
         self.game_model = Game.objects.get(url_game=url)
-        self.timer_time = 10
+        self.timer_time = 1000
 
         self.channel_layer = get_channel_layer()
         self.group_send = async_to_sync(self.channel_layer.group_send)
@@ -32,6 +32,8 @@ class GameLogic:
 
         self.conversations = []
         self.all_messages = []
+
+        self.remove_from_dict = remove_from_dict
 
     def add_player(self, member):
         if len(self.players) == 0:
@@ -49,6 +51,8 @@ class GameLogic:
         # if member.isAdmin:
         member.is_disconnected = True
         self.update_player()
+        #TODO if all players are out, delete the party
+        # self.remove_from_dict(self.url)
 
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])
@@ -57,8 +61,9 @@ class GameLogic:
         self.group_send(self.url,
                         {'type': 'message', 'data_type': data_type, 'data': data})
 
-    def start(self):
-        if not self.has_started:
+    def start(self, nb_round):
+        if not self.has_started and nb_round <= len(self.players) and nb_round >= 3 and nb_round % 2 == 1:
+            self.nb_round = nb_round
             self.timer = Timer(self.timer_time, self.round_end)
             self.timer.start()
             self.has_started = True
@@ -99,8 +104,6 @@ class GameLogic:
 
     def send_round_image(self, user, image):
         conv = self.conversations[user.current_conversation]
-        # TODO
-
 
         image_base = str(BASE_DIR) + "/ETMApp/static/"
         image_folder = "ETMApp/games/" + self.url + "/" + conv.url_conversation
@@ -108,13 +111,14 @@ class GameLogic:
         image_url = image_folder + "/" + image_name
         image_path = image_base + image_url
 
-        os.makedirs(image_base + image_folder)
 
-        print(image_path)
+        os.makedirs(image_base + image_folder, exist_ok = True)
 
         format, imgstr = image.split(';base64,')
         with open(image_path, "wb") as fh:
             fh.write(base64.b64decode(imgstr))
+
+        print(image_url)
 
         m = Message.create_image(conv, user.getUser(), user.is_connected, image_url, len(self.all_messages[user.current_conversation]))
         m.save()
@@ -135,13 +139,16 @@ class GameLogic:
         return all_ready
 
     def round_end(self):
-        print("round end called")
         self.timer.cancel()
-        self.send('round_end', None)
+        #self.send('round_end', {})
 
     def next_round(self):
-        print("next round")
         self.current_round += 1
+
+        if self.current_round >= self.nb_round:
+            self.game_end()
+            return
+
 
         for p in self.players.values():
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)
@@ -159,6 +166,7 @@ class GameLogic:
         self.timer = Timer(self.timer_time, self.round_end)
         self.timer.start()
 
-        # todo conversations[index + currentRound] ou
-        # un truc comme ca et envoyé le text a l'utilisateur
-        # tester le code qu'on a fait a la ligne 57
+    def game_end(self):
+        self.send('end_game', {})
+        self.remove_from_dict(self.url)
+
