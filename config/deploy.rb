@@ -52,6 +52,10 @@ end
 
 after 'deploy:updating', 'python:create_venv'
 
+set :default_environment, { 
+  'PRODUCTION' => 'True'
+}
+
 namespace :python do
 
     def venv_path
@@ -61,6 +65,8 @@ namespace :python do
     desc 'Create venv'
     task :create_venv do
         on roles([:app, :web]) do |h|
+
+        execute "echo $PRODUCTION"
 	    execute "python3 -m venv #{venv_path}"
             execute "source #{venv_path}/bin/activate"
 	    execute "#{venv_path}/bin/pip install -r #{release_path}/requirements.txt"
