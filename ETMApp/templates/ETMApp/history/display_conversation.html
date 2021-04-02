@@ -1,0 +1,14 @@
+{% load static %}
+<div id="conversationContainer" class="container">
+    <table id="rounds_table" class="table mt-5 table-striped table-hover table-sm">
+        <thead>
+            <tr>
+            <th>Messages</th>
+            </tr>
+        </thead>
+        <tbody class="text-danger" id="messages">
+        </tbody>
+    </table>
+</div>
+
+<script type="application/javascript" src="{% static 'ETMApp/js/conversation.js' %}"></script>

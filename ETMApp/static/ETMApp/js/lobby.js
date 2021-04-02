@@ -106,8 +106,14 @@ function lobbyPlayers(players) {
     
     sliderRound.max = nbPlayer;
 
+    if (nbPlayer < 3) {
+        btnStartGame.disabled = true;
+    } else if (me.isAdmin) {
+        btnStartGame.disabled = false;
+    }
+
     //Update the number of players
-    document.getElementById("numberOfPlayers").innerHTML = players.length + ' players ready !';
+    document.getElementById("numberOfPlayers").innerHTML = nbPlayer;
 }
 
 let me = null;

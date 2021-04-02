@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts import redirect
-from ETMApp.models import Game
+from ETMApp.models import Conversation, Game
 import logging
+from django.core import serializers
 
 logger = logging.getLogger(__name__)
 
@@ -49,44 +50,45 @@ def game(request):
 def try_signup(request):
     if request.user.is_authenticated:
         return JsonResponse({'error': True, 'msg': 'already_connected'})
-    if request.method == 'POST':
-        if 'username' in request.POST and 'password' in request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
-            if len(username) >= 3 and len(password) >= 3:
-                doesExist = User.objects.filter(username=username).exists()
-                if not doesExist:
-                    user = User.objects.create_user(username, password=password)
-                    # user = authenticate(username=username, password=password)
-                    auth_login(request, user)
-                    return JsonResponse({'error': False, 'msg': 'signed'})
-                else:
-                    return JsonResponse({'error': True, 'msg': 'user_already_exist'})
-            else:
-                return JsonResponse({'error': True, 'msg': 'invalid_data'})
-        else:
-            return JsonResponse({'error': True, 'msg': 'invalid_post'})
-    else:
+
+    if request.method != 'POST':
         return JsonResponse({'error': True, 'msg': 'invalid_request'})
+    
+    if 'username' not in request.POST or 'password' not in request.POST:
+        return JsonResponse({'error': True, 'msg': 'invalid_post'})
+
+    username = request.POST['username']
+    password = request.POST['password']
+
+    if len(username) < 3 or len(password) < 3:
+        return JsonResponse({'error': True, 'msg': 'invalid_data'})
+    
+    doesExist = User.objects.filter(username=username).exists()
+
+    if doesExist:
+        return JsonResponse({'error': True, 'msg': 'user_already_exist'})
+
+    user = User.objects.create_user(username, password=password)
+    # user = authenticate(username=username, password=password)
+    auth_login(request, user)
+    return JsonResponse({'error': False, 'msg': 'signed'})
 
 
 def try_login(request):
     if request.user.is_authenticated:
         return JsonResponse({'error': True, 'msg': 'already_connected'})
-    if request.method == 'POST':
-        if 'username' in request.POST and 'password' in request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                auth_login(request, user)
-                return JsonResponse({'error': False, 'msg': 'connected'})
-            else:
-                return JsonResponse({'error': True, 'msg': 'invalid_credentials'})
-        else:
-            return JsonResponse({'error': True, 'msg': 'invalid_post'})
-    else:
+    if request.method != 'POST':
         return JsonResponse({'error': True, 'msg': 'invalid_request'})
+    if 'username' not in request.POST or 'password' not in request.POST:
+        return JsonResponse({'error': True, 'msg': 'invalid_post'})
+        
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        auth_login(request, user)
+        return JsonResponse({'error': False, 'msg': 'connected'})
+    return JsonResponse({'error': True, 'msg': 'invalid_credentials'})
 
 
 def disconnect(request):
@@ -94,10 +96,25 @@ def disconnect(request):
     return redirect('/')
 
 def history(request):
-    return render(request, 'ETMApp/history.html')
+#     // let games = [
+# //     { "url": "....", "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "14.03.2021"},
+# // ];
+    games = Game.get_all_serializable()
 
-def rounds(request):
-    return render(request, 'ETMApp/rounds.html')
+
+    return render(request, 'ETMApp/history/history.html', {
+        'games': games
+    })
+
+def history_game(request, urlGame):
+    conversations = Conversation.get_all_serializable(urlGame)
+    return render(request, 'ETMApp/history/conversations.html', {
+        'conversations': conversations,
+        'game_url': urlGame
+    })
+
+def history_game_conversation(request, urlGame, urlConversation):
+    return render(request, 'ETMApp/history_game_conversation.html')
 
 # TMP PAGES
 def draw(request):

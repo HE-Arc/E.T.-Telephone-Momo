@@ -1,0 +1,13 @@
+{% extends "ETMApp/base.html" %}
+{% block content %}
+{% load static %}
+
+{% if not user.is_authenticated %}
+<p>Your are not connected</p>
+{% endif %}
+{% include 'ETMApp/history/display_conversation.html'%}
+{% endblock %}
+
+{% block title %}
+Rounds of the game
+{% endblock %}

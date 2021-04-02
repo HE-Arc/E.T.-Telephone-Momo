@@ -36,9 +36,9 @@ class ChatConsumer(WebsocketConsumer):
                 r = requests.get('http://names.drycodes.com/1?separator=space&format=text').text
                 if len(r) >= 50:
                     r = "anon" + str(random.randint(0, 1000))
-                anon = UserAnonyme(pseudo=r)
+                anon = UserAnonyme(username=r)
                 anon.save()
-                self.scope["session"]["pseudo"] = anon.pseudo
+                self.scope["session"]["pseudo"] = anon.username
                 self.scope["session"]["anonID"] = anon.id
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name, self)
@@ -98,7 +98,7 @@ class ChatConsumer(WebsocketConsumer):
             self.scope['session']['pseudo'] = pseudo
             self.scope['session'].save()
             anon = UserAnonyme.objects.get(id=self.scope['session']['anonID'])
-            anon.pseudo = pseudo
+            anon.username = pseudo
             anon.save()
 
     def message(self, event):

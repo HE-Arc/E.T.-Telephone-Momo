@@ -14,10 +14,27 @@ class Game(models.Model):
     def create(cls):
         return cls(date=timezone.now(), url_game=id_generator(8))
 
-
+    @classmethod
+    def get_all_serializable(cls):
+        games = set(Game.objects.filter(conversation__message__id_user=2))
+        
+        games = [g.get_serializable() for g in games]
+        return games
+        
+    def get_serializable(self):
+        players = list(User.objects.filter(message__id_conversation__id_game=self.id))
+        players.extend(UserAnonyme.objects.filter(message__id_conversation__id_game=self.id))
+        players = set(players)
+        return {
+            'date': self.date,
+            'hasStarted': self.has_started,
+            'hasEnded': self.has_ended,
+            'urlGame': self.url_game,
+            'players': [p.username for p in players]
+            }
 
 class UserAnonyme(models.Model):
-    pseudo = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
 
 
 class Conversation(models.Model):
@@ -29,6 +46,19 @@ class Conversation(models.Model):
         return cls(id_game=id_game, url_conversation=id_generator(8))
 
 
+    @classmethod
+    def get_all_serializable(cls, url_game):
+        conversations = Conversation.objects.filter(id_game__url_game=url_game)
+        conversations = [c.get_serializable() for c in conversations]
+        return conversations
+
+    def get_serializable(self):
+        messages = Message.objects.filter(id_conversation=self.id)
+
+        return {
+                'urlConversation': self.url_conversation,
+                'messages': [m.get_serializable() for m in messages]
+            }
 
 
 class Message(models.Model):
@@ -52,6 +82,18 @@ class Message(models.Model):
             return cls(id_conversation=id_conversation, id_user=id_user, url_drawing=image, order=order)
         else:
             return cls(id_conversation=id_conversation, id_userAnonyme=id_user, url_drawing=image, order=order)
+
+    def get_serializable(self):
+        user = None
+        if (self.id_user != None):
+            user = self.id_user
+        else:
+            user = self.id_userAnonyme
+        return {
+            'user': user.username,
+            'url_drawing': self.url_drawing,
+            'description': self.description
+        }
 
 
 class UserLike(models.Model):
