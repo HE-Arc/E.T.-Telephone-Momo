@@ -14,10 +14,27 @@ class Game(models.Model):
     def create(cls):
         return cls(date=timezone.now(), url_game=id_generator(8))
 
-
+    @classmethod
+    def get_all_serializable(cls):
+        games = Game.objects.filter(conversation__message__id_user=2)
+        print(len(games))
+        games = [g.get_serializable() for g in games]
+        return games
+        
+    def get_serializable(self):
+        players = list(User.objects.filter(message__id_conversation__id_game=self.id))
+        players.extend(UserAnonyme.objects.filter(message__id_conversation__id_game=self.id))
+        print(len(players))
+        return {
+            'date': self.date,
+            'hasStarted': self.has_started,
+            'hasEnded': self.has_ended,
+            'urlGame': self.url_game,
+            'players': [p.username for p in players]
+            }
 
 class UserAnonyme(models.Model):
-    pseudo = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
 
 
 class Conversation(models.Model):

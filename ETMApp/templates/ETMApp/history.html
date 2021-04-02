@@ -13,11 +13,11 @@
       <th>Date</th>
     </tr>
   </thead>
-  <tbody class="text-danger" id="games">
+  <tbody class="text-danger" id="games_body">
   </tbody>
 </table>
 
-{{ game_url|json_script:"game_url" }}
+{{ games|json_script:"games" }}
 <script type="application/javascript" src="{% static 'ETMApp/js/history.js' %}"></script>
 {% endblock %}
 
