@@ -20,11 +20,11 @@ let drawDiv = document.getElementById('drawContainer');
 let findDiv = document.getElementById('findContainer');
 let chooseDiv = document.getElementById('chooseContainer');
 let lobbyDiv = document.getElementById('lobbyContainer');
-let conversationDiv = document.getElementById('conversationContainer');
+//let conversationDiv = document.getElementById('conversationContainer');
 
 //TO REMOVE
 //displayDraw();
-conversationDiv.style.display = 'none';
+//conversationDiv.style.display = 'none';
 drawDiv.style.display = 'none';
 findDiv.style.display = 'none';
 chooseDiv.style.display = 'none';

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ro^e!)p4&1^&%hvr-y*k(n50)@0kzehw68k1wu%xfgxi8_bi_='
 
-IS_PRODUCTION = os.environ.get('PRODUCTION', 'False') == 'True',
+IS_PRODUCTION = os.environ.get('PRODUCTION', 'False') == 'True'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -143,12 +143,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/app/public/static/'
+if IS_PRODUCTION:
+    STATIC_ROOT = '/var/www/app/public/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')
 if IS_PRODUCTION:
     MEDIA_ROOT = '/var/www/app/public/media/'
+
 
 CHANNEL_LAYERS = {
     'default': {

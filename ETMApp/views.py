@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts import redirect
-from ETMApp.models import Game
+from ETMApp.models import Conversation, Game
 import logging
 from django.core import serializers
 
@@ -102,12 +102,16 @@ def history(request):
     games = Game.get_all_serializable()
 
 
-    return render(request, 'ETMApp/history.html', {
+    return render(request, 'ETMApp/history/history.html', {
         'games': games
     })
 
 def history_game(request, urlGame):
-    return render(request, 'ETMApp/history_game.html')
+    conversations = Conversation.get_all_serializable(urlGame)
+    return render(request, 'ETMApp/history/conversations.html', {
+        'conversations': conversations,
+        'game_url': urlGame
+    })
 
 def history_game_conversation(request, urlGame, urlConversation):
     return render(request, 'ETMApp/history_game_conversation.html')

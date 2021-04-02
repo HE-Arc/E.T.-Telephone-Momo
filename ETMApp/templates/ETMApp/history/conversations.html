@@ -5,18 +5,19 @@
 {% if not user.is_authenticated %}
 <p>Your are not connected</p>
 {% endif %}
-<table id="rounds_table" class="table mt-5 table-striped table-hover table-sm">
+<table id="conversations_table" class="table mt-5 table-striped table-hover table-sm">
   <thead>
     <tr>
-      <th>Rounds</th>
+      <th>Conversations</th>
     </tr>
   </thead>
-  <tbody class="text-danger" id="rounds">
+  <tbody class="text-danger" id="conversations_body">
   </tbody>
 </table>
 
+{{ conversations|json_script:"conversations" }}
 {{ game_url|json_script:"game_url" }}
-<script type="application/javascript" src="{% static 'ETMApp/js/rounds.js' %}"></script>
+<script type="application/javascript" src="{% static 'ETMApp/js/conversations.js' %}"></script>
 {% endblock %}
 
 {% block title %}
