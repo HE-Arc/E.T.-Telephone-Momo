@@ -94,13 +94,13 @@ def disconnect(request):
     return redirect('/')
 
 def history(request):
-    return render(request, 'ETMApp/history.html')
+    return render(request, 'ETMApp/history/history.html')
 
 def rounds(request):
-    return render(request, 'ETMApp/rounds.html')
+    return render(request, 'ETMApp/history/rounds.html')
 
 def conversation(request):
-    return render(request, 'ETMApp/conversation.html')
+    return render(request, 'ETMApp/history/conversation.html')
 
 # TMP PAGES
 def draw(request):
