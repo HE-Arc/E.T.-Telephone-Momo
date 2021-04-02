@@ -99,9 +99,23 @@ DATABASES = {
         }
     }
 }
-
+print("IS_PRODUCTION")
+print(IS_PRODUCTION)
 if IS_PRODUCTION:
-    DATABASES['default']['OPTIONS']['ssl_mode'] = 'DISABLED'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('GROUPNAME', 'ETM'),
+            'USER': os.environ.get('GROUPNAME', 'root'),
+            'PASSWORD': os.environ.get('PASSWORD', ''),
+            'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+            'PORT': os.environ.get('MYSQL_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'ssl_mode': 'DISABLED'
+            }
+        }
+    }
 
 
 
