@@ -66,7 +66,7 @@ namespace :python do
     task :create_venv do
         on roles([:app, :web]) do |h|
 
-        execute "export PRODUCTION=True"
+        execute "env PRODUCTION=True"
         execute "echo $PRODUCTION"
         execute "printenv"
 	    execute "python3 -m venv #{venv_path}"
