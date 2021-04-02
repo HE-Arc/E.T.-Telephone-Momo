@@ -52,7 +52,7 @@ end
 
 after 'deploy:updating', 'python:create_venv'
 
-set :default_environment, { 
+set :default_env, { 
   'PRODUCTION' => 'True'
 }
 
@@ -67,6 +67,7 @@ namespace :python do
         on roles([:app, :web]) do |h|
 
         execute "env PRODUCTION=True"
+        execute "source ~/.bash_profile"
         execute "echo $PRODUCTION"
         execute "printenv"
 	    execute "python3 -m venv #{venv_path}"
