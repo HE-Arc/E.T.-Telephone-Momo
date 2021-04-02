@@ -33,6 +33,7 @@ urlpatterns = [
     path('disconnect', ETMApp.disconnect, name='disconnect'),
     path('history', ETMApp.history, name='history'),
     path('rounds', ETMApp.rounds, name='rounds'),
+    path('conversation', ETMApp.conversation, name='conversation'),
     path('createGame', ETMApp.create_game, name='create_game'),
 
     #path('draw', ETMApp.draw, name='draw'),

@@ -99,6 +99,9 @@ def history(request):
 def rounds(request):
     return render(request, 'ETMApp/rounds.html')
 
+def conversation(request):
+    return render(request, 'ETMApp/conversation.html')
+
 # TMP PAGES
 def draw(request):
     return render(request, 'ETMApp/game/draw.html')
