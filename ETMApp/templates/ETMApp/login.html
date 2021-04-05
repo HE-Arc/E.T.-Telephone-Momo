@@ -1,9 +1,10 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
     {% load static %}
-    <div id="errorMessage" class="alert alert-danger" role="alert" hidden>
-        Your pseudo or your password is wrong
-    </div>
+    <div id="errorConnection" class="alert alert-danger" role="alert" hidden>
+        Your pseudo or your password is wrong.
+    </div>    
+    
     <form id="loginForm" method="post">
         <div class="form-group">
             <label for="username" class="col-form-label-lg">Enter your pseudo</label>

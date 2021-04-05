@@ -17,6 +17,13 @@ function sendConnectionRequest() {
         if(!data.error)
             window.location.href = '/';
         else
-            document.getElementById('errorMessage').removeAttribute('hidden');
+            switch(data.msg) {
+                case 'invalid_request':
+                    document.getElementById('errorConnection').removeAttribute('hidden');
+                    break;
+                case 'already_connected':
+                    document.getElementById('errorAlreadyConnected').removeAttribute('hidden');
+                    break;
+            }
     });
   }
