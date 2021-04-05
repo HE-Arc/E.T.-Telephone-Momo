@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 {% if not user.is_authenticated %}
-<p>Your are not connected</p>
+<p>You are not connected. <a href="/login">Login</a> to see all your party</p>
 {% endif %}
 
 <table id="history_table" class="table mt-5 table-striped table-hover table-sm">

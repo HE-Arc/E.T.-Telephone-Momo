@@ -16,6 +16,7 @@ class Game(models.Model):
 
     @classmethod
     def get_all_serializable(cls):
+        # TODO
         games = set(Game.objects.filter(conversation__message__id_user=2))
         
         games = [g.get_serializable() for g in games]

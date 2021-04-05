@@ -14,9 +14,19 @@
                 </div>
             {% endif %}
             <div id="roundContainer" class="row" style="display: none">
-                <label class="form-label" for="sliderRound">Nombre de round: <span id="nbRound">3</span></label>
+                <label class="form-label" for="sliderRound">Number of round: <span id="nbRound">3</span></label>
                 <div class="range">
                     <input type="range" min="3" max="3" step="2" value="3" class="form-range" id="sliderRound" />
+                </div>
+                <div>
+                    <label for="roundLength" class="form-label">Length: </label>
+                    <select name="roundLength" id="roundLength" class="form-select">
+                        <option value="10">Very short (10s)</option>
+                        <option value="60">Short (1 minute)</option>
+                        <option value="150" selected>Normal (2 minutes 30)</option>
+                        <option value="300">Long (5 minutes)</option>
+                        <option value="600">Pro (10 minutes)</option>
+                      </select>
                 </div>
             </div>
         </div>
