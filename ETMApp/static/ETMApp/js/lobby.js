@@ -202,6 +202,7 @@ function sendCurrent(sentByServer) {
     textContent.disabled = true;
     textFind.disabled = true;
     if (!sent) {
+        sent = true;
         if(drawing) {
 
             sendCanvas();
@@ -214,6 +215,7 @@ function sendCurrent(sentByServer) {
         btnValidateChoose.disabled = true;
         
         //todo marty page en attente d'autre joueurs
+        displayWaitingAlert();
     }
 
     if(sentByServer) {
@@ -230,6 +232,7 @@ function clearAll() {
 
 function nextRound() {
     startTimerGUI(totalTime);
+    removeWaitingAlert();
 
     canDraw = true;
 

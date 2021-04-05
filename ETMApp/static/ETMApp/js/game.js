@@ -79,16 +79,18 @@ function displayConversation() {
     conversationDiv.style.display = 'block';
 }
 
+let timer;
 function startTimerGUI(totalTime) {
     let elem = document.getElementById("timeLeftBar");
     let currentTime = 0;
-    let id = setInterval(() => {
+    clearInterval(timer);
+    timer = setInterval(() => {
         if (currentTime >= totalTime) {
-            clearInterval(id);
+            clearInterval(timer);
         } else {
             currentTime++;
             elem.style.width = currentTime/totalTime * 100 + "%";
             elem.innerHTML = totalTime - currentTime + " s left";
         }
     }, 1000);
-}  
+}

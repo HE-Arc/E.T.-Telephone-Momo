@@ -64,8 +64,8 @@ class GameLogic:
     def start(self, nb_round, timer_time):
         if not self.has_started and nb_round <= len(self.players) and nb_round >= 3 and nb_round % 2 == 1:
             self.nb_round = nb_round
-            # self.timer_time = timer_time
-            self.timer_time = 5
+            self.timer_time = timer_time
+            # self.timer_time = 5
             self.timer = Timer(self.timer_time, self.round_end)
             self.timer.start()
             self.has_started = True
