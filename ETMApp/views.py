@@ -99,7 +99,9 @@ def history(request):
 #     // let games = [
 # //     { "url": "....", "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "14.03.2021"},
 # // ];
-    games = Game.get_all_serializable()
+    
+    id_user = request.user.id
+    games = Game.get_all_serializable(id_user)
 
 
     return render(request, 'ETMApp/history/history.html', {

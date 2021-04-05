@@ -50,9 +50,14 @@ class GameLogic:
 
         # if member.isAdmin:
         member.is_disconnected = True
+
         self.update_player()
-        #TODO if all players are out, delete the party
-        # self.remove_from_dict(self.url)
+
+        # if all players are out, delete the party
+        if self.all_players_disconnected():
+            print('All players left - deleting game')
+            self.remove_from_dict(self.url)
+            self.game_model.delete()
 
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])
@@ -138,13 +143,18 @@ class GameLogic:
             self.timer.cancel()
             self.next_round()
 
+    def all_players_disconnected(self):
+        for p in self.players:
+            if not p.is_disconnected:
+                return False
+        return True
+
     def all_players_ready(self):
-        all_ready = True
         for m in self.players:
             if not self.players[m].is_disconnected:
                 if not self.players[m].is_ready:
-                    all_ready = False
-        return all_ready
+                    return False
+        return True
 
     def round_end(self):
         self.timer.cancel()

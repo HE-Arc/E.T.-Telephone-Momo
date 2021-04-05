@@ -15,9 +15,8 @@ class Game(models.Model):
         return cls(date=timezone.now(), url_game=id_generator(8))
 
     @classmethod
-    def get_all_serializable(cls):
-        # TODO
-        games = set(Game.objects.filter(conversation__message__id_user=2))
+    def get_all_serializable(cls, id_user):
+        games = set(Game.objects.filter(conversation__message__id_user=id_user))
         
         games = [g.get_serializable() for g in games]
         return games

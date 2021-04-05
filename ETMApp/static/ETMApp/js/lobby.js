@@ -214,12 +214,7 @@ function sendCurrent(sentByServer) {
 
         btnValidateChoose.disabled = true;
         
-        //todo marty page en attente d'autre joueurs
         displayWaitingAlert();
-    }
-
-    if(sentByServer) {
-        //todo marty round finishing soon
     }
 }
 
