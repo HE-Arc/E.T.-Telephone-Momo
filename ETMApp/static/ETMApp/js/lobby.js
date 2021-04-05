@@ -14,6 +14,7 @@ const chatSocket = new WebSocket(
 
 let drawing = false;
 let sent = false;
+let totalTime;
 
 //Set on click event
 let btnPseudo = document.getElementById("btnPseudo");
@@ -22,6 +23,7 @@ if (btnPseudo)
 
 let pageTitle = document.getElementById('pageTitle');
 let nbRound = document.getElementById('nbRound');
+let roundLength = document.getElementById('roundLength');
 let sliderRound = document.getElementById('sliderRound');
 let lobbyContainer = document.getElementById('lobbyContainer');
 let chooseContainer = document.getElementById('chooseContainer');
@@ -50,7 +52,7 @@ chatSocket.onmessage = function (e) {
             initPlayer(e.data);
             break;
         case "game_start":
-            gameStarted();
+            gameStarted(e.data);
             break;
         case "round_end":
             sendCurrent();
@@ -148,14 +150,21 @@ function startGame() {
     console.log('startgame');
     chatSocket.send(JSON.stringify({
         'type': 'startGame',
-        'data': {'nbRound': sliderRound.value}
+        'data': {
+            'nbRound': sliderRound.value,
+            'roundLength': roundLength.value
+        }
     }));
 }
 
-function gameStarted() {
+function gameStarted(data) {
+    totalTime = data.time;
+
     textContent.disabled = false;
     btnValidateChoose.disabled = false;
     displayChoose();
+
+    startTimerGUI(totalTime);
 }
 
 
@@ -193,6 +202,7 @@ function sendCurrent(sentByServer) {
     textContent.disabled = true;
     textFind.disabled = true;
     if (!sent) {
+        sent = true;
         if(drawing) {
 
             sendCanvas();
@@ -205,6 +215,7 @@ function sendCurrent(sentByServer) {
         btnValidateChoose.disabled = true;
         
         //todo marty page en attente d'autre joueurs
+        displayWaitingAlert();
     }
 
     if(sentByServer) {
@@ -220,6 +231,9 @@ function clearAll() {
 }
 
 function nextRound() {
+    startTimerGUI(totalTime);
+    removeWaitingAlert();
+
     canDraw = true;
 
     clearAll();

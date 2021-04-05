@@ -125,6 +125,8 @@ def history_game_conversation(request, urlGame, urlConversation):
     next_conv = urlGame + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
     prev_conv = urlGame + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
 
+    print(conversations[i])
+
     return render(request, 'ETMApp/history/conversation.html', {
         'conversation': conversations[i], 
         'game_url': urlGame,

@@ -25,7 +25,6 @@ class GameLogic:
         self.players = {}
         self.has_started = False
         self.game_model = Game.objects.get(url_game=url)
-        self.timer_time = 1000
 
         self.channel_layer = get_channel_layer()
         self.group_send = async_to_sync(self.channel_layer.group_send)
@@ -62,13 +61,15 @@ class GameLogic:
         self.group_send(self.url,
                         {'type': 'message', 'data_type': data_type, 'data': data})
 
-    def start(self, nb_round):
+    def start(self, nb_round, timer_time):
         if not self.has_started and nb_round <= len(self.players) and nb_round >= 3 and nb_round % 2 == 1:
             self.nb_round = nb_round
+            self.timer_time = timer_time
+            # self.timer_time = 5
             self.timer = Timer(self.timer_time, self.round_end)
             self.timer.start()
             self.has_started = True
-            self.send('game_start', {})
+            self.send('game_start', {'time': self.timer_time})
             self.game_model.has_started = True
             self.game_model.save()
             # self.round_choose_word()
@@ -147,9 +148,10 @@ class GameLogic:
 
     def round_end(self):
         self.timer.cancel()
-        #self.send('round_end', {})
+        self.send('round_end', {})
 
     def next_round(self):
+        print("next round")
         self.current_round += 1
 
         if self.current_round >= self.nb_round:
@@ -174,6 +176,11 @@ class GameLogic:
         self.timer.start()
 
     def game_end(self):
-        self.send('end_game', {})
-        self.remove_from_dict(self.url)
+        print('game end')
+        if not self.game_model.has_ended:
+            self.game_model.has_ended = True
+            self.game_model.save()
+            
+            self.send('end_game', {})
+            self.remove_from_dict(self.url)
 

@@ -19,7 +19,7 @@ function listMessages(messages) {
 
         //Who said what
         let td = document.createElement('td');
-        let content = (text ? '<b>' + message.description + '</b>' : '<br/><img src="/media/' + message.url_drawing + '"/>');
+        let content = (message.url_drawing == null ? '<b>' + message.description + '</b>' : '<br/><img src="/media/' + message.url_drawing + '"/>');
         td.innerHTML = '<i>' + message.user + '</i>' + (first ? ' choose ' : ' found ') + content;
         //td.classList.add("text-truncate");
 

@@ -85,7 +85,7 @@ class ChatConsumer(WebsocketConsumer):
             self.change_pseudo(message['data'])
         elif message['type'] == 'startGame':
             if self.me.is_admin:
-                self.game.start(int(message['data']['nbRound']))
+                self.game.start(int(message['data']['nbRound']), int(message['data']['roundLength']))
         elif message['type'] == 'message':
             self.game.send_round_message(self.me, message['data'])
         elif message['type'] == 'image':
