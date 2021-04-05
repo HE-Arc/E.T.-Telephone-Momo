@@ -1,7 +1,16 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
 {% load static %}
-<form  action="trySignup" method="post">
+<form id="signupForm"  method="post">
+
+    <div id="errorData" class="alert alert-danger" role="alert" hidden>
+        Your password and username must have at least 3 character.
+    </div>
+
+    <div id="errorAlreadyExist" class="alert alert-warning" role="alert" hidden>
+        You are already connected. <a href="/login" class="alert-link">Click here to login.</a>
+    </div>
+
     <div class="form-group">
         <label for="username" class="col-form-label-lg">Enter your pseudo</label>
         <input type="text" name="username" class="form-control form-control-lg" placeholder="Enter pseudo" required>
