@@ -2,10 +2,11 @@
 {% block content %}
 {% load static %}
 
-{% if not user.is_authenticated %}
-<p>Your are not connected</p>
-{% endif %}
-{% include 'ETMApp/history/display_conversation.html'%}
+{% include 'ETMApp/history/display_conversation.html' %}
+
+{{ conversation|json_script:"conversation" }}
+{{ game_url|json_script:"game_url" }}
+<script type="application/javascript" src="{% static 'ETMApp/js/conversation.js' %}"></script>
 {% endblock %}
 
 {% block title %}
