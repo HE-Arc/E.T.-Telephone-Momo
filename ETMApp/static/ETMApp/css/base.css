@@ -17,3 +17,11 @@ body, html{
 #history_table th:first-child{
     width: 100px;
 }
+
+td > img {
+    width: 100%;
+    max-width: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

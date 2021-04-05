@@ -1,6 +1,5 @@
 const conversations = JSON.parse(document.getElementById('conversations').textContent);
 const game_url = JSON.parse(document.getElementById('game_url').textContent);
-console.log(conversations);
 listConversations(conversations);
 
 function listConversations(conversations) {
@@ -30,12 +29,3 @@ function listConversations(conversations) {
         table.appendChild(tr);
     }
 }
-/*
-let rounds = [
-    { "who" : "Gurix", "what" : "Val a un mic qui pu du cullllllllllllllllll"},
-    { "who" : "Laon", "what" : "JS bad"},
-    { "who" : "LaMousseAuLini", "what" : "Le HashMaster"},
-];
-*/
-
-//listRounds(rounds);

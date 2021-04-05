@@ -114,7 +114,23 @@ def history_game(request, urlGame):
     })
 
 def history_game_conversation(request, urlGame, urlConversation):
-    return render(request, 'ETMApp/history_game_conversation.html')
+    conversations = Conversation.get_all_serializable(urlGame)
+
+    for i, c in enumerate(conversations):
+        if c['urlConversation'] == urlConversation:
+            index = i
+
+    i = index
+
+    next_conv = urlGame + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
+    prev_conv = urlGame + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
+
+    return render(request, 'ETMApp/history/conversation.html', {
+        'conversation': conversations[i], 
+        'game_url': urlGame,
+        'next_conv': next_conv,
+        'prev_conv': prev_conv
+    })
 
 # TMP PAGES
 def draw(request):

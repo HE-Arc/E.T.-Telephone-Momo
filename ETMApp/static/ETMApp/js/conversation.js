@@ -1,3 +1,8 @@
+const conversation = JSON.parse(document.getElementById('conversation').textContent);
+const game_url = JSON.parse(document.getElementById('game_url').textContent);
+
+listMessages(conversation.messages);
+
 function listMessages(messages) {
 
     let table = document.getElementById('messages');
@@ -14,9 +19,9 @@ function listMessages(messages) {
 
         //Who said what
         let td = document.createElement('td');
-        let content = (text ? '<b>' + message.what + '</b>' : '<br/><img src="' + message.img + '"/>');
-        td.innerHTML = message.who + (first ? ' choose ' : ' found ') + content;
-        td.classList.add("text-truncate");
+        let content = (text ? '<b>' + message.description + '</b>' : '<br/><img src="/media/' + message.url_drawing + '"/>');
+        td.innerHTML = '<i>' + message.user + '</i>' + (first ? ' choose ' : ' found ') + content;
+        //td.classList.add("text-truncate");
 
         //Add to the row
         tr.appendChild(td);
@@ -27,11 +32,3 @@ function listMessages(messages) {
         text = !text;
     }
 }
-
-let messages = [
-    { "who" : "Gurix", "what" : "Val a un mic qui pu du cullllllllllllllllll", "img" : null},
-    { "who" : "Laon", "what" : null, "img" : "https://www.speedskating.ca/sites/speedskating.ca/files/styles/large/public/img/person/balboa_teamportraits3-13_0.jpg"},
-    { "who" : "LaMousseAuLini", "what" : "Le HashMaster", "img" : null},
-];
-
-listMessages(messages);
