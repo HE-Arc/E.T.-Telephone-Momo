@@ -22,6 +22,8 @@ let chooseDiv = document.getElementById('chooseContainer');
 let lobbyDiv = document.getElementById('lobbyContainer');
 //let conversationDiv = document.getElementById('conversationContainer');
 
+let waitingAlert = document.getElementById('waitingAlert');
+
 //TO REMOVE
 //displayDraw();
 //conversationDiv.style.display = 'none';
@@ -39,6 +41,14 @@ function displayDraw(description = "") {
 
     document.getElementById('drawDescription').value = description;
     pageTitle.innerHTML = 'Draw';
+}
+
+function displayWaitingAlert() {
+    waitingAlert.removeAttribute('hidden');
+}
+
+function removeWaitingAlert() {
+    waitingAlert.setAttribute('hidden','');
 }
 
 function displayFind(imageURL) {
