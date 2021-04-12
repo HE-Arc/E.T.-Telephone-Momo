@@ -27,11 +27,12 @@ def signup(request):
 
 
 def lobby(request, url):
-
-    #logger.error("test lobbby")
-    request.session['isWorking'] = 1  # necessary to make session work
-
-    game = Game.objects.get(url_game=url)
+    request.session['isWorking'] = 1  # necessary to make session work for the sockets
+    game = None
+    try:
+        game = Game.objects.get(url_game=url)
+    except:
+        pass
     if game is None or game.has_started:
         return redirect('/')
     elif game.has_ended:

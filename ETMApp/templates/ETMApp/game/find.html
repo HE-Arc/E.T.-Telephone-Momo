@@ -1,6 +1,6 @@
 <div id="findContainer" class="container">
     <div class="row">
-        <input type="text" placeholder="Find" id="textFind" class="col-10" />
+        <input type="text" placeholder="Find" id="textFind" class="col-10" onkeyup="(e) => {if (e.keyCode == 13) sendCurrent()}" />
         <button class="btn btn-success col-2" onclick="sendCurrent()" id="btnValidateFind">Valider</button>
     </div>
 
