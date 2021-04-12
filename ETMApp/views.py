@@ -33,10 +33,6 @@ def lobby(request, url):
         game = Game.objects.get(url_game=url)
     except:
         pass
-
-    print("game: ")
-    print(game)
-    print(game.has_ended)
     if game is None:
         return redirect('/')
     elif game.has_ended:
@@ -104,9 +100,6 @@ def disconnect(request):
     return redirect('/')
 
 def history(request):
-#     // let games = [
-# //     { "url": "....", "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "14.03.2021"},
-# // ];
     
     id_user = request.user.id
     games = Game.get_all_serializable(id_user)
@@ -150,6 +143,12 @@ def history_game_conversation(request, urlGame, urlConversation):
         'prev_conv': prev_conv
     })
 
+
+def create_game(request):
+    game = Game.create()
+    game.save()
+    return redirect('/play/' + game.url_game)
+
 # TMP PAGES
 def draw(request):
     return render(request, 'ETMApp/game/draw.html')
@@ -160,7 +159,3 @@ def find(request):
 def base_game(request):
     return render(request, 'ETMApp/base_game.html')
 
-def create_game(request):
-    game = Game.create()
-    game.save()
-    return redirect('/play/' + game.url_game)
