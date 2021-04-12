@@ -26,19 +26,32 @@ td > img {
     margin-right: auto;
 }
 
-.card-image{
-    height: 180px; 
-    object-fit: none;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+
+.overlay-container{
+    max-width: 300px;
+    margin: auto;
 }
+
+.crop-text-2 {
+    -webkit-line-clamp: 2;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+.card-image{
+    height: 180px;
+    object-fit: scale-down;
+}
+
 
 .overlay-container:hover .overlay {
     width: 100%;
     left: 0;
 }
 
-.overlay-container, .overlay{
+.overlay-container, .overlay, .card-image{
     border-radius: 10px;
 }
 
