@@ -33,10 +33,17 @@ def lobby(request, url):
         game = Game.objects.get(url_game=url)
     except:
         pass
-    if game is None or game.has_started:
+
+    print("game: ")
+    print(game)
+    print(game.has_ended)
+    if game is None:
         return redirect('/')
     elif game.has_ended:
-        return redirect('/history/url')
+        return redirect('/history/'+url)
+    elif game.has_started:
+        return redirect('/')
+
 
     return render(request, 'ETMApp/lobby.html', {
         'game_url': url
