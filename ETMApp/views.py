@@ -134,7 +134,10 @@ def history_game_conversation(request, urlGame, urlConversation):
         'prev_conv': prev_conv
     })
 
-# TMP PAGES
+# TMP PAGES TODO
+def conversations(request):
+    return render(request, 'ETMApp/history/conversations.html')
+
 def draw(request):
     return render(request, 'ETMApp/game/draw.html')
 
