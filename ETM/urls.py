@@ -39,7 +39,10 @@ urlpatterns = [
 
     #path('draw', ETMApp.draw, name='draw'),
     #path('find', ETMApp.find, name='find'), #???????
-    path('base_game', ETMApp.base_game, name='base_game')
+    path('base_game', ETMApp.base_game, name='base_game'),
+
+    # TODO REMOVE
+    path('conversations', ETMApp.conversations, name='conversations')
 ]
 if not settings.DEBUG:
     urlpatterns += [

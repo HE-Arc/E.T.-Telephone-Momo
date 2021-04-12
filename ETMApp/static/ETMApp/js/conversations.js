@@ -4,28 +4,45 @@ listConversations(conversations);
 
 function listConversations(conversations) {
 
-    let table = document.getElementById('conversations_body');
-
-    //Clear the current table
-    table.innerHTML = '';
-
-
+    let table = document.getElementById('conversations_table');
 
     //Add parties in element then in the html table
     for (let conversation of conversations) {
-        let tr = document.createElement('tr');
-        console.log(conversation);
+        let card = document.createElement('div');
+        card.classList.add("mb-3");
+        card.classList.add("card");
+        card.classList.add("overlay-container");
+        card.classList.add("conversations-card");
 
-        //Who said what
-        let td = document.createElement('td');
-        td.innerHTML = conversation.messages[0].user + ' choose "<b>' + conversation.messages[0].description + '</b>"';
-        td.classList.add("text-truncate");
+        let image = document.createElement('img');
+        image.classList.add('card-img-top');
+        image.classList.add('card-image');
+        image.setAttribute('src', '/media/' + conversation.messages[1].url_drawing);
+        card.appendChild(image);
 
-        tr.setAttribute('onclick', 'window.location = "' + game_url + '/' + conversation.urlConversation + '"');
+        let overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        let text = document.createElement('p');
+        text.classList.add('overlay-text');
+        text.innerHTML = 'Click to get the full conversation';
+        overlay.appendChild(text);
+        card.appendChild(overlay);
 
-        //Add to the row
-        tr.appendChild(td);
-        //Add to the table
-        table.appendChild(tr);
+        let body = document.createElement('div');
+        body.classList.add('card-body');
+        let title = document.createElement('h5');
+        title.classList.add('card-title');
+        title.innerHTML = conversation.messages[0].user + ' choose';
+        body.appendChild(title);
+        let card_text = document.createElement('p');
+        card_text.classList.add('card-text');
+        card_text.classList.add('crop-text-2');
+        card_text.innerHTML = conversation.messages[0].description;
+        body.appendChild(card_text);
+        card.appendChild(body);
+
+        card.setAttribute('onclick', 'window.location = "' + game_url + '/' + conversation.urlConversation + '"');
+
+        table.appendChild(card);
     }
 }

@@ -149,7 +149,10 @@ def create_game(request):
     game.save()
     return redirect('/play/' + game.url_game)
 
-# TMP PAGES
+# TMP PAGES TODO
+def conversations(request):
+    return render(request, 'ETMApp/history/conversations.html')
+
 def draw(request):
     return render(request, 'ETMApp/game/draw.html')
 
