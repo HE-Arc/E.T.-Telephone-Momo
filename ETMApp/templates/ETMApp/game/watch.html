@@ -3,13 +3,11 @@
 
 {% block content %}
 
-    <div>
-        watch
-    </div>
+    {% include 'ETMApp/history/display_conversation.html' %}
 
 
-    <script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
-    <script type="application/javascript" src="{% static 'ETMApp/js/game.js' %}"></script>
+
+    <script type="application/javascript" src="{% static 'ETMApp/js/watch.js' %}"></script>
 {% endblock %}
 
 {% block title %}

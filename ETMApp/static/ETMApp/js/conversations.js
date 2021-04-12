@@ -1,5 +1,6 @@
 const conversations = JSON.parse(document.getElementById('conversations').textContent);
 const game_url = JSON.parse(document.getElementById('game_url').textContent);
+console.log(JSON.stringify(conversations));
 listConversations(conversations);
 
 function listConversations(conversations) {
