@@ -193,9 +193,12 @@ function sendCanvas() {
     }));
 }
 
-
+function checkEnter(e) {
+    if (e.keyCode === 13) {
+        sendCurrent();
+    }
+}
 function sendCurrent(sentByServer) {
-    console.log("sendCurrent")
     btnValidateChoose.disabled = true;
     btnValidateFind.disabled = true;
     btnValidateDraw.disabled = true;
