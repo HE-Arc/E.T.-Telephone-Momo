@@ -26,7 +26,7 @@ function listGames(games) {
         body.classList.add('card-body');
         let title = document.createElement('h5');
         title.classList.add('card-title');
-        title.innerHTML = game.players.length + ' players';
+        title.innerHTML = game.date;
         body.appendChild(title);
         let card_text = document.createElement('p');
         card_text.classList.add('card-text');
@@ -37,14 +37,18 @@ function listGames(games) {
         date.classList.add('card-text');
         let date_inside = document.createElement('small');
         date_inside.classList.add('text-muted');
-        date_inside.innerHTML = game.date;
+        date_inside.innerHTML = game.players.length + ' players';
         date.appendChild(date_inside);
         body.appendChild(date);
         card.appendChild(body);
 
-        card.setAttribute('onclick', 'window.location = "' + game_url + '/' + conversation.urlConversation + '"');
+        let a = document.createElement('a');
+        a.setAttribute('href', 'history/' + game.urlGame);
+        a.appendChild(card);
+        
+        // card.setAttribute('onclick', 'window.location = "history/' + game.urlGame + '"');
 
-        table.appendChild(card);
+        table.appendChild(a);
     }
 }
 
