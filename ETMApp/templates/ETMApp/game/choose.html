@@ -1,7 +1,7 @@
 <div id="chooseContainer" class="container">
     <div class="row mt-5">
         <label for="textContent">Write a description</label>
-        <input type="text" placeholder="Marty is the hashmaster" class="form-control" name="textContent" id="textContent" onkeyup="(e) => {if (e.keyCode == 13) sendCurrent()}" />
+        <input type="text" placeholder="Marty is the hashmaster" class="form-control" name="textContent" id="textContent" onkeyup="checkEnter(event)" />
         <button class="btn btn-success mt-3" id="btnValidateChoose">Valider</button>
     </div>
 </div>
