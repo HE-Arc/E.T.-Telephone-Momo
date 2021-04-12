@@ -12,7 +12,7 @@ function listConversations(conversations) {
         card.classList.add("mb-3");
         card.classList.add("card");
         card.classList.add("overlay-container");
-        card.classList.add("mb-3");
+        card.classList.add("conversations-card");
 
         let image = document.createElement('img');
         image.classList.add('card-img-top');

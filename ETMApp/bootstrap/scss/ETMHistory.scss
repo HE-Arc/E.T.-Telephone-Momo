@@ -1,6 +1,10 @@
-.overlay-container{
+.conversations-card{
     max-width: 300px;
     margin: auto;
+}
+
+.game-card, .conversations-card{
+    cursor: pointer;
 }
 
 .crop-text-2 {
