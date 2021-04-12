@@ -162,3 +162,5 @@ def find(request):
 def base_game(request):
     return render(request, 'ETMApp/base_game.html')
 
+def watch(request):
+    return render(request, 'ETMApp/game/watch.html')
