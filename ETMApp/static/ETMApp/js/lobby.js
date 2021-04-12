@@ -248,5 +248,5 @@ function nextRound() {
 }
 
 function gameEnd() {
-    window.location.replace("/history/" + game_url);
+    //window.location.replace("/history/" + game_url);
 }

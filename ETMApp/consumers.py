@@ -113,13 +113,5 @@ class ChatConsumer(WebsocketConsumer):
         }))
 
     def remove_game(self, id):
-        print("remove game " + id)
-        image_base = str(settings.MEDIA_ROOT) + "/"
-        image_folder = "ETMApp/games/" + id + "/"
-        try:
-            shutil.rmtree(image_base + image_folder)
-        except OSError as e:
-            print("error")
-            print(e)
         del games[id]
 

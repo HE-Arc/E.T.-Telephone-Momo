@@ -55,10 +55,19 @@ class GameLogic:
         self.update_player()
 
         # if all players are out, delete the party
-        if self.all_players_disconnected():
+        if self.all_players_disconnected() and not self.game_model.has_ended:
             print('All players left - deleting game')
             self.remove_from_dict(self.url)
+            
             self.game_model.delete()
+            print("remove game " + id)
+            image_base = str(settings.MEDIA_ROOT) + "/"
+            image_folder = "ETMApp/games/" + id + "/"
+            try:
+                shutil.rmtree(image_base + image_folder)
+            except OSError as e:
+                print("error")
+                print(e)
 
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])
