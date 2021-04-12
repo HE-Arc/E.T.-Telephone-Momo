@@ -1,10 +1,16 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
     <div class="text-center mt-5">
-        <div class="btn-group-vertical btn-group-lg justify-content-between">
-            <a href="/createGame" type="button" class="btn btn-primary">Create a party</a>
-            <a href="/history" type="button" class="btn btn-primary {% if not user.is_authenticated %} disabled {% endif %}">History</a>
+        <p class="d-none d-sm-block">E.T Téléphone Momo is a multiplayer game to play with friends !</p>
+        <p class="d-none d-sm-block">Create a game and share the link to your friend !</p>
+        <p>The goal is to draw the description you receive, and to describe the drawing you receive !</p>
+        <div class="justify-content-between">
+            <div class="mt-5"><a href="/createGame" type="button" class="btn btn-primary">Create game</a></div>
+            <div class="mt-5"><a href="/history" type="button" class="btn btn-primary {% if not user.is_authenticated %} disabled {% endif %}">History</a></div>
         </div>
+        {% if not user.is_authenticated %}
+        <p><i>You need to be <a href="/login">logged in</a> to see your history</i></p>
+        {% endif %}
     </div>
 {% endblock %}
 
