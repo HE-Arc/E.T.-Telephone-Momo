@@ -4,33 +4,8 @@
 {% if not user.is_authenticated %}
 <p>You are not connected. <a href="/login">Login</a> to see all your party</p>
 {% endif %}
-<div class="card game-card overlay-container mb-3">
-  <a href="/login">
-    <div class="overlay">
-      <p class="overlay-text">Click to get the full game history</p>
-    </div>
-  </a>
-  <div class="card-body">
-    <h5 class="card-title">7 players</h5>
-    <a href="www.google.ch" class="stretched-link" style="display:none"></a>
-    <p class="card-text crop-text-2">player0, player1, player2, player3, player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19</p>
-    <p class="card-text"><small class="text-muted">03.04.2021</small></p>
-  </div>
-</div>
 
-
-<div class="row" id="history_table">
-  <div class="card game-card overlay-container mb-3 stretched-link">
-    <div class="overlay">
-      <p class="overlay-text">Click to get the full game history</p>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">7 players</h5>
-      <p class="card-text crop-text-2">player0, player1, player2, player3, player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19</p>
-      <p class="card-text"><small class="text-muted">03.04.2021</small></p>
-    </div>
-  </div>
-</div>
+<div class="row" id="history_table"></div>
 
 {{ games|json_script:"games" }}
 <script type="application/javascript" src="{% static 'ETMApp/js/history.js' %}"></script>
