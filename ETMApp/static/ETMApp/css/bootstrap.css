@@ -10630,3 +10630,53 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.overlay-container {
+  max-width: 300px;
+  margin: auto;
+}
+
+.crop-text-2 {
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.card-image {
+  height: 180px;
+  object-fit: scale-down;
+}
+
+.overlay-container:hover .overlay {
+  width: 100%;
+  left: 0;
+}
+
+.overlay-container, .overlay, .card-image {
+  border-radius: 10px;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 100%;
+  right: 0;
+  background-color: #0396a6;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: 0.5s ease;
+}
+
+.overlay-text {
+  white-space: nowrap;
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
