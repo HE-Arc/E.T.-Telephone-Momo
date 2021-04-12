@@ -1,43 +1,50 @@
 function listGames(games) {
 
-    let table = document.getElementById('games_body');
+    let table = document.getElementById('history_table');
 
     //Clear the current table
     table.innerHTML = '';
 
     //Add parties in element then in the html table
     for (let game of games) {
-        let tr = document.createElement('tr');
 
-        //Number of players
-        let td1 = document.createElement('td');
-        td1.innerHTML = game.players.length;
-        
-        //Names of players
-        let td2 = document.createElement('td');
-        td2.innerHTML = game.players.join(', ');
-        td2.classList.add("text-truncate");
+        let card = document.createElement('div');
+        card.classList.add("mb-3");
+        card.classList.add("card");
+        card.classList.add("overlay-container");
+        card.classList.add("game-card");
 
+        let overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        let text = document.createElement('p');
+        text.classList.add('overlay-text');
+        text.innerHTML = 'Click to get the full conversation';
+        overlay.appendChild(text);
+        card.appendChild(overlay);
 
-        //Date
-        let td3 = document.createElement('td');
-        td3.innerHTML = game.date;
+        let body = document.createElement('div');
+        body.classList.add('card-body');
+        let title = document.createElement('h5');
+        title.classList.add('card-title');
+        title.innerHTML = game.players.length + ' players';
+        body.appendChild(title);
+        let card_text = document.createElement('p');
+        card_text.classList.add('card-text');
+        card_text.classList.add('crop-text-2');
+        card_text.innerHTML = game.players.join(', ');
+        body.appendChild(card_text);
+        let date = document.createElement('p');
+        date.classList.add('card-text');
+        let date_inside = document.createElement('small');
+        date_inside.classList.add('text-muted');
+        date_inside.innerHTML = game.date;
+        date.appendChild(date_inside);
+        body.appendChild(date);
+        card.appendChild(body);
 
-        //Add to the row
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
+        card.setAttribute('onclick', 'window.location = "' + game_url + '/' + conversation.urlConversation + '"');
 
-        //Add href to game
-        /*let a = document.createElement('a');
-        a.setAttribute('href', game.urlGame);
-        a.appendChild(tr)*/
-
-        tr.setAttribute('onclick', 'window.location = "history/' + game.urlGame + '"');
-
-        //Add to the table
-        table.appendChild(tr);
-        
+        table.appendChild(card);
     }
 }
 
