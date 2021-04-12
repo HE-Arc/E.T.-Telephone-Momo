@@ -10635,10 +10635,6 @@ textarea.form-control-lg {
   margin: auto;
 }
 
-.game-card, .conversations-card {
-  cursor: pointer;
-}
-
 .crop-text-2 {
   -webkit-line-clamp: 2;
   overflow: hidden;

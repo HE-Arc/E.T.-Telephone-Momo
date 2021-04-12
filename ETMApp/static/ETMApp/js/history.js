@@ -28,25 +28,24 @@ function listGames(games) {
         title.classList.add('card-title');
         title.innerHTML = game.date;
         body.appendChild(title);
+        let link = document.createElement('a');
+        link.classList.add('stretched-link');
+        link.setAttribute('href', 'history/' + game.urlGame);
+        link.setAttribute('style', "display:none");
+        body.appendChild(link);
         let card_text = document.createElement('p');
         card_text.classList.add('card-text');
         card_text.classList.add('crop-text-2');
         card_text.innerHTML = game.players.join(', ');
         body.appendChild(card_text);
-        let date = document.createElement('p');
-        date.classList.add('card-text');
-        let date_inside = document.createElement('small');
-        date_inside.classList.add('text-muted');
-        date_inside.innerHTML = game.players.length + ' players';
-        date.appendChild(date_inside);
-        body.appendChild(date);
+        let playerN = document.createElement('p');
+        playerN.classList.add('card-text');
+        let playerN_inside = document.createElement('small');
+        playerN_inside.classList.add('text-muted');
+        playerN_inside.innerHTML = game.players.length + ' players';
+        playerN.appendChild(playerN_inside);
+        body.appendChild(playerN);
         card.appendChild(body);
-
-        let a = document.createElement('a');
-        a.setAttribute('href', 'history/' + game.urlGame);
-        a.appendChild(card);
-        
-        // card.setAttribute('onclick', 'window.location = "history/' + game.urlGame + '"');
 
         table.appendChild(a);
     }
