@@ -14,7 +14,6 @@ document.getElementById('redoButton').addEventListener('click', redo);
 
 document.getElementById('colorPicker').addEventListener('change', e => color = e.target.value);
 document.getElementById('thicknessSelector').addEventListener('change', e => lineWidth = e.target.value);
-
 //Get the draw and find div
 let drawDiv = document.getElementById('drawContainer');
 let findDiv = document.getElementById('findContainer');
@@ -32,6 +31,12 @@ findDiv.style.display = 'none';
 chooseDiv.style.display = 'none';
 lobbyDiv.style.display = 'block';
 
+
+
+function changeColor(col) {
+    color = col;
+    document.getElementById('colorPicker').value = col;
+}
 //Pass to draw gameplay to find gameplay
 function displayDraw(description = "") {
     findDiv.style.display = 'none';
@@ -42,6 +47,7 @@ function displayDraw(description = "") {
     document.getElementById('drawDescription').value = description;
     pageTitle.innerHTML = 'Draw';
 }
+
 
 function displayWaitingAlert() {
     waitingAlert.removeAttribute('hidden');

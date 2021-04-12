@@ -27,15 +27,19 @@ def signup(request):
 
 
 def lobby(request, url):
-
-    #logger.error("test lobbby")
-    request.session['isWorking'] = 1  # necessary to make session work
-
-    game = Game.objects.get(url_game=url)
-    if game is None or game.has_started:
+    request.session['isWorking'] = 1  # necessary to make session work for the sockets
+    game = None
+    try:
+        game = Game.objects.get(url_game=url)
+    except:
+        pass
+    if game is None:
         return redirect('/')
     elif game.has_ended:
-        return redirect('/history/url')
+        return redirect('/history/'+url)
+    elif game.has_started:
+        return redirect('/')
+
 
     return render(request, 'ETMApp/lobby.html', {
         'game_url': url
@@ -96,9 +100,6 @@ def disconnect(request):
     return redirect('/')
 
 def history(request):
-#     // let games = [
-# //     { "url": "....", "players" : ["Gurix", "LaouLeLardon", "LaMousseAuLini"], "date" : "14.03.2021"},
-# // ];
     
     id_user = request.user.id
     games = Game.get_all_serializable(id_user)
@@ -110,19 +111,27 @@ def history(request):
 
 def history_game(request, urlGame):
     conversations = Conversation.get_all_serializable(urlGame)
-    return render(request, 'ETMApp/history/conversations.html', {
-        'conversations': conversations,
-        'game_url': urlGame
-    })
+    print("conversation: ")
+    if (len(conversations) > 0):
+        return render(request, 'ETMApp/history/conversations.html', {
+            'conversations': conversations,
+            'game_url': urlGame
+        })
+    return redirect('/history')
 
 def history_game_conversation(request, urlGame, urlConversation):
     conversations = Conversation.get_all_serializable(urlGame)
-
+    isValid = False
     for i, c in enumerate(conversations):
         if c['urlConversation'] == urlConversation:
             index = i
+            isValid = True
+
+    if not isValid:
+        return redirect('/history/' + urlGame)
 
     i = index
+    
 
     next_conv = urlGame + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
     prev_conv = urlGame + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
@@ -133,6 +142,12 @@ def history_game_conversation(request, urlGame, urlConversation):
         'next_conv': next_conv,
         'prev_conv': prev_conv
     })
+
+
+def create_game(request):
+    game = Game.create()
+    game.save()
+    return redirect('/play/' + game.url_game)
 
 # TMP PAGES TODO
 def conversations(request):
@@ -147,7 +162,3 @@ def find(request):
 def base_game(request):
     return render(request, 'ETMApp/base_game.html')
 
-def create_game(request):
-    game = Game.create()
-    game.save()
-    return redirect('/play/' + game.url_game)

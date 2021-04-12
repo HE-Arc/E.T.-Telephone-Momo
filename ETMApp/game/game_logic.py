@@ -16,6 +16,7 @@ import os
 
 
 
+
 class GameLogic:
     def __init__(self, url, remove_from_dict):
         print("=====================")
@@ -145,7 +146,7 @@ class GameLogic:
 
     def all_players_disconnected(self):
         for p in self.players:
-            if not p.is_disconnected:
+            if not self.players[p].is_disconnected:
                 return False
         return True
 
@@ -167,7 +168,6 @@ class GameLogic:
         if self.current_round >= self.nb_round:
             self.game_end()
             return
-
 
         for p in self.players.values():
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)

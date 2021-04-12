@@ -13,12 +13,13 @@ function sendConnectionRequest() {
         body: form
     }).then(response => response.json())
     .then(data => {
+        console.log(data)
         // If connection succed
         if(!data.error)
             window.location.href = '/';
         else
             switch(data.msg) {
-                case 'invalid_request':
+                case 'invalid_credentials':
                     document.getElementById('errorConnection').removeAttribute('hidden');
                     break;
                 case 'already_connected':
