@@ -110,19 +110,27 @@ def history(request):
 
 def history_game(request, urlGame):
     conversations = Conversation.get_all_serializable(urlGame)
-    return render(request, 'ETMApp/history/conversations.html', {
-        'conversations': conversations,
-        'game_url': urlGame
-    })
+    print("conversation: ")
+    if (len(conversations) > 0):
+        return render(request, 'ETMApp/history/conversations.html', {
+            'conversations': conversations,
+            'game_url': urlGame
+        })
+    return redirect('/history')
 
 def history_game_conversation(request, urlGame, urlConversation):
     conversations = Conversation.get_all_serializable(urlGame)
-
+    isValid = False
     for i, c in enumerate(conversations):
         if c['urlConversation'] == urlConversation:
             index = i
+            isValid = True
+
+    if not isValid:
+        return redirect('/history/' + urlGame)
 
     i = index
+    
 
     next_conv = urlGame + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
     prev_conv = urlGame + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
