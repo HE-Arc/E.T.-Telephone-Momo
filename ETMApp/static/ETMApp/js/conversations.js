@@ -4,18 +4,19 @@ listConversations(conversations);
 
 function listConversations(conversations) {
 
-    let table = document.getElementById('conversations_body');
+    let table = document.getElementById('conversations_table');
 
     //Add parties in element then in the html table
     for (let conversation of conversations) {
         let card = document.createElement('div');
+        card.classList.add("mb-3");
         card.classList.add("card");
         card.classList.add("overlay-container");
 
         let image = document.createElement('img');
         image.classList.add('card-img-top');
         image.classList.add('card-image');
-        image.setAttribute('src', conversation.messages[1].imageUrl);
+        image.setAttribute('src', '/media/' + conversation.messages[1].url_drawing);
         card.appendChild(image);
 
         let overlay = document.createElement('div');
