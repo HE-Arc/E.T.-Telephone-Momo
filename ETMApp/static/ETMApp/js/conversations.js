@@ -12,6 +12,7 @@ function listConversations(conversations) {
         card.classList.add("mb-3");
         card.classList.add("card");
         card.classList.add("overlay-container");
+        card.classList.add("mb-3");
 
         let image = document.createElement('img');
         image.classList.add('card-img-top');
@@ -35,6 +36,7 @@ function listConversations(conversations) {
         body.appendChild(title);
         let card_text = document.createElement('p');
         card_text.classList.add('card-text');
+        card_text.classList.add('crop-text-2');
         card_text.innerHTML = conversation.messages[0].description;
         body.appendChild(card_text);
         card.appendChild(body);
