@@ -12,6 +12,8 @@ from ETMApp.models import Conversation
 import requests
 import random
 import logging
+import os
+import shutil
 
 games = {}
 logger = logging.getLogger(__name__)
@@ -110,4 +112,11 @@ class ChatConsumer(WebsocketConsumer):
 
     def remove_game(self, id):
         print("remove game " + id)
+        image_base = str(settings.MEDIA_ROOT) + "/"
+        image_folder = "ETMApp/games/" + self.url + "/" + conv.url_conversation
+        try:
+            shutil.rmtree(os.makedirs(image_base + image_folder))
+        except OSError as e:
+            pass
         del games[id]
+
