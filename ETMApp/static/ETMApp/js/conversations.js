@@ -34,14 +34,17 @@ function listConversations(conversations) {
         title.classList.add('card-title');
         title.innerHTML = conversation.messages[0].user + ' choose';
         body.appendChild(title);
+        let link = document.createElement('a');
+        link.classList.add('stretched-link');
+        link.setAttribute('href',  game_url + '/' + conversation.urlConversation + '"');
+        link.setAttribute('style', "display:none");
+        body.appendChild(link);
         let card_text = document.createElement('p');
         card_text.classList.add('card-text');
         card_text.classList.add('crop-text-2');
         card_text.innerHTML = conversation.messages[0].description;
         body.appendChild(card_text);
         card.appendChild(body);
-
-        card.setAttribute('onclick', 'window.location = "' + game_url + '/' + conversation.urlConversation + '"');
 
         table.appendChild(card);
     }
