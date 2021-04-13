@@ -25,3 +25,27 @@ td > img {
     margin-left: auto;
     margin-right: auto;
 }
+
+.card-text {
+    display: inline-block;
+    width: 70%;
+    max-width: none;
+}
+.card-text-container {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.card-img {
+    display: inline-block;
+    width: 70%;
+    max-width: none;
+    text-align: left;
+}
+.card-img-container {
+    text-align: right;
+    margin-top: 20px;
+}
+.card-image-large {
+    height: 300px;
+}

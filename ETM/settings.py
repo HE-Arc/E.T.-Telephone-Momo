@@ -99,8 +99,7 @@ DATABASES = {
         }
     }
 }
-print("IS_PRODUCTION")
-print(IS_PRODUCTION)
+
 if IS_PRODUCTION:
     DATABASES = {
         'default': {

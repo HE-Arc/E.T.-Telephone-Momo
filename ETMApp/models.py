@@ -16,7 +16,7 @@ class Game(models.Model):
 
     @classmethod
     def get_all_serializable(cls, id_user):
-        games = set(Game.objects.filter(conversation__message__id_user=id_user))
+        games = unique(Game.objects.filter(conversation__message__id_user=id_user).order_by('-date'))
         
         games = [g.get_serializable() for g in games]
         return games
@@ -108,3 +108,7 @@ class UserGame(models.Model):
 def id_generator(size):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(size))
+
+def unique(sequence):
+    seen = set()
+    return [x for x in sequence if not (x in seen or seen.add(x))]

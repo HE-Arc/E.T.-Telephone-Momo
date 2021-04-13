@@ -61,6 +61,11 @@ class GameLogic:
         if self.all_players_disconnected() and not self.game_model.has_ended:
             self.timer_before_delete = Timer(10, self.delete_game)
             self.timer_before_delete.start()
+        elif not self.game_model.has_ended: #if a player leave, skip the round
+            if self.all_players_ready():
+                self.timer.cancel()
+                self.next_round()
+
             
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])

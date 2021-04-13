@@ -38,7 +38,7 @@ function goto(conversationID, messageID) {
 
     let message = conversations[conversationID].messages[messageID-1];
     if(message.url_drawing == null){
-        speak(message.descrption);
+        speak(message.description);
     }
 }
 
@@ -71,9 +71,9 @@ function listMessages(messages) {
             <div class="card-img-container">
                 <div class="mb-3 card overlay-container conversations-card card-img">
                     <div class="card-body">
-                        <p class="card-text crop-text-2">Nico draw</p>
+                        <p class="card-text crop-text-2">${message.user} draw</p>
                     </div>
-                    <img class="card-img-top card-image" src="/media/${message.url_drawing}">
+                    <img class="card-img-top card-image card-image-large" src="/media/${message.url_drawing}">
                 </div>
             </div>`;
         }
