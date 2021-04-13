@@ -4,7 +4,7 @@
 
 let conversations;
 let currentConv = 0;
-let currentMessage = 0;
+let currentMessage = 1;
 
 function setConversations(conv) {
     conversations = conv;

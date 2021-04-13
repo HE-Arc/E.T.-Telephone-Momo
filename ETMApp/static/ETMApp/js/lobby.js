@@ -255,6 +255,13 @@ function nextRound() {
 
 function gameEnd(data) {
     setConversations(data.conversations);
+    findDiv.style.display = 'none';
+    drawDiv.style.display = 'none';
+    chooseDiv.style.display = 'none';
+    lobbyDiv.style.display = 'none';
+    startTimerGUI(0);
+    document.getElementById("timeLeftBar").style.display = "none";
+
     
     //window.location.replace("/history/" + game_url);
 }
