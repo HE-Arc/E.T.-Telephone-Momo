@@ -37,8 +37,6 @@ let btnValidateFind = document.getElementById("btnValidateFind");
 let btnStartGame = document.getElementById('btnStartGame');
 let btnNextMessage = document.getElementById('btnNextMessage');
 
-let timerDiv = document.getElementById('timerDiv');
-
 btnValidateChoose.addEventListener('click', sendCurrent);
 sliderRound.addEventListener('input', sliderRoundChange);
 btnStartGame.addEventListener('click', startGame);
