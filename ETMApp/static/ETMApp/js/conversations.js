@@ -17,8 +17,8 @@ function listConversations(conversations) {
                 <p class="overlay-text">Click to get the full conversation</p>
             </div>
             <div class="card-body">
-                <h5 class="card-title">${conversation.messages[0].user} choose</h5>
-                <a class="stretched-link" href="${game_url}/${conversation.urlConversation}"></a>
+                <h5 class="card-title">${conversation.messages[0].user} choose</h5> 
+                <a class="stretched-link" href="${conversation.urlConversation}"></a>
                 <p class="card-text crop-text-2">${conversation.messages[0].description}</p>
             </div>
         </div>
