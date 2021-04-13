@@ -138,6 +138,7 @@ function initPlayer(initMe) {
         document.getElementById('roundContainer').style.display = "block";
         document.getElementById('btnStartGame').disabled = false;
         btnNextMessage.removeAttribute('hidden');
+        document.getElementById('alertWatch').style.display = "none";
     }
 }
 

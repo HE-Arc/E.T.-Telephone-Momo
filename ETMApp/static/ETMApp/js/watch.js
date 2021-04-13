@@ -37,11 +37,15 @@ function nextMessage() {
 function goto(conversationID, messageID) {
     console.log(`${conversationID}, ${messageID}`);
     listMessages(conversations[conversationID].messages.slice(0, messageID));
-    window.scrollTo(0, document.body.scrollHeight);
+
     let message = conversations[conversationID].messages[messageID-1];
     if(message.url_drawing == null){
         speak(message.description);
     }
+        
+    setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+    }, 10);
 }
 
 function listMessages(messages) {
@@ -108,6 +112,7 @@ function initVoice(voices) {
     console.log(voices);
 
     for(let voice of voices) {
+        console.log(voice.lang);
         if(voice.lang == "fr-FR") {
             ssu.voice = voice;
             break;

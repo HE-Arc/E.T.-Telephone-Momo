@@ -45,6 +45,8 @@ function displayDraw(description = "") {
     drawDiv.style.display = 'block';
     chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
+    tool = pen;
+    document.getElementById('penButton').checked = true;
 
     document.getElementById('drawDescription').value = description;
     pageTitle.innerHTML = 'Draw';
@@ -93,6 +95,7 @@ function startTimerGUI(totalTime) {
     let elem = document.getElementById("timeLeftBar");
     let bar = document.getElementById("timeBarText");
     let currentTime = 0;
+    elem.style.width = "0%";
     clearInterval(timer);
     timer = setInterval(() => {
         if (currentTime >= totalTime) {
