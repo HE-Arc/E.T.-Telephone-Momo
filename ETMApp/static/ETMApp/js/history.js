@@ -15,7 +15,7 @@ function listGames(games) {
         overlay.classList.add('overlay');
         let text = document.createElement('p');
         text.classList.add('overlay-text');
-        text.innerHTML = 'Click to get the full conversation';
+        text.innerHTML = 'Click to get the full game';
         
         let body = document.createElement('div');
         body.classList.add('card-body');

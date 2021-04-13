@@ -1,14 +1,15 @@
 
-// TODO delete
-//let conversations = [{"urlConversation":"0PkY1T02","messages":[{"user":"Nicolas","url_drawing":null,"description":"Nico la taupe"},{"user":"Fence Plus 928","url_drawing":"ETMApp/games/cgJmDmwn/0PkY1T02/1.png","description":null},{"user":"Laptop Post office","url_drawing":null,"description":"Nico la taupe"}]},{"urlConversation":"cse3vkGh","messages":[{"user":"Laptop Post office","url_drawing":null,"description":"Yo2"},{"user":"Nicolas","url_drawing":"ETMApp/games/cgJmDmwn/cse3vkGh/1.png","description":null},{"user":"Fence Plus 928","url_drawing":null,"description":"yo"}]},{"urlConversation":"w7kTnYaR","messages":[{"user":"Fence Plus 928","url_drawing":null,"description":"Marty is the taupe"},{"user":"Laptop Post office","url_drawing":"ETMApp/games/cgJmDmwn/w7kTnYaR/1.png","description":null},{"user":"Nicolas","url_drawing":null,"description":"Marty la taupe"}]}]
-
 let conversations;
 let currentConv = 0;
 let currentMessage = 1;
 
+let ss;
+let ssu
+
 function setConversations(conv) {
     conversations = conv;
     document.getElementById('watchContainer').removeAttribute('hidden');
+    initSpeech();
 }
 
 function nextMessage() {
@@ -38,14 +39,55 @@ function listMessages(messages) {
 
     let table = document.getElementById('messages');
 
-    //Clear the current table
-    table.innerHTML = '';
-
     let first = true;
     let text = true;
 
+    let html = '';
     //Add parties in element then in the html table
-    for (let message of messages) {
+    for (let [index, message] of messages.entries()) {
+        if (message.url_drawing == null) {
+            let isChoose = 'found'
+            if (first) {
+                isChoose = 'choose'
+            }
+            html +=
+            `<div class="card-text-container">
+                <div class="mb-3 card overlay-container conversations-card inline card-text">
+                    <div class="card-body">
+                        <p class="card-text crop-text-2">${message.user} ${isChoose}</p>
+                        <h5 class="card-title">${message.description}</h5>
+                    </div>
+                </div>
+            </div>`;
+
+            if(index == messages.length - 1) {
+                //speak(message.description);
+            }
+        } else {
+            html += `
+            <div class="card-img-container">
+                <div class="mb-3 card overlay-container conversations-card card-img">
+                    <div class="card-body">
+                        <p class="card-text crop-text-2">Nico draw</p>
+                    </div>
+                    <img class="card-img-top card-image" src="/media/${message.url_drawing}">
+                </div>
+            </div>`;
+        }
+
+        first = false;
+        
+        /*<div class="card-img-container">
+            <div class="mb-3 card overlay-container conversations-card card-img">
+                <div class="card-body">
+                    <p class="card-text crop-text-2">Nico draw</p>
+                </div>
+                <img class="card-img-top card-image" src="/media/ETMApp/games/cgJmDmwn/0PkY1T02/1.png">
+            </div>
+        </div>*/
+
+/*
+        
         let tr = document.createElement('tr');
 
         //Who said what
@@ -60,8 +102,31 @@ function listMessages(messages) {
         table.appendChild(tr);
 
         first = false;
-        text = !text;
+        text = !text;*/
     }
+
+    document.getElementById('roundContent').innerHTML = html;
+}
+
+function initSpeech() {
+    ss = window.speechSynthesis;
+    ssu = new SpeechSynthesisUtterance();
+
+    let voices = ss.getVoices();
+    for(let voice of voices) {
+        if(voice.lang == "fr-FR") {
+            ssu.voice = voice;
+            break;
+        }
+    }
+}
+
+function speak(text) {
+    if (ss.speaking) {
+        ss.cancel();
+    }
+    ssu.text = text;
+    ss.speak(ssu);
 }
 
 

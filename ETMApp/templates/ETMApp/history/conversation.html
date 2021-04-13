@@ -12,6 +12,7 @@
 
 {{ conversation|json_script:"conversation" }}
 {{ game_url|json_script:"game_url" }}
+<script type="application/javascript" src="{% static 'ETMApp/js/watch.js' %}"></script>
 <script type="application/javascript" src="{% static 'ETMApp/js/conversation.js' %}"></script>
 {% endblock %}
 

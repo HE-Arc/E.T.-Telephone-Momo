@@ -125,12 +125,14 @@ function lobbyPlayers(players) {
 
 let me = null;
 function initPlayer(initMe) {
-    me = initMe;
-    if (btnPseudo) {
-        document.getElementById('pseudo').value = me.pseudo
+    
+   
+    if (btnPseudo && me == null) {
+        document.getElementById('pseudo').value = initMe.pseudo
         document.getElementById('pseudo').disabled = false;
         document.getElementById('btnPseudo').disabled = false;
     }
+    me = initMe;
     
     if (initMe.isAdmin === true) {
         document.getElementById('roundContainer').style.display = "block";
