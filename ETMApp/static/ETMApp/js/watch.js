@@ -90,11 +90,14 @@ function initSpeech() {
 
     let voices = ss.getVoices();
     for(let voice of voices) {
+        console.log(voice.lang);
         if(voice.lang == "fr-FR") {
             ssu.voice = voice;
             break;
         }
     }
+
+    console.log(ssu.voice.lang);
 }
 
 function speak(text) {
