@@ -23,6 +23,8 @@ let conversationDiv = document.getElementById('conversationContainer');
 
 let waitingAlert = document.getElementById('waitingAlert');
 
+let timerDiv = document.getElementById('timerDiv');
+
 //TO REMOVE
 //displayDraw();
 //conversationDiv.style.display = 'none';
