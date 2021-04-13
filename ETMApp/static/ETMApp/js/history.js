@@ -8,9 +8,31 @@ function listGames(games) {
     //Add parties in element then in the html table
     for (let game of games) {
 
+        let html = `
+        <div class="mb-3 card overlay-container game-card">
+            <image class="card-img-top card-image" src="/media/${conversation.messages[1].url_drawing}">
+            <div class="overlay">
+                <p class="overlay-text">Click to get the full game</p>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${game.date}</h5>
+                <a class="stretched-link" href="history/${game.urlGame}"></a>
+                <p class="card-text crop-text-2">${game.players.join(', ')}</p>
+                <p class="card-text">
+                    <small class="text-muted">${game.players.length} players</small>
+                </p>
+            </div>
+        </div>
+        `;
+
         let card = document.createElement('div');
         card.classList.add("mb-3", "card", "overlay-container", "game-card");
 
+        card.innerHTML = html;
+
+        table.appendChild(card);
+
+        /*
         let overlay = document.createElement('div');
         overlay.classList.add('overlay');
         let text = document.createElement('p');
@@ -50,6 +72,8 @@ function listGames(games) {
         card.appendChild(body);
 
         table.appendChild(card);
+
+        */
     }
 }
 
