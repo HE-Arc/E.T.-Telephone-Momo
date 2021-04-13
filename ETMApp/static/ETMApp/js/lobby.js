@@ -100,7 +100,7 @@ function lobbyPlayers(players) {
             let td = document.createElement('td');
             //If it's the actual client, put it in evidence
             if (me.id === player.id) {
-                td.classList.add("text-primary")
+                td.classList.add("text-danger")
                 initPlayer(me);
             }
 
@@ -217,7 +217,6 @@ function sendCurrent(sentByServer) {
         if(drawing) {
 
             sendCanvas();
-            console.log('send canvas');
         } else {
 
             sendMessage();

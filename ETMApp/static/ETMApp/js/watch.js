@@ -6,10 +6,12 @@ let currentMessage = 0;
 let ss;
 let ssu;
 
+setSpeech().then((voices) => initVoice(voices));
+
 function setConversations(conv) {
     conversations = conv;
     document.getElementById('watchContainer').removeAttribute('hidden');
-    initSpeech();
+    // initSpeech();
 }
 
 function nextMessage() {
@@ -35,7 +37,7 @@ function nextMessage() {
 function goto(conversationID, messageID) {
     console.log(`${conversationID}, ${messageID}`);
     listMessages(conversations[conversationID].messages.slice(0, messageID));
-
+    window.scrollTo(0, document.body.scrollHeight);
     let message = conversations[conversationID].messages[messageID-1];
     if(message.url_drawing == null){
         speak(message.description);
@@ -84,21 +86,35 @@ function listMessages(messages) {
     document.getElementById('roundContent').innerHTML = html;
 }
 
-function initSpeech() {
+function setSpeech() {
     ss = window.speechSynthesis;
     ssu = new SpeechSynthesisUtterance();
 
-    let voices = ss.getVoices();
+    return new Promise(
+        function (resolve, reject) {
+            let id;
+
+            id = setInterval(() => {
+                if (ss.getVoices().length !== 0) {
+                    resolve(ss.getVoices());
+                    clearInterval(id);
+                }
+            }, 10);
+        }
+    )
+}
+
+function initVoice(voices) {
     console.log(voices);
+
     for(let voice of voices) {
-        console.log(voice.lang);
         if(voice.lang == "fr-FR") {
             ssu.voice = voice;
             break;
         }
     }
 
-    console.log(ssu.voice.lang);
+    console.log(ssu.voice == null ? "defaults to EN-en" : ssu.voice.lang);
 }
 
 function speak(text) {
