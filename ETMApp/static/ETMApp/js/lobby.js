@@ -261,8 +261,8 @@ function gameEnd(data) {
     drawDiv.style.display = 'none';
     chooseDiv.style.display = 'none';
     lobbyDiv.style.display = 'none';
+    timerDiv.style.display = 'none';
     startTimerGUI(0);
-    document.getElementById("timeLeftBar").style.display = "none";
 
     removeWaitingAlert();
     

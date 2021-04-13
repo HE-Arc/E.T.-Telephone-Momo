@@ -77,6 +77,7 @@ function displayChoose() {
     chooseDiv.style.display = 'block';
     lobbyDiv.style.display = 'none';
     pageTitle.innerHTML = 'Choose';
+    timerDiv.style.display = 'block';
 }
 
 function displayConversation() {
