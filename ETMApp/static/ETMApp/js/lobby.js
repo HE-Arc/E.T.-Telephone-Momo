@@ -40,7 +40,7 @@ let btnNextMessage = document.getElementById('btnNextMessage');
 btnValidateChoose.addEventListener('click', sendCurrent);
 sliderRound.addEventListener('input', sliderRoundChange);
 btnStartGame.addEventListener('click', startGame);
-
+//TODO slider automatically to the max when new player comes
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
     console.log("received", e);

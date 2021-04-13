@@ -4,7 +4,7 @@ let currentConv = 0;
 let currentMessage = 0;
 
 let ss;
-let ssu
+let ssu;
 
 function setConversations(conv) {
     conversations = conv;
@@ -89,6 +89,7 @@ function initSpeech() {
     ssu = new SpeechSynthesisUtterance();
 
     let voices = ss.getVoices();
+    console.log(voices);
     for(let voice of voices) {
         console.log(voice.lang);
         if(voice.lang == "fr-FR") {

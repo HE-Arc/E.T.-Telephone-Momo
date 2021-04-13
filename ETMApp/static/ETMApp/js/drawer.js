@@ -7,10 +7,33 @@ let ctxf = cnvf.getContext('2d');
 let cnvb = document.getElementById('cnvb');
 let ctxb = cnvb.getContext('2d');
 
-//TODO add shortcut
+on('p', () => {
+    tool = pen;
+    document.getElementById('penButton').checked = true;
+});
+
+on('z', () => {
+    undo();
+}, true);
+
+on('y', () => {
+    redo();
+}, true);
+
+on('b', () => {
+    tool = bucket;
+    document.getElementById('bucketButton').checked = true;
+});
+
+on('g', () => {
+    tool = eraser;
+    document.getElementById('eraserButton').checked = true;
+});
+
+
 
 let lineWidth = 10;
-let color = "#000000";
+let color = "#000001";
 
 let canDraw = true;
 
@@ -221,7 +244,7 @@ let rect = {
 let tool = pen;
 
 
-let maxUndo = 15;
+let maxUndo = 25;
 let undoStack = [];
 let redoStack = [];
 

@@ -8,46 +8,46 @@
                 <textarea type="text" id="drawDescription" disabled></textarea>
             </div>
             <div class="row mt-3">
-                <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
+                <div class="btn-group btn-group-sm col-sm" role="group">
 
                     <input type="radio" class="btn-check" id="penButton" name="tool" checked>
-                    <label class="btn btn-outline-primary" for="penButton"><span class="material-icons md-36">draw</span></label>
+                    <label class="btn btn-outline-primary" for="penButton" title="Pen tool (P)"><span class="material-icons md-36">draw</span></label>
 
                     <input type="radio" class="btn-check" id="eraserButton" name="tool">
-                    <label class="btn btn-outline-primary" for="eraserButton"><span class="material-icons md-36">rice_bowl</span></label>
+                    <label class="btn btn-outline-primary" for="eraserButton" title="Eraser tool (G)"><span class="material-icons md-36">rice_bowl</span></label>
 
                     <input type="radio" class="btn-check" id="bucketButton" name="tool">
-                    <label class="btn btn-outline-primary" for="bucketButton"><span class="material-icons md-36">format_color_fill</span></label>
+                    <label class="btn btn-outline-primary" for="bucketButton" title="Flood fill tool (B)"><span class="material-icons md-36">format_color_fill</span></label>
                 </div>
             </div>
             <div class="row mt-1">
-                <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
+                <div class="btn-group btn-group-sm col-sm" role="group">
                     <input type="radio" class="btn-check" id="lineButton" name="tool">
-                    <label class="btn btn-outline-primary" for="lineButton"><span class="material-icons md-36">horizontal_rule</span></label>
+                    <label class="btn btn-outline-primary" for="lineButton" title="line tool"><span class="material-icons md-36">horizontal_rule</span></label>
 
                     <input type="radio" class="btn-check" id="rectButton" name="tool">
-                    <label class="btn btn-outline-primary" for="rectButton"><span class="material-icons md-36">crop_5_4</span></label>
+                    <label class="btn btn-outline-primary" for="rectButton" title="rectangle tool"><span class="material-icons md-36">crop_5_4</span></label>
                 </div>
             </div>
             <div class="row mt-1">
-                <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-                    <button id="undoButton" type="button" class="btn btn-success"><span class="material-icons md-36">chevron_left</span>
+                <div class="btn-group btn-group-sm col-sm" role="group">
+                    <button id="undoButton" type="button" class="btn btn-success" title="undo (ctrl + z)"><span class="material-icons md-36">chevron_left</span>
                     </button>
-                    <button id="clearDrawButton" type="button" class="btn btn-primary"><span class="material-icons md-36">clear</span>
+                    <button id="clearDrawButton" type="button" class="btn btn-danger" title="Reset canvas"><span class="material-icons md-36">clear</span>
                     </button>
-                    <button id="clearCanvasButton" type="button" class="btn btn-success"><span class="material-icons md-36">border_clear</span>
+                    <button id="clearCanvasButton" type="button" class="btn btn-warning" title="Reset background"><span class="material-icons md-36">border_clear</span>
                     </button>
-                    <button id="redoButton" type="button" class="btn btn-primary"><span class="material-icons md-36">chevron_right</span>
+                    <button id="redoButton" type="button" class="btn btn-success" title="redo (ctrl + y)"><span class="material-icons md-36">chevron_right</span>
                     </button>
                 </div>
             </div>
             <div class="row mt-1">
-                <div class="btn-group btn-group-sm col-sm" role="group" aria-label="Basics">
-                    <label for="imageUpload" class="btn btn-primary"><span class="material-icons md-36">insert_photo</span></label>
-                    <input type="file" class="form-control-file" id="imageUpload" value="upload" style="">
-                    <input id="colorPicker" type="color" class="btn btn-success">
+                <div class="btn-group btn-group-sm col-sm" role="group">
+                    <label for="imageUpload" class="btn btn-primary" title="Add a background"><span class="material-icons md-36">insert_photo</span></label>
+                    <input type="file" class="form-control-file" id="imageUpload" value="upload" style="" title="Add a background">
+                    <input id="colorPicker" type="color" class="btn btn-success" title="Choose the color">
                     </input>
-                    <select id="thicknessSelector"class="btn btn-primary">
+                    <select id="thicknessSelector"class="btn btn-primary" title="Line thickness">
                         <option value="5">5</option>
                         <option value="10" selected>10</option>
                         <option value="15">15</option>
