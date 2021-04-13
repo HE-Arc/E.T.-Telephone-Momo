@@ -97,14 +97,14 @@ function lobbyPlayers(players) {
         if (!player.isDisconnected) {
             nbPlayer++;
             let tr = document.createElement('tr');
-
+            let td = document.createElement('td');
             //If it's the actual client, put it in evidence
             if (me.id === player.id) {
-                tr.classList.add("bg-success")
+                td.classList.add("text-primary")
                 initPlayer(me);
             }
 
-            let td = document.createElement('td');
+            
             td.innerHTML = player.pseudo;
             tr.appendChild(td);
             table.appendChild(tr);
