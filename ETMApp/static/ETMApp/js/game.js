@@ -88,6 +88,7 @@ function displayConversation() {
 let timer;
 function startTimerGUI(totalTime) {
     let elem = document.getElementById("timeLeftBar");
+    let bar = document.getElementById("timebar");
     let currentTime = 0;
     clearInterval(timer);
     timer = setInterval(() => {
@@ -96,7 +97,7 @@ function startTimerGUI(totalTime) {
         } else {
             currentTime++;
             elem.style.width = currentTime/totalTime * 100 + "%";
-            elem.innerHTML = totalTime - currentTime + " s left";
+            bar.innerHTML = totalTime - currentTime + " s left";
         }
     }, 1000);
 }
