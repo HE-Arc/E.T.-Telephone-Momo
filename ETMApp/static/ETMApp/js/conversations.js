@@ -9,6 +9,26 @@ function listConversations(conversations) {
 
     //Add parties in element then in the html table
     for (let conversation of conversations) {
+
+        let card = document.createElement('div');
+        card.classList.add("mb-3", "card", "overlay-container", "conversations-card");
+
+        let html = `
+            <image class="card-img-top card-image" src="/media/${conversation.messages[1].url_drawing}">
+            <div class="overlay">
+                <p class="overlay-text">Click to get the full conversation</p>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${conversation.messages[0].user} choose</h5>
+                <a class="stretched-link" href="${game_url}/${conversation.urlConversation}"></a>
+                <p class="card-text crop-text-2">${conversation.messages[0].description}</p>
+            </div>
+        `;
+
+        card.innerHTML = html;
+        table.appendChild(card);
+
+        /*
         let card = document.createElement('div');
         card.classList.add("mb-3", "card", "overlay-container", "conversations-card");
 
@@ -48,5 +68,6 @@ function listConversations(conversations) {
         body.appendChild(card_text);
         card.appendChild(body);
         table.appendChild(card);
+        */
     }
 }
