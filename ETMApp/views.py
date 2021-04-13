@@ -3,16 +3,19 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts import redirect
+from django.template.loader import get_template, render_to_string
 from ETMApp.models import Conversation, Game
 import logging
 from django.core import serializers
-from fpdf import FPDF, HTMLMixin
+# from fpdf import FPDF, HTMLMixin
+from easy_pdf.rendering import render_to_pdf_response
+from django.shortcuts import HttpResponse
 
 logger = logging.getLogger(__name__)
 
 
 def index(request):
-    return render(request, 'ETMApp/index.html')
+    return render(request, 'ETMApp/index.html') 
 
 
 def login(request):
@@ -130,21 +133,33 @@ def view_game(request, urlGame):
             'game_url': urlGame
         })
     return redirect('/history')"""
+
+
+
     conversations = Conversation.get_all_serializable(urlGame)
     isValid = False
-    pdf = HtmlPdf()
+    
+
+    return render_to_pdf_response(request, 'ETMApp/view/render.html', {
+            'conversations': conversations, 
+            'game_url': urlGame,
+        })
         
     for i, c in enumerate(conversations):
         pdf.add_page()
         
-        pdf.write_html(render_to_string(request, 'ETMApp/view/render.html', {
+
+        html = render_to_string('ETMApp/view/render.html', {
             'conversation': conversations[i], 
             'game_url': urlGame,
-        }))
+        })
+        pdf.write_html(html)
+        #pdf.write_html("<p>YOOOOOOOOOOOOOO</p>")
 
-    response = HttpResponse(pdf.output(dest='S').encode('latin-1'))
+    response = HttpResponse(pdf.output(dest='S'))
     response['Content-Type'] = 'application/pdf'
     return response
+    #return render(request, 'ETMApp/view/render.html')
 
 def history_game_conversation(request, urlGame, urlConversation):
     conversations = Conversation.get_all_serializable(urlGame)
@@ -191,8 +206,4 @@ def base_game(request):
 
 def watch(request):
     return render(request, 'ETMApp/game/watch.html')
-
-class HtmlPdf(FPDF, HTMLMixin):
-    pass
-
 

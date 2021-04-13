@@ -35,7 +35,7 @@ urlpatterns = [
     path('history', ETMApp.history, name='history'),
     path('history/<slug:urlGame>/', ETMApp.history_game, name='history_game'),
     path('history/<slug:urlGame>/<slug:urlConversation>/', ETMApp.history_game_conversation, name='history_game_conversation'),
-    path('view/<slug:urlGame>/', ETMApp.view_game, name='view_game'),
+    path('view/<slug:urlGame>.pdf', ETMApp.view_game, name='view_game'),
     path('createGame', ETMApp.create_game, name='create_game'),
 
     #path('draw', ETMApp.draw, name='draw'),
