@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block content %}
+    
     {% include 'ETMApp/game/draw.html' %}
-
+    
     {% include 'ETMApp/game/find.html' %}
 
     {% include 'ETMApp/history/display_conversation.html' %}
 
     {% include 'ETMApp/game/find.html' %}
-
+    
 
     <div class="progress mt-2">
         <div id="timeLeftBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
