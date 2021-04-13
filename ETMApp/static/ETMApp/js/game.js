@@ -88,7 +88,7 @@ function displayConversation() {
 let timer;
 function startTimerGUI(totalTime) {
     let elem = document.getElementById("timeLeftBar");
-    let bar = document.getElementById("timebar");
+    let bar = document.getElementById("timeBarText");
     let currentTime = 0;
     clearInterval(timer);
     timer = setInterval(() => {
