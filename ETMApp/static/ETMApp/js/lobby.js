@@ -263,6 +263,7 @@ function gameEnd(data) {
     lobbyDiv.style.display = 'none';
     startTimerGUI(0);
     document.getElementById("timeLeftBar").style.display = "none";
+    
 
     
     //window.location.replace("/history/" + game_url);
