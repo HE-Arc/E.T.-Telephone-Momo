@@ -102,7 +102,10 @@ def disconnect(request):
 def history(request):
     
     id_user = request.user.id
-    games = Game.get_all_serializable(id_user)
+    games = []
+    if id_user is not None:
+        games = Game.get_all_serializable(id_user)
+
 
 
     return render(request, 'ETMApp/history/history.html', {

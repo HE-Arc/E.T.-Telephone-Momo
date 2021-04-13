@@ -1,12 +1,55 @@
 {% load static %}
 <div id="conversationContainer" class="container">
-    <table id="rounds_table" class="table mt-5 table-striped table-hover table-sm">
+    <!--<table id="rounds_table" class="table mt-5 table-striped table-hover table-sm">
         <thead>
             <tr>
-            <th>Messages</th>
+                <th>Messages</th>
             </tr>
         </thead>
         <tbody class="text-danger" id="messages">
         </tbody>
-    </table>
+    </table>-->
+
+    <!--<div class="card-text-container">
+        <div class="card overlay-container conversations-card inline card-text">
+            <div class="card-body">
+                <p class="card-text crop-text-2">Nicolas choose</p>
+                <h5 class="card-title">Nico la taupe</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-img-container">
+        <div class="mb-3 card overlay-container conversations-card card-img">
+            <div class="card-body">
+                <p class="card-text crop-text-2">Nico draw</p>
+            </div>
+            <img class="card-img-top card-image" src="/media/ETMApp/games/cgJmDmwn/0PkY1T02/1.png">
+        </div>
+    </div>-->
+    <div id="roundContent"></div>
+
+    <style>
+        .card-text {
+            display: inline-block;
+            width: 70%;
+            max-width: none;
+        }
+        .card-text-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card-img {
+            display: inline-block;
+            width: 70%;
+            max-width: none;
+            text-align: left;
+        }
+        .card-img-container {
+            text-align: right;
+            margin-top: 20px;
+
+        }
+    </style>
+
 </div>
