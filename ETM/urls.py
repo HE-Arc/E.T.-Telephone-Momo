@@ -42,7 +42,8 @@ urlpatterns = [
     path('base_game', ETMApp.base_game, name='base_game'),
 
     # TODO REMOVE
-    path('conversations', ETMApp.conversations, name='conversations')
+    path('conversations', ETMApp.conversations, name='conversations'),
+    path('watch', ETMApp.watch, name='watch')
 ]
 if not settings.DEBUG:
     urlpatterns += [

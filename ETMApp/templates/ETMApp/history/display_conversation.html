@@ -1,6 +1,5 @@
 {% load static %}
 <div id="conversationContainer" class="container">
-    <a href="/history/{{ game_url }}">All rounds</a>
     <table id="rounds_table" class="table mt-5 table-striped table-hover table-sm">
         <thead>
             <tr>
@@ -10,9 +9,4 @@
         <tbody class="text-danger" id="messages">
         </tbody>
     </table>
-    <div class="row">
-        <a href="/history/{{ prev_conv }}" class="col-3 btn btn-primary">Previous</a>
-        <div class="col-6"></div>
-        <a href="/history/{{ next_conv }}" class="col-3 btn btn-primary">Next</a>
-    </div>
 </div>

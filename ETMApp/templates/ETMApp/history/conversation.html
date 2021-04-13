@@ -2,7 +2,13 @@
 {% block content %}
 {% load static %}
 
+<a href="/history/{{ game_url }}"><span class="material-icons">arrow_back</span></a>
 {% include 'ETMApp/history/display_conversation.html' %}
+<div class="row">
+    <a href="/history/{{ prev_conv }}" class="col-3 btn btn-outline-primary">Previous</a>
+    <div class="col-6"></div>
+    <a href="/history/{{ next_conv }}" class="col-3 btn btn-outline-primary">Next</a>
+</div>
 
 {{ conversation|json_script:"conversation" }}
 {{ game_url|json_script:"game_url" }}

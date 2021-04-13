@@ -19,7 +19,7 @@ let drawDiv = document.getElementById('drawContainer');
 let findDiv = document.getElementById('findContainer');
 let chooseDiv = document.getElementById('chooseContainer');
 let lobbyDiv = document.getElementById('lobbyContainer');
-//let conversationDiv = document.getElementById('conversationContainer');
+let conversationDiv = document.getElementById('conversationContainer');
 
 let waitingAlert = document.getElementById('waitingAlert');
 

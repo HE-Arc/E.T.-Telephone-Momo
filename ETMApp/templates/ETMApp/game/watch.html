@@ -1,0 +1,13 @@
+
+<div id="watchContainer" hidden>
+    {% include 'ETMApp/history/display_conversation.html' %}
+    {% load static %}
+    <div class="text-center">
+
+        <button class="btn btn-primary mt-3" onclick="nextMessage()" id="btnNextMessage" hidden>Next message</button>
+        <br>
+
+        <a href="/history/{{ game_url }}" target="_blank" class="btn btn-primary mt-3">See complete game</a>
+
+    </div>
+</div>
