@@ -35,6 +35,7 @@ let btnValidateChoose = document.getElementById("btnValidateChoose");
 let btnValidateDraw = document.getElementById("btnValidateDraw");
 let btnValidateFind = document.getElementById("btnValidateFind");
 let btnStartGame = document.getElementById('btnStartGame');
+let btnNextMessage = document.getElementById('btnNextMessage');
 
 btnValidateChoose.addEventListener('click', sendCurrent);
 sliderRound.addEventListener('input', sliderRoundChange);
@@ -58,15 +59,19 @@ chatSocket.onmessage = function (e) {
             sendCurrent();
             break;
         case "new_round_draw":
-            nextRound()
-            displayDraw(e.data)
+            nextRound();
+            displayDraw(e.data);
             break;
         case "new_round_find":
-            nextRound()
-            displayFind(e.data)
+            nextRound();
+            displayFind(e.data);
             break;
         case "end_game":
-            gameEnd()
+            gameEnd(e.data);
+            break;
+        case "next_message":
+            if (!me.isAdmin) //admin has already done the goto
+                goto(e.data.conversationID, e.data.messageID);
             break;
         default:
             console.error("Unknown event type", e);
@@ -130,6 +135,7 @@ function initPlayer(initMe) {
     if (initMe.isAdmin === true) {
         document.getElementById('roundContainer').style.display = "block";
         document.getElementById('btnStartGame').disabled = false;
+        btnNextMessage.removeAttribute('hidden');
     }
 }
 
@@ -247,6 +253,8 @@ function nextRound() {
     textFind.disabled = false;
 }
 
-function gameEnd() {
+function gameEnd(data) {
+    setConversations(data.conversations);
+    
     //window.location.replace("/history/" + game_url);
 }

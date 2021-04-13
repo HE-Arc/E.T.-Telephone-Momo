@@ -94,6 +94,9 @@ class ChatConsumer(WebsocketConsumer):
             self.game.send_round_message(self.me, message['data'])
         elif message['type'] == 'image':
             self.game.send_round_image(self.me, message['data'])
+        elif message['type'] == 'nextMessage':
+            if self.me.is_admin:
+                self.game.send('next_message', message['data'])
 
     def change_pseudo(self, pseudo):
         if 'anonID' in self.scope['session']:

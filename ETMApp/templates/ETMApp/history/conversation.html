@@ -3,6 +3,11 @@
 {% load static %}
 
 {% include 'ETMApp/history/display_conversation.html' %}
+<div class="row">
+    <a href="/history/{{ prev_conv }}" class="col-3 btn btn-primary">Previous</a>
+    <div class="col-6"></div>
+    <a href="/history/{{ next_conv }}" class="col-3 btn btn-primary">Next</a>
+</div>
 
 {{ conversation|json_script:"conversation" }}
 {{ game_url|json_script:"game_url" }}
