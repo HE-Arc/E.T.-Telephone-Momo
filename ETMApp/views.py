@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from ETMApp.models import Conversation, Game
 import logging
 from django.core import serializers
+from fpdf import FPDF, HTMLMixin
 
 logger = logging.getLogger(__name__)
 
@@ -114,13 +115,36 @@ def history(request):
 
 def history_game(request, urlGame):
     conversations = Conversation.get_all_serializable(urlGame)
-    print("conversation: ")
     if (len(conversations) > 0):
         return render(request, 'ETMApp/history/conversations.html', {
             'conversations': conversations,
             'game_url': urlGame
         })
     return redirect('/history')
+
+def view_game(request, urlGame):
+    """conversations = Conversation.get_all_serializable(urlGame)
+    if (len(conversations) > 0):
+        return render(request, 'ETMApp/view/render.html', {
+            'conversations': conversations,
+            'game_url': urlGame
+        })
+    return redirect('/history')"""
+    conversations = Conversation.get_all_serializable(urlGame)
+    isValid = False
+    pdf = HtmlPdf()
+        
+    for i, c in enumerate(conversations):
+        pdf.add_page()
+        
+        pdf.write_html(render_to_string(request, 'ETMApp/view/render.html', {
+            'conversation': conversations[i], 
+            'game_url': urlGame,
+        }))
+
+    response = HttpResponse(pdf.output(dest='S').encode('latin-1'))
+    response['Content-Type'] = 'application/pdf'
+    return response
 
 def history_game_conversation(request, urlGame, urlConversation):
     conversations = Conversation.get_all_serializable(urlGame)
@@ -167,3 +191,8 @@ def base_game(request):
 
 def watch(request):
     return render(request, 'ETMApp/game/watch.html')
+
+class HtmlPdf(FPDF, HTMLMixin):
+    pass
+
+

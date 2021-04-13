@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ETM</title>
+
+    <link rel="shortcut icon" href="{% static 'ETMApp/images/favicon.ico' %}" type="image/x-icon">
+
+    <!--Bootstrap CSS-->
+    <link href="{% static 'ETMApp/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!--Material icons CDN-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet"  href="{% static 'ETMApp/css/base.css' %}">
+    <script src="{% static 'ETMApp/js/util.js' %}"></script>
+
+    {% block link %}
+    {% endblock %}
+</head>
+<body>
+    <div id="main_container" class="container">
+        
+        {% for message in conversation.messages %}
+            {% if message.url_drawing == null %}
+                <div class="card-text-container">
+                    <div class="mb-3 card overlay-container conversations-card inline card-text">
+                        <div class="card-body">
+                            <p class="card-text crop-text-2">{{message.user}} typed</p>
+                            <h5 class="card-title">{{message.description}}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+            <div class="card-img-container">
+                <div class="mb-3 card overlay-container conversations-card card-img">
+                    <div class="card-body">
+                        <p class="card-text crop-text-2">{{message.user}} draw</p>
+                    </div>
+                    <img class="card-img-top card-image card-image-large" src="/media/{{message.url_drawing}}">
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <!--Jquery for bootstrap-->
+    <script src="{% static 'ETMApp/js/jquery-3.6.0.min.js' %}"></script>
+
+    <!--Bootstrap JS-->
+    <script src="{% static 'ETMApp/js/bootstrap.min.js' %}"></script>
+
+
+</body>
+</html>

@@ -15,7 +15,7 @@ function listGames(games) {
                 <p class="overlay-text">Click to get the full game</p>
             </div>
             <div class="card-body">
-                <h5 class="card-title">${game.date}</h5>
+                <h5 class="card-title">${timeSince(game.date)} ago</h5>
                 <a class="stretched-link" href="history/${game.urlGame}"></a>
                 <p class="card-text crop-text-2">${game.players.join(', ')}</p>
                 <p class="card-text">
