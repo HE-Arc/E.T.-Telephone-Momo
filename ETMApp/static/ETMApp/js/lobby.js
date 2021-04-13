@@ -263,8 +263,8 @@ function gameEnd(data) {
     lobbyDiv.style.display = 'none';
     startTimerGUI(0);
     document.getElementById("timeLeftBar").style.display = "none";
-    
 
+    removeWaitingAlert();
     
     //window.location.replace("/history/" + game_url);
 }
