@@ -1,7 +1,7 @@
 
 let conversations;
 let currentConv = 0;
-let currentMessage = 1;
+let currentMessage = 0;
 
 let ss;
 let ssu
@@ -21,6 +21,7 @@ function nextMessage() {
     }
     goto(currentConv, currentMessage);
 
+
     chatSocket.send(JSON.stringify({
         'type': 'nextMessage',
         'data': {
@@ -32,7 +33,13 @@ function nextMessage() {
 
 
 function goto(conversationID, messageID) {
-    listMessages(conversations[conversationID].messages.slice(0, messageID))
+    console.log(`${conversationID}, ${messageID}`);
+    listMessages(conversations[conversationID].messages.slice(0, messageID));
+
+    let message = conversations[conversationID].messages[messageID-1];
+    if(message.url_drawing == null){
+        speak(message.descrption);
+    }
 }
 
 function listMessages(messages) {
