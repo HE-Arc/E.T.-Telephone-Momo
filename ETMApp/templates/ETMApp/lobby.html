@@ -55,7 +55,7 @@
 
     {% include 'ETMApp/game/find.html' %}
 
-    {% include 'ETMApp/history/display_conversation.html' %}
+    {% include 'ETMApp/game/watch.html' %}
 
     <div class="progress mt-2">
         <div id="timeLeftBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -72,6 +72,7 @@
     <script type="application/javascript" src="{% static 'ETMApp/js/drawer.js' %}"></script>
     <script type="application/javascript" src="{% static 'ETMApp/js/game.js' %}"></script>
     <script type="application/javascript" src="{% static 'ETMApp/js/lobby.js' %}"></script>
+    <script type="application/javascript" src="{% static 'ETMApp/js/watch.js' %}"></script>
 
 {% endblock %}
 

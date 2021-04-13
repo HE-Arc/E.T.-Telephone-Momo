@@ -13,7 +13,7 @@ from ETM import settings
 from threading import Timer
 import base64
 import os
-
+import shutil
 
 
 
@@ -35,6 +35,7 @@ class GameLogic:
         self.all_messages = []
 
         self.remove_from_dict = remove_from_dict
+        self.timer_before_delete = None
 
     def add_player(self, member):
         if len(self.players) == 0:
@@ -45,6 +46,8 @@ class GameLogic:
 
         # self.players[member.id] = member
         self.update_player()
+        if self.timer_before_delete is not None:
+            self.timer_before_delete.cancel()
 
     def remove_player(self, member):
         # del self.players[member.id]
@@ -56,19 +59,9 @@ class GameLogic:
 
         # if all players are out, delete the party
         if self.all_players_disconnected() and not self.game_model.has_ended:
-            print('All players left - deleting game')
-            self.remove_from_dict(self.url)
+            self.timer_before_delete = Timer(10, self.delete_game)
+            self.timer_before_delete.start()
             
-            self.game_model.delete()
-            print("remove game " + id)
-            image_base = str(settings.MEDIA_ROOT) + "/"
-            image_folder = "ETMApp/games/" + id + "/"
-            try:
-                shutil.rmtree(image_base + image_folder)
-            except OSError as e:
-                print("error")
-                print(e)
-
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])
 
@@ -200,6 +193,29 @@ class GameLogic:
             self.game_model.has_ended = True
             self.game_model.save()
             
-            self.send('end_game', {})
+            conversations = Conversation.get_all_serializable(self.url)
+
+            self.send('end_game', {'conversations': conversations})
             self.remove_from_dict(self.url)
+
+    def delete_game(self):
+        print('All players left - deleting game')
+        self.remove_from_dict(self.url)
+        try:
+            if (self.timer is not None):
+                self.timer.cancel()
+            if self.timer_before_delete is not None:
+                self.timer_before_delete.cancel()
+        except:
+            pass
+        
+        self.game_model.delete()
+        print("remove game " + self.url)
+        image_base = str(settings.MEDIA_ROOT) + "/"
+        image_folder = "ETMApp/games/" + self.url + "/"
+        try:
+            shutil.rmtree(image_base + image_folder)
+        except OSError as e:
+            print("error")
+            print(e)
 

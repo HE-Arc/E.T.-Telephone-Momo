@@ -1,38 +1,101 @@
-let conversations = [{"urlConversation":"0PkY1T02","messages":[{"user":"Nicolas","url_drawing":null,"description":"Nico la taupe"},{"user":"Fence Plus 928","url_drawing":"ETMApp/games/cgJmDmwn/0PkY1T02/1.png","description":null},{"user":"Laptop Post office","url_drawing":null,"description":"Nico la taupe"}]},{"urlConversation":"cse3vkGh","messages":[{"user":"Laptop Post office","url_drawing":null,"description":"Yo2"},{"user":"Nicolas","url_drawing":"ETMApp/games/cgJmDmwn/cse3vkGh/1.png","description":null},{"user":"Fence Plus 928","url_drawing":null,"description":"yo"}]},{"urlConversation":"w7kTnYaR","messages":[{"user":"Fence Plus 928","url_drawing":null,"description":"Marty is the taupe"},{"user":"Laptop Post office","url_drawing":"ETMApp/games/cgJmDmwn/w7kTnYaR/1.png","description":null},{"user":"Nicolas","url_drawing":null,"description":"Marty la taupe"}]}]
 
+let conversations;
+let currentConv = 0;
+let currentMessage = 1;
+
+let ss;
+let ssu
+
+function setConversations(conv) {
+    conversations = conv;
+    document.getElementById('watchContainer').removeAttribute('hidden');
+    initSpeech();
+}
+
+function nextMessage() {
+    currentMessage++;
+    if (currentMessage > conversations[currentConv].messages.length) {
+        currentMessage = 1;
+        currentConv++;
+        currentConv = currentConv % conversations.length
+    }
+    goto(currentConv, currentMessage);
+
+    chatSocket.send(JSON.stringify({
+        'type': 'nextMessage',
+        'data': {
+            'messageID': currentMessage,
+            'conversationID': currentConv
+        }
+    }));
+}
 
 
 function goto(conversationID, messageID) {
     listMessages(conversations[conversationID].messages.slice(0, messageID))
 }
-goto(0,1);
 
 function listMessages(messages) {
 
     let table = document.getElementById('messages');
 
-    //Clear the current table
-    table.innerHTML = '';
-
     let first = true;
     let text = true;
 
+    let html = '';
     //Add parties in element then in the html table
-    for (let message of messages) {
-        let tr = document.createElement('tr');
-
-        //Who said what
-        let td = document.createElement('td');
-        let content = (message.url_drawing == null ? '<b>' + message.description + '</b>' : '<br/><img src="/media/' + message.url_drawing + '"/>');
-        td.innerHTML = '<i>' + message.user + '</i>' + (first ? ' choose ' : ' found ') + content;
-        //td.classList.add("text-truncate");
-
-        //Add to the row
-        tr.appendChild(td);
-        //Add to the table
-        table.appendChild(tr);
+    for (let [index, message] of messages.entries()) {
+        if (message.url_drawing == null) {
+            let isChoose = 'found'
+            if (first) {
+                isChoose = 'choose'
+            }
+            html +=
+            `<div class="card-text-container">
+                <div class="mb-3 card overlay-container conversations-card inline card-text">
+                    <div class="card-body">
+                        <p class="card-text crop-text-2">${message.user} ${isChoose}</p>
+                        <h5 class="card-title">${message.description}</h5>
+                    </div>
+                </div>
+            </div>`;
+        } else {
+            html += `
+            <div class="card-img-container">
+                <div class="mb-3 card overlay-container conversations-card card-img">
+                    <div class="card-body">
+                        <p class="card-text crop-text-2">Nico draw</p>
+                    </div>
+                    <img class="card-img-top card-image" src="/media/${message.url_drawing}">
+                </div>
+            </div>`;
+        }
 
         first = false;
-        text = !text;
+    }
+
+    document.getElementById('roundContent').innerHTML = html;
+}
+
+function initSpeech() {
+    ss = window.speechSynthesis;
+    ssu = new SpeechSynthesisUtterance();
+
+    let voices = ss.getVoices();
+    for(let voice of voices) {
+        if(voice.lang == "fr-FR") {
+            ssu.voice = voice;
+            break;
+        }
     }
 }
+
+function speak(text) {
+    if (ss.speaking) {
+        ss.cancel();
+    }
+    ssu.text = text;
+    ss.speak(ssu);
+}
+
+
