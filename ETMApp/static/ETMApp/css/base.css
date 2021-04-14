@@ -3,6 +3,9 @@ body, html{
 
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+body{
     padding-bottom: 10px;
 }
 
@@ -49,4 +52,35 @@ td > img {
 }
 .card-image-large {
     height: 300px;
+}
+
+/* Scroll bar */
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0 auto;
+}
+
+
+body::-webkit-scrollbar-thumb
+{
+  -webkit-box-shadow: inset 0 0 12px rgba(0,0,0,0.3);
+  background: #0cebeb;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #29ffc6, #20e3b2, #0cebeb);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #29ffc6, #20e3b2, #0cebeb); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+body::-webkit-scrollbar
+{
+  width: 10px;
+  background-color: #000000;
+}
+
+body::-webkit-scrollbar-track
+{
+    background:  #0396a6; 
 }
