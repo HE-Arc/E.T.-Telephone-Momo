@@ -1,36 +1,36 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
     {% load static %}
-
-    <div id="lobbyContainer">
-        <div class="form-inline">
+        <form id="lobbyContainer">
             {% if not user.is_authenticated %}
-                <div class="row">
-                    <label for="pseudo" class="col-md-4 col-form-label">Change your pseudo</label>
-                    <div class="col-md-5">
+                <div class="form-group row align-items-center mt-3">
+                    <label for="pseudo" class="offset-md-1 col-md-3 col-form-label"><h5>Change your pseudo</h5></label>
+                    <div class="col-md-3">
                         <input id="pseudo" type="text" class="form-control" name="pseudo" placeholder="js good">
                     </div>
-                    <button id="btnPseudo" class="btn btn-primary col-md-3">Change pseudo</button>
+                    <button id="btnPseudo" class="btn btn-danger col-md-2">Click to validate</button>
                 </div>
             {% endif %}
-            <div id="roundContainer" class="row" style="display: none">
-                <label class="form-label" for="sliderRound">Number of round: <span id="nbRound">3</span></label>
-                <div class="range">
-                    <input type="range" min="3" max="3" step="2" value="3" class="form-range" id="sliderRound" />
-                </div>
-                <div>
-                    <label for="roundLength" class="form-label">Length: </label>
-                    <select name="roundLength" id="roundLength" class="form-select">
+            <div id="roundContainer" class="form-group row align-items-center mt-3" style="display:none">
+                <label class="offset-md-1 col-form-label col-md-3" for="sliderRound"><h5>Number of round <span id="nbRound" class="text-danger">3</span></h5></label>
+                <div class="col-md-3"><input type="range" min="3" max="3" step="2" value="3" class="form-range" id="sliderRound" /></div>
+            </div>
+            <div class="form-group row mt-3">
+                <label for="roundLength" class="offset-md-1 col-form-label col-md-3"><h5>Length of the game</h5></label>
+                <div class="col-md-3">
+                    <select name="roundLength" id="roundLength" class="form-select col-md-3">
                         <option value="30">Very short (30s)</option>
                         <option value="60">Short (1 minute)</option>
                         <option value="150" selected>Normal (2 minutes 30)</option>
                         <option value="300">Long (5 minutes)</option>
                         <option value="600">Pro (10 minutes)</option>
-                      </select>
+                    </select>
                 </div>
             </div>
-        </div>
-        <table class="table mt-2 table-sm">
+        </form>
+
+
+        <table class="table mt-4 table-sm">
             <thead>
             <tr>
                 <th>Connected</th>
