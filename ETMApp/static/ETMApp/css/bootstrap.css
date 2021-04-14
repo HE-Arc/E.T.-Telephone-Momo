@@ -10683,7 +10683,7 @@ textarea.form-control-lg {
 
 .range {
   position: relative;
-  width: 550px;
+  width: 100%;
   height: 5px;
 }
 
