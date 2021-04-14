@@ -119,8 +119,7 @@ function lobbyPlayers(players) {
         sliderRound.value = nbPlayer;
         nbRound.innerHTML = sliderRound.value;
     }
-
-    sliderRound.max = nbPlayer;
+    changeRange(nbPlayer);
 
     if (nbPlayer < 3) {
         btnStartGame.disabled = true;
@@ -130,6 +129,7 @@ function lobbyPlayers(players) {
 
     //Update the number of players
     document.getElementById("numberOfPlayers").innerHTML = nbPlayer;
+
 }
 
 let me = null;
@@ -144,7 +144,7 @@ function initPlayer(initMe) {
     me = initMe;
     
     if (initMe.isAdmin === true) {
-        document.getElementById('roundContainer').style.display = "block";
+        document.getElementById('roundContainer').style.display = "";
         document.getElementById('btnStartGame').disabled = false;
         btnNextMessage.removeAttribute('hidden');
         document.getElementById('alertWatch').style.display = "none";

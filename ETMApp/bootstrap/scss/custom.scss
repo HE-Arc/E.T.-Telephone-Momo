@@ -4,7 +4,10 @@ $success: #b3d979;
 $danger: #d9806c;
 $info: #b5d99c;
 
+$form-range-thumb-bg: $danger;
+
 $body-bg: $secondary;
 
 @import "bootstrap";
 @import "ETMHistory";
+@import "ETMCustomRange";
