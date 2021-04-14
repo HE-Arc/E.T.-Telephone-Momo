@@ -7,7 +7,6 @@ from django.template.loader import get_template, render_to_string
 from ETMApp.models import Conversation, Game
 import logging
 from django.core import serializers
-# from fpdf import FPDF, HTMLMixin
 from easy_pdf.rendering import render_to_pdf_response
 from django.shortcuts import HttpResponse
 
