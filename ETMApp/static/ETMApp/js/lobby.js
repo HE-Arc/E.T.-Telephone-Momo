@@ -26,6 +26,15 @@ if (btnPseudo) {
     });
 }
 
+document.getElementById('linktoclipboard').addEventListener('click', () => {
+    let input = document.body.appendChild(document.createElement("input"));
+    input.value = window.location;
+    input.focus();
+    input.select();
+    document.execCommand('copy');
+    input.parentNode.removeChild(input);
+});
+
 let pageTitle = document.getElementById('pageTitle');
 let nbRound = document.getElementById('nbRound');
 let roundLength = document.getElementById('roundLength');
@@ -165,7 +174,6 @@ function sliderRoundChange() {
 }
 
 function startGame() {
-    console.log('startgame');
     chatSocket.send(JSON.stringify({
         'type': 'startGame',
         'data': {

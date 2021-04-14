@@ -1,7 +1,11 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
     {% load static %}
-        <form id="lobbyContainer">
+        <div id="lobbyContainer">        
+            <div class="alert alert-info" role="alert">
+                Share the link to your friends !  <button id="linktoclipboard" class="btn btn-link alert-link">Click here to copy the URL in the clipboard</button>
+            </div>
+
             {% if not user.is_authenticated %}
                 <div class="form-group row align-items-center mt-3">
                     <label for="pseudo" class="offset-md-1 col-md-3 col-form-label"><h5>Change your pseudo</h5></label>
@@ -37,26 +41,20 @@
                     </div>
                 </div>
             </div>
-            
-        </form>
+            <table class="table mt-4 table-sm">
+                <thead>
+                <tr>
+                    <th>Connected</th>
+                </tr>
+                </thead>
+                <tbody id="players">
 
-        <table class="table mt-4 table-sm">
-            <thead>
-            <tr>
-                <th>Connected</th>
-            </tr>
-            </thead>
-            <tbody id="players">
+                </tbody>
+            </table>
+            <p class="text-primary text-center"><span id="numberOfPlayers">1</span> players ready ! (3 players minimum)</p>
 
-            </tbody>
-        </table>
-
-
-
-        <p class="text-primary text-center"><span id="numberOfPlayers">1</span> players ready ! (3 players minimum)</p>
-
-        <button type="button" class="btn btn-primary btn-lg w-100" id="btnStartGame" disabled>Start !</button>
-    </div>
+            <button type="button" class="btn btn-primary btn-lg w-100" id="btnStartGame" disabled>Start !</button>
+        </div>
 
 
     {% include 'ETMApp/game/choose.html' %}
