@@ -16,10 +16,15 @@ let drawing = false;
 let sent = false;
 let totalTime;
 
-//Set on click event
 let btnPseudo = document.getElementById("btnPseudo");
-if (btnPseudo)
+if (btnPseudo) {
     btnPseudo.addEventListener("click", changePseudo);
+    document.getElementById('pseudo').addEventListener('keyup', (e) => {
+        if (e.keyCode == 13) {
+            changePseudo();
+        }
+    });
+}
 
 let pageTitle = document.getElementById('pageTitle');
 let nbRound = document.getElementById('nbRound');
@@ -40,7 +45,6 @@ let btnNextMessage = document.getElementById('btnNextMessage');
 btnValidateChoose.addEventListener('click', sendCurrent);
 sliderRound.addEventListener('input', sliderRoundChange);
 btnStartGame.addEventListener('click', startGame);
-//TODO slider automatically to the max when new player comes
 chatSocket.onmessage = function (e) {
     e = JSON.parse(e.data);
     console.log("received", e);
@@ -83,7 +87,7 @@ chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-
+// Update the player table
 function lobbyPlayers(players) {
     let nbPlayer = 0;
     let table = document.getElementById('players');
@@ -105,12 +109,17 @@ function lobbyPlayers(players) {
             }
 
             
-            td.innerHTML = player.pseudo;
+            td.innerHTML = htmlEntities(player.pseudo);
             tr.appendChild(td);
             table.appendChild(tr);
         }
     }
-    
+    if (sliderRound.max - sliderRound.value < 2) {
+        sliderRound.max = nbPlayer;
+        sliderRound.value = nbPlayer;
+        nbRound.innerHTML = sliderRound.value;
+    }
+
     sliderRound.max = nbPlayer;
 
     if (nbPlayer < 3) {
@@ -128,7 +137,7 @@ function initPlayer(initMe) {
     
    
     if (btnPseudo && me == null) {
-        document.getElementById('pseudo').value = initMe.pseudo
+        document.getElementById('pseudo').value = htmlEntities(initMe.pseudo)
         document.getElementById('pseudo').disabled = false;
         document.getElementById('btnPseudo').disabled = false;
     }

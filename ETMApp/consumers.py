@@ -1,27 +1,21 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 
 from ETMApp.game.game_logic import GameLogic
 from ETMApp.game.member import Member
 
 from ETMApp.models import UserAnonyme
-from ETMApp.models import Message
-from ETMApp.models import Conversation
 import requests
 import random
 import logging
-import os
-import shutil
-from ETM import settings
-
+from django.utils.html import escape
 
 games = {}
 logger = logging.getLogger(__name__)
 
 
-class ChatConsumer(WebsocketConsumer):
+class GameConsumer(WebsocketConsumer):
     def __init__(self):
         super().__init__()
 
@@ -100,13 +94,14 @@ class ChatConsumer(WebsocketConsumer):
 
     def change_pseudo(self, pseudo):
         if 'anonID' in self.scope['session']:
-            self.me.pseudo = pseudo
-            self.game.update_player()
-            self.scope['session']['pseudo'] = pseudo
-            self.scope['session'].save()
-            anon = UserAnonyme.objects.get(id=self.scope['session']['anonID'])
-            anon.username = pseudo
-            anon.save()
+            if 3 <= len(pseudo) < 50:
+                self.me.pseudo = pseudo
+                self.game.update_player()
+                self.scope['session']['pseudo'] = pseudo
+                self.scope['session'].save()
+                anon = UserAnonyme.objects.get(id=self.scope['session']['anonID'])
+                anon.username = pseudo
+                anon.save()
 
     def message(self, event):
         # Send message to WebSocket

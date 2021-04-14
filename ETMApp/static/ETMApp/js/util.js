@@ -29,3 +29,7 @@ function timeSince(date) {
     }
     return Math.floor(seconds) + " seconds";
   }
+
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}

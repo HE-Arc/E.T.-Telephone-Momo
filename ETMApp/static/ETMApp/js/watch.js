@@ -67,8 +67,8 @@ function listMessages(messages) {
             `<div class="card-text-container">
                 <div class="mb-3 card overlay-container conversations-card inline card-text">
                     <div class="card-body">
-                        <p class="card-text crop-text-2">${message.user} ${isChoose}</p>
-                        <h5 class="card-title">${message.description}</h5>
+                        <p class="card-text crop-text-2">${htmlEntities(message.user)} ${isChoose}</p>
+                        <h5 class="card-title">${htmlEntities(message.description)}</h5>
                     </div>
                 </div>
             </div>`;
@@ -77,9 +77,9 @@ function listMessages(messages) {
             <div class="card-img-container">
                 <div class="mb-3 card overlay-container conversations-card card-img">
                     <div class="card-body">
-                        <p class="card-text crop-text-2">${message.user} draw</p>
+                        <p class="card-text crop-text-2">${htmlEntities(message.user)} draw</p>
                     </div>
-                    <img class="card-img-top card-image card-image-large" src="/media/${message.url_drawing}">
+                    <img class="card-img-bottom card-image card-image-large" src="/media/${htmlEntities(message.url_drawing)}">
                 </div>
             </div>`;
         }

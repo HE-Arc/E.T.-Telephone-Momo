@@ -48,7 +48,7 @@ function displayDraw(description = "") {
     tool = pen;
     document.getElementById('penButton').checked = true;
 
-    document.getElementById('drawDescription').value = description;
+    document.getElementById('drawDescription').value = htmlEntities(description);
     pageTitle.innerHTML = 'Draw';
 }
 
@@ -70,7 +70,7 @@ function displayFind(imageURL) {
     document.getElementById('imageToFind').innerHTML = "";
     if (imageURL) {
         let img = document.createElement('img');
-        img.src = "/media/" + imageURL;
+        img.src = "/media/" + htmlEntities(imageURL);
         document.getElementById('imageToFind').appendChild(img);
     }
 }
