@@ -26,8 +26,10 @@ body{
 .logo-large {
     height: 100%;
     width: 80%;
+    max-width: 500px;
     position:relative;
     display: inline-block;
+    overflow: hidden;
 }
 
 .phone{
