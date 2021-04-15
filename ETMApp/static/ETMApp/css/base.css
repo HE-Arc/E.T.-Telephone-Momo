@@ -9,7 +9,7 @@ body{
     padding-bottom: 10px;
 }
 
-#phone, #moon {
+.phone, .moon {
     width: 100%;
     height: 100%;
 }
@@ -20,7 +20,14 @@ body{
     position:relative;
 }
 
-#phone{
+.logo-large {
+    height: 100%;
+    width: 80%;
+    position:relative;
+    display: inline-block;
+}
+
+.phone{
     width: 70%;
     height: 70%;
     position: absolute;
