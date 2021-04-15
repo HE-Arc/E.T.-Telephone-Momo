@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 def index(request):
     return render(request, 'ETMApp/index.html') 
+def about(request):
+    return render(request, 'ETMApp/about.html') 
 
 
 def login(request):
@@ -44,7 +46,7 @@ def lobby(request, url):
         return redirect('/')
 
 
-    return render(request, 'ETMApp/lobby.html', {
+    return render(request, 'ETMApp/game/lobby.html', {
         'game_url': url
     })
 
@@ -191,18 +193,5 @@ def create_game(request):
     return redirect('/play/' + game.url_game)
 
 # TMP PAGES TODO
-def conversations(request):
-    return render(request, 'ETMApp/history/conversations.html')
-
-def draw(request):
-    return render(request, 'ETMApp/game/draw.html')
-
-def find(request):
-    return render(request, 'ETMApp/game/find.html')
-
 def base_game(request):
     return render(request, 'ETMApp/base_game.html')
-
-def watch(request):
-    return render(request, 'ETMApp/game/watch.html')
-
