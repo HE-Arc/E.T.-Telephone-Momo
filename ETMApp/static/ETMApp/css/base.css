@@ -19,6 +19,8 @@ body{
     width: 50px;
     position:relative;
     overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .logo-large {
