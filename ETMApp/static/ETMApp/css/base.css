@@ -9,8 +9,7 @@ body{
     padding-bottom: 10px;
 }
 
-/* LOGO AND ANIMATION */
-#phone, #moon {
+.phone, .moon {
     width: 100%;
     height: 100%;
 }
@@ -22,7 +21,14 @@ body{
     overflow: hidden;
 }
 
-#phone{
+.logo-large {
+    height: 100%;
+    width: 80%;
+    position:relative;
+    display: inline-block;
+}
+
+.phone{
     width: 70%;
     height: 70%;
     position: absolute;
@@ -32,7 +38,7 @@ body{
     animation: phone-wave 1.5s alternate infinite ease-in-out;
 }
 
-#ET{
+.ET{
     width: 30%;
     height: 30%;
     left: -50%;
@@ -50,7 +56,7 @@ body{
         left: -10%;
         top: 50%;
     }
-    
+
     5%{
         left: 100%;
         top: 35%;

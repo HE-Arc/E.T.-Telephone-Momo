@@ -1,0 +1,40 @@
+{% extends "ETMApp/base.html" %}
+{% block content %}
+{% load static %}
+
+    This project has been developped by
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Nicolas Laoun</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Mathias Marty</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Valentin Wyss</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<img src="{% static 'ETMApp/images/logo.png'%}" alt="" width="100%">-->
+    <div class="text-center">
+        <div class="logo-large">
+            <img src="{% static 'ETMApp/images/moon.png'%}" class="moon" />
+            <img src="{% static 'ETMApp/images/phone.png'%}" class="phone" />
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+About
+{% endblock %}

@@ -23,28 +23,24 @@ from . import views
 from ETMApp import views as ETMApp
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('', ETMApp.index, name='index'),
     path('login', ETMApp.login, name='login'),
     path('tryLogin', ETMApp.try_login, name='try_login'),
     path('signup', ETMApp.signup, name='signup'),
     path('trySignup', ETMApp.try_signup, name='try_signup'),
     path('play/<slug:url>', ETMApp.lobby, name='lobby'),
-    path('game', ETMApp.game, name='game'),
     path('disconnect', ETMApp.disconnect, name='disconnect'),
     path('history', ETMApp.history, name='history'),
     path('history/<slug:urlGame>/', ETMApp.history_game, name='history_game'),
     path('history/<slug:urlGame>/<slug:urlConversation>', ETMApp.history_game_conversation, name='history_game_conversation'),
     path('view/<slug:urlGame>.pdf', ETMApp.view_game, name='view_game'),
     path('createGame', ETMApp.create_game, name='create_game'),
-
-    #path('draw', ETMApp.draw, name='draw'),
-    #path('find', ETMApp.find, name='find'), #???????
-    path('base_game', ETMApp.base_game, name='base_game'),
+    path('about', ETMApp.about, name='about'),
 
     # TODO REMOVE
-    path('conversations', ETMApp.conversations, name='conversations'),
-    path('watch', ETMApp.watch, name='watch')
+    path('base_game', ETMApp.base_game, name='base_game'),
+
 ]
 if not settings.DEBUG:
     urlpatterns += [
