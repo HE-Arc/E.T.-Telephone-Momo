@@ -6,7 +6,10 @@
         width: 40%;
     }*/
 
-    .chooseContainer, .drawContainer
+    #chooseContainer, #drawContainer {
+        margin-left: 0;
+        width: 40%;
+    }
 
     #canvasContainer {
         left: 45% !important;

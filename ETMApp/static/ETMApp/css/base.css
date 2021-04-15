@@ -18,13 +18,18 @@ body{
     height: 50px;
     width: 50px;
     position:relative;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .logo-large {
     height: 100%;
     width: 80%;
+    max-width: 500px;
     position:relative;
     display: inline-block;
+    overflow: hidden;
 }
 
 .phone{
@@ -37,13 +42,36 @@ body{
     animation: phone-wave 1.5s alternate infinite ease-in-out;
 }
 
+.ET{
+    width: 30%;
+    height: 30%;
+    left: -50%;
+    top: 30%;
+    position: absolute;
+    animation: et-fly 15s infinite linear 5s;
+}
+
 @keyframes phone-wave {
-    /*
-    to {top: 15%;}
-    from {top: 30%;}
-    */
     to { transform: translatey(15%);}
 }
+
+@keyframes et-fly {
+    0% {
+        left: -10%;
+        top: 50%;
+    }
+
+    5%{
+        left: 100%;
+        top: 35%;
+    }
+
+    100%{
+        left: 100%;
+        top: 35%;
+    }
+}
+
 
 #history_table, #rounds_table{
     table-layout: fixed;

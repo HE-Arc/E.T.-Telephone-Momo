@@ -85,7 +85,7 @@ class GameConsumer(WebsocketConsumer):
             if self.me.is_admin:
                 self.game.start(int(message['data']['nbRound']), int(message['data']['roundLength']))
         elif message['type'] == 'message':
-            self.game.send_round_message(self.me, message['data'])
+            self.game.send_round_message(self.me, message['data'][:100])
         elif message['type'] == 'image':
             self.game.send_round_image(self.me, message['data'])
         elif message['type'] == 'nextMessage':

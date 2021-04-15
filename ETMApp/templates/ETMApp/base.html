@@ -31,10 +31,19 @@
                     <!--<img id="logo" src="{% static 'ETMApp/images/logo.png'%}" alt="">-->
                     <div id="logo">
                         <img src="{% static 'ETMApp/images/moon.png'%}" class="moon" />
+                        <img src="{% static 'ETMApp/images/et.png'%}" class="ET" />
                         <img src="{% static 'ETMApp/images/phone.png'%}" class="phone" />
                     </div>
                     ETM
                 </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
             </div>
 
             <div>
@@ -50,7 +59,7 @@
                                 {{ user.username }}
                             </a>
                         {% else %}
-                            <a href="/login" class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true" title="Click here to connect">
+                            <a href="/login" class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true" title="Click here to login">
                                 Not connected
                             </a>
                         {% endif %}
