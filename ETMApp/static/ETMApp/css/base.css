@@ -84,3 +84,20 @@ body::-webkit-scrollbar-track
 {
     background:  #0396a6; 
 }
+
+#logo:hover {
+    animation-name: spin;
+    animation-duration: 300ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+    animation-delay: 2s;
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
