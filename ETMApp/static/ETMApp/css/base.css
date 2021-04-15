@@ -9,9 +9,33 @@ body{
     padding-bottom: 10px;
 }
 
+#phone, #moon {
+    width: 100%;
+    height: 100%;
+}
+
 #logo{
     height: 50px;
     width: 50px;
+    position:relative;
+}
+
+#phone{
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    left: 0%;
+    top: 14%;
+    animation-name: phone-wave;
+    animation: phone-wave 1.5s alternate infinite ease-in-out;
+}
+
+@keyframes phone-wave {
+    /*
+    to {top: 15%;}
+    from {top: 30%;}
+    */
+    to { transform: translatey(15%);}
 }
 
 #history_table, #rounds_table{
