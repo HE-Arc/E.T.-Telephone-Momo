@@ -9,7 +9,6 @@ from ETMApp.models import UserAnonyme
 import requests
 import random
 import logging
-from django.utils.html import escape
 
 games = {}
 logger = logging.getLogger(__name__)
@@ -78,14 +77,14 @@ class GameConsumer(WebsocketConsumer):
     def receive(self, text_data):
         message = json.loads(text_data)
         # message = data['message']
-        #print(message)
+        # print(message)
         if message['type'] == 'changePseudo':
             self.change_pseudo(message['data'])
         elif message['type'] == 'startGame':
             if self.me.is_admin:
                 self.game.start(int(message['data']['nbRound']), int(message['data']['roundLength']))
         elif message['type'] == 'message':
-            self.game.send_round_message(self.me, message['data'][:100]) #limit the message to 100 char
+            self.game.send_round_message(self.me, message['data'][:100])  # limit the message to 100 char
         elif message['type'] == 'image':
             self.game.send_round_image(self.me, message['data'])
         elif message['type'] == 'nextMessage':
@@ -110,6 +109,5 @@ class GameConsumer(WebsocketConsumer):
             'data': event['data']
         }))
 
-    def remove_game(self, id):
-        del games[id]
-
+    def remove_game(self, game_url):
+        del games[game_url]

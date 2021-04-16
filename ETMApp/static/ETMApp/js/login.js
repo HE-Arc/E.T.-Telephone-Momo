@@ -13,7 +13,6 @@ function sendConnectionRequest() {
         body: form
     }).then(response => response.json())
     .then(data => {
-        console.log(data)
         // If connection succed
         if(!data.error)
             window.location.href = '/';

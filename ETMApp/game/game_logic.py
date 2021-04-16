@@ -9,12 +9,10 @@ from ETMApp.models import Message
 from ETMApp.models import Conversation
 from ETM import settings
 
-
 from threading import Timer
 import base64
 import os
 import shutil
-
 
 
 class GameLogic:
@@ -61,12 +59,13 @@ class GameLogic:
         if self.all_players_disconnected() and not self.game_model.has_ended:
             self.timer_before_delete = Timer(10, self.delete_game)
             self.timer_before_delete.start()
-        elif not self.game_model.has_ended: #if a player leave, skip the round
+        elif not self.game_model.has_ended:  # if a player leave, skip the round
+            print("disconnect")
+            print("all_player_ready: " + str(self.all_players_ready()))
             if self.all_players_ready():
                 self.timer.cancel()
                 self.next_round()
 
-            
     def update_player(self):
         self.send('lobby_players', [x.get_serializable() for x in self.players.values()])
 
@@ -75,7 +74,7 @@ class GameLogic:
                         {'type': 'message', 'data_type': data_type, 'data': data})
 
     def start(self, nb_round, timer_time):
-        if not self.has_started and nb_round <= len(self.players) and nb_round >= 3 and nb_round % 2 == 1:
+        if not self.has_started and len(self.players) >= nb_round >= 3 and nb_round % 2 == 1:
             self.nb_round = nb_round
             self.timer_time = timer_time
             # self.timer_time = 5
@@ -90,12 +89,12 @@ class GameLogic:
             # Remove disconnected players
             self.players = {p.id: p for p in self.players.values() if not p.is_disconnected}
 
-            nbPlayer = len(self.players)
-            randNumbers = [i for i in range(nbPlayer)]
-            random.shuffle(randNumbers)
+            nb_player = len(self.players)
+            rand_numbers = [i for i in range(nb_player)]
+            random.shuffle(rand_numbers)
 
             for m in self.players:
-                self.players[m].index = randNumbers.pop()
+                self.players[m].index = rand_numbers.pop()
                 self.players[m].is_ready = False
                 conv = Conversation.create(self.game_model)
                 conv.save()
@@ -103,11 +102,11 @@ class GameLogic:
                 self.conversations.append(conv)
                 self.all_messages.append([])
                 self.players[m].current_conversation = self.players[m].index
-                # rounds
 
     def send_round_message(self, user, text):
         conv = self.conversations[user.current_conversation]
-        m = Message.create_message(conv, user.getUser(), user.is_connected, text, len(self.all_messages[user.current_conversation]))
+        m = Message.create_message(conv, user.get_user(), user.is_connected, text,
+                                   len(self.all_messages[user.current_conversation]))
         m.save()
         user.is_ready = True
 
@@ -132,8 +131,7 @@ class GameLogic:
         image_url = image_folder + "/" + image_name
         image_path = image_base + image_url
 
-
-        os.makedirs(image_base + image_folder, exist_ok = True)
+        os.makedirs(image_base + image_folder, exist_ok=True)
 
         format, imgstr = image.split(';base64,')
         with open(image_path, "wb") as fh:
@@ -141,7 +139,8 @@ class GameLogic:
 
         print(image_url)
 
-        m = Message.create_image(conv, user.getUser(), user.is_connected, image_url, len(self.all_messages[user.current_conversation]))
+        m = Message.create_image(conv, user.get_user(), user.is_connected, image_url,
+                                 len(self.all_messages[user.current_conversation]))
         m.save()
         user.is_ready = True
 
@@ -179,9 +178,13 @@ class GameLogic:
         for p in self.players.values():
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)
             if self.current_round % 2:
+                try:
+                    data = self.all_messages[p.current_conversation][-1].description
+                except:
+                    data = "Player has disconnected"
                 p.socket.send(text_data=json.dumps({
                     'type': 'new_round_draw',
-                    'data': self.all_messages[p.current_conversation][-1].description
+                    'data': data
                 }))
             else:
                 p.socket.send(text_data=json.dumps({
@@ -197,7 +200,7 @@ class GameLogic:
         if not self.game_model.has_ended:
             self.game_model.has_ended = True
             self.game_model.save()
-            
+
             conversations = Conversation.get_all_serializable(self.url)
 
             self.send('end_game', {'conversations': conversations})
@@ -207,13 +210,13 @@ class GameLogic:
         print('All players left - deleting game')
         self.remove_from_dict(self.url)
         try:
-            if (self.timer is not None):
+            if self.timer is not None:
                 self.timer.cancel()
             if self.timer_before_delete is not None:
                 self.timer_before_delete.cancel()
         except:
             pass
-        
+
         self.game_model.delete()
         print("remove game " + self.url)
         image_base = str(settings.MEDIA_ROOT) + "/"
@@ -223,4 +226,3 @@ class GameLogic:
         except OSError as e:
             print("error")
             print(e)
-

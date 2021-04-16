@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-#import django
+
+# import django
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,15 +26,13 @@ SECRET_KEY = 'ro^e!)p4&1^&%hvr-y*k(n50)@0kzehw68k1wu%xfgxi8_bi_='
 
 IS_PRODUCTION = os.environ.get('PRODUCTION', 'False') == 'True'
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#if IS_PRODUCTION:
-#    DEBUG = False
+if IS_PRODUCTION:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['momo.srvz-webapp.he-arc.ch', 'localhost']
-
 
 # Application definition
 
@@ -65,7 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            #BASE_DIR / 'ETMApp/templates/'
+            # BASE_DIR / 'ETMApp/templates/'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -79,10 +77,8 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'ETM.wsgi.application'
+# WSGI_APPLICATION = 'ETM.wsgi.application'
 ASGI_APPLICATION = 'ETM.asgi.application'
-
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -116,8 +112,6 @@ if IS_PRODUCTION:
         }
     }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -136,11 +130,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-#LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'fr-ch'
 
 TIME_ZONE = 'Europe/Zurich'
@@ -151,19 +144,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = str(BASE_DIR / 'ETMApp/static/')
 if IS_PRODUCTION:
     STATIC_ROOT = '/var/www/app/public/static/'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')
 if IS_PRODUCTION:
     MEDIA_ROOT = '/var/www/app/public/media/'
-
 
 CHANNEL_LAYERS = {
     'default': {
@@ -193,4 +186,6 @@ CHANNEL_LAYERS = {
     },
 }"""
 
-#django.setup()
+# django.setup()
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

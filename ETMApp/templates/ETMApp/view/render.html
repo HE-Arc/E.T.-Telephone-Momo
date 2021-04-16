@@ -14,7 +14,6 @@
         .description {
             font-size: 50px;
             text-align: center;
-            font-family: "Impact";
         }
         .spacer {
             display: block;
@@ -36,13 +35,19 @@
                 <div class="card-img-container">
                     <p >{{message.user}} draw</p>
                     <div class="center">
-                        <img height="500" src="/media/{{message.url_drawing}}">
+                        <img height="500" src="/media/{{message.url_drawing}}" alt="image">
                     </div>
                 {% endif %}
             {% endfor %}
             <tr></tr>
             <div class="spacer">&nbsp;</div>
         {% endfor %}
+
+        <div>
+            <!-- tried other way to get the host, but none of them works -->
+            <!-- WIP -->
+            See the all game at: <a href="https://momo.srvz-webapp.he-arc.ch/history/{{game_url}}/">https://momo.srvz-webapp.he-arc.ch/history/{{game_url}}/</a>
+        </div>
 
         Work in progress
 

@@ -1,18 +1,32 @@
 {% extends "ETMApp/base.html" %}
 {% block content %}
 {% load static %}
+<div class="text-center">
+    <h6>{{game.date}}</h6>
+</div>
 <a href="/history"><span class="material-icons">arrow_back</span></a>
 
 
-<div class="row" id="conversations_table"></div>
+<div class="row" id="conversations_table">
+{% for conversation in conversations %}
+    <div class="mb-3 card overlay-container conversations-card">
+        <img class="card-img-top card-image" src="/media/{{conversation.messages.1.url_drawing}}" alt="image">
+        <div class="overlay">
+            <p class="overlay-text">Click to see the full conversation</p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{conversation.messages.0.user}} choose</h5> 
+            <a class="stretched-link" href="{{conversation.urlConversation}}"></a>
+            <p class="card-text crop-text-2">{{conversation.messages.0.description}}</p>
+        </div>
+    </div>
+{% endfor %}
+
+</div>
 
 <div class="text-center">
     <a href="/view/{{game_url}}.pdf" target="_blank" class="btn btn-outline-primary">Download as PDF</a>
 </div>
-
-{{ conversations|json_script:"conversations" }}
-{{ game_url|json_script:"game_url" }}
-<script type="application/javascript" src="{% static 'ETMApp/js/conversations.js' %}"></script>
 {% endblock %}
 
 {% block title %}

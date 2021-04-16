@@ -6,10 +6,14 @@ import random
 
 
 class Game(models.Model):
+    """
+        Used to save a game. A game has several conversation
+    """
     date = models.DateTimeField('date published')
     url_game = models.CharField(max_length=8, unique=True)
     has_started = models.BooleanField(default=False)
     has_ended = models.BooleanField(default=False)
+
     @classmethod
     def create(cls):
         return cls(date=timezone.now(), url_game=id_generator(8))
@@ -19,14 +23,13 @@ class Game(models.Model):
         games = unique(Game.objects.filter(conversation__message__id_user=id_user).order_by('-date'))
         games = [g.get_serializable() for g in games]
         return games
-    
+
     @classmethod
     def get_all_serializable_admin(cls):
         games = unique(Game.objects.all().order_by('-date'))
         games = [g.get_serializable() for g in games]
         return games
-    
-        
+
     def get_serializable(self):
         players = list(User.objects.filter(message__id_conversation__id_game=self.id))
         players.extend(UserAnonyme.objects.filter(message__id_conversation__id_game=self.id))
@@ -37,20 +40,23 @@ class Game(models.Model):
             'hasEnded': self.has_ended,
             'urlGame': self.url_game,
             'players': [p.username for p in players]
-            }
+        }
+
 
 class UserAnonyme(models.Model):
     username = models.CharField(max_length=50)
 
 
 class Conversation(models.Model):
+    """
+        Used to save a series of messages. a game has several conversations, each conversation has several message.
+    """
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
     url_conversation = models.CharField(max_length=8, unique=True)
 
     @classmethod
     def create(cls, id_game):
         return cls(id_game=id_game, url_conversation=id_generator(8))
-
 
     @classmethod
     def get_all_serializable(cls, url_game):
@@ -62,12 +68,16 @@ class Conversation(models.Model):
         messages = Message.objects.filter(id_conversation=self.id)
 
         return {
-                'urlConversation': self.url_conversation,
-                'messages': [m.get_serializable() for m in messages]
-            }
+            'urlConversation': self.url_conversation,
+            'messages': [m.get_serializable() for m in messages],
+        }
 
 
 class Message(models.Model):
+    """
+        Used to save the drawings and descriptions to the database
+    """
+
     id_conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     id_userAnonyme = models.ForeignKey(UserAnonyme, on_delete=models.DO_NOTHING, null=True)
@@ -90,8 +100,7 @@ class Message(models.Model):
             return cls(id_conversation=id_conversation, id_userAnonyme=id_user, url_drawing=image, order=order)
 
     def get_serializable(self):
-        user = None
-        if (self.id_user != None):
+        if self.id_user is not None:
             user = self.id_user
         else:
             user = self.id_userAnonyme
@@ -102,18 +111,10 @@ class Message(models.Model):
         }
 
 
-class UserLike(models.Model):
-    id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    id_message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
-
-
-class UserGame(models.Model):
-    id_game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
-    id_message = models.ForeignKey(Message, on_delete=models.CASCADE)
-
 def id_generator(size):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 def unique(sequence):
     seen = set()
