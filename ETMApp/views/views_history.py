@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import redirect
 from ETMApp.models import Conversation, Game
@@ -17,15 +18,18 @@ def history(request):
 
 def history_game(request, url_game):
     conversations = Conversation.get_all_serializable(url_game)
-    game = Game.objects.get(url_game=url_game).get_serializable()
-
-    if len(conversations) > 0:
+    try:
+        game = Game.objects.get(url_game=url_game).get_serializable()
+    except Game.DoesNotExist:
+        game = None
+    if len(conversations) > 0 and game is not None:
         return render(request, 'ETMApp/history/conversations.html', {
             'conversations': conversations,
             'game': game,
             'game_url': url_game
         })
-    return redirect('/history')
+    raise Http404("Game does not exist")
+    #return redirect('/history')
 
 
 def view_game(request, url_game):

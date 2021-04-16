@@ -39,7 +39,8 @@ urlpatterns = [
     path('admin_debug', etm_app.admin_debug, name='admin_debug'),  # for debug, left on production on purpose
 
     # TODO REMOVE
-    # path('base_game', ETMApp.base_game, name='base_game'),
+    # path('base_game', etm_app.base_game, name='base_game'),
+    path('404', etm_app.error404, name='error404'),
 
 ]
 """
@@ -51,3 +52,5 @@ if not settings.DEBUG:
 """
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = etm_app.error404

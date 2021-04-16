@@ -1,0 +1,27 @@
+{% extends "ETMApp/base.html" %}
+{% block content %}
+    {% load static %}
+
+    <div class="row">
+        <div class="col-md-6 offset-md-6 align-self-center mt-5">
+            <h1>404</h1>
+            <h2>UH OH! You're lost.</h2>
+            <p>The page you are looking for does not exist.
+                How you got here is a mystery. But you can click the button below
+                to go back to the homepage.
+            </p>
+            <a class="btn btn-outline-light" href="/">HOME</a>
+        </div>
+    </div>
+    <style>
+        /*
+            🙃
+        */
+        body {
+            background-color: #272B36;
+        }
+        #main_container {
+            color: white;
+        }
+    </style>
+{% endblock %}

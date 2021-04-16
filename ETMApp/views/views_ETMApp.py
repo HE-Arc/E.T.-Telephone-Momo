@@ -37,6 +37,8 @@ def play(request, url):
     })
 
 
+def error404(request, exception=None):
+    return render(request, 'ETMApp/404.html')
 
 
 
