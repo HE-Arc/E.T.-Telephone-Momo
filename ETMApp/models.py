@@ -17,9 +17,15 @@ class Game(models.Model):
     @classmethod
     def get_all_serializable(cls, id_user):
         games = unique(Game.objects.filter(conversation__message__id_user=id_user).order_by('-date'))
-        
         games = [g.get_serializable() for g in games]
         return games
+    
+    @classmethod
+    def get_all_serializable_admin(cls):
+        games = unique(Game.objects.all().order_by('-date'))
+        games = [g.get_serializable() for g in games]
+        return games
+    
         
     def get_serializable(self):
         players = list(User.objects.filter(message__id_conversation__id_game=self.id))

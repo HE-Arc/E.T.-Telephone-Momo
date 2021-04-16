@@ -51,11 +51,6 @@ def lobby(request, url):
     })
 
 
-def game(request):
-    return JsonResponse({'yo': 1})
-    return render(request, 'ETMApp/game.html')
-
-
 def try_signup(request):
     if request.user.is_authenticated:
         return JsonResponse({'error': True, 'msg': 'already_connected'})
@@ -127,16 +122,6 @@ def history_game(request, urlGame):
     return redirect('/history')
 
 def view_game(request, urlGame):
-    """conversations = Conversation.get_all_serializable(urlGame)
-    if (len(conversations) > 0):
-        return render(request, 'ETMApp/view/render.html', {
-            'conversations': conversations,
-            'game_url': urlGame
-        })
-    return redirect('/history')"""
-
-
-
     conversations = Conversation.get_all_serializable(urlGame)
     isValid = False
     
@@ -145,22 +130,6 @@ def view_game(request, urlGame):
             'conversations': conversations, 
             'game_url': urlGame,
         })
-        
-    for i, c in enumerate(conversations):
-        pdf.add_page()
-        
-
-        html = render_to_string('ETMApp/view/render.html', {
-            'conversation': conversations[i], 
-            'game_url': urlGame,
-        })
-        pdf.write_html(html)
-        #pdf.write_html("<p>YOOOOOOOOOOOOOO</p>")
-
-    response = HttpResponse(pdf.output(dest='S'))
-    response['Content-Type'] = 'application/pdf'
-    return response
-    #return render(request, 'ETMApp/view/render.html')
 
 def history_game_conversation(request, urlGame, urlConversation):
     conversations = Conversation.get_all_serializable(urlGame)
@@ -191,6 +160,16 @@ def create_game(request):
     game = Game.create()
     game.save()
     return redirect('/play/' + game.url_game)
+
+
+#temp page for debugging and see all parties ever created, even when not connected
+#left on production on purpose
+def admin_debug(request):
+    games = Game.get_all_serializable_admin()
+
+    return render(request, 'ETMApp/history/history.html', {
+        'games': games
+    })
 
 # TMP PAGES TODO
 def base_game(request):
