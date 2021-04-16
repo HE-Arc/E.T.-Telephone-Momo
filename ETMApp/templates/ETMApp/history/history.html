@@ -7,10 +7,27 @@
 <a href="/"><span class="material-icons">arrow_back</span></a>
 
 
-<div class="row" id="history_table"></div>
+<div class="row" id="history_table">
+{% for game in games %}
+    <div class="mb-3 card overlay-container game-card">
+        <div class="overlay">
+            <p class="overlay-text">Click to get the full game</p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{game.date|timesince}} ago</h5>
+            <a class="stretched-link" href="history/{{game.urlGame}}"></a>
+            <p class="card-text crop-text-2">{{game.players|join:", "}}</p>
+            <p class="card-text">
+                <small class="text-muted">{{game.players|length}} players</small>
+            </p>
+        </div>
+    </div>
+{% endfor %}
 
-{{ games|json_script:"games" }}
-<script type="application/javascript" src="{% static 'ETMApp/js/history.js' %}"></script>
+
+
+</div>
+
 {% endblock %}
 
 {% block title %}

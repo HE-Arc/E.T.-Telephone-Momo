@@ -112,45 +112,49 @@ def history(request):
         'games': games
     })
 
-def history_game(request, urlGame):
-    conversations = Conversation.get_all_serializable(urlGame)
+def history_game(request, url_game):
+    conversations = Conversation.get_all_serializable(url_game)
+    game = Game.objects.get(url_game=url_game).get_serializable()
+
     if (len(conversations) > 0):
         return render(request, 'ETMApp/history/conversations.html', {
             'conversations': conversations,
-            'game_url': urlGame
+            'game': game,
+            'game_url': url_game
         })
     return redirect('/history')
 
-def view_game(request, urlGame):
-    conversations = Conversation.get_all_serializable(urlGame)
+def view_game(request, url_game):
+    """ pdf of the game """
+    conversations = Conversation.get_all_serializable(url_game)
     isValid = False
     
 
     return render_to_pdf_response(request, 'ETMApp/view/render.html', {
             'conversations': conversations, 
-            'game_url': urlGame,
+            'gameUrl': url_game,
         })
 
-def history_game_conversation(request, urlGame, urlConversation):
-    conversations = Conversation.get_all_serializable(urlGame)
+def history_game_conversation(request, url_game, url_conversation):
+    conversations = Conversation.get_all_serializable(url_game)
     isValid = False
     for i, c in enumerate(conversations):
-        if c['urlConversation'] == urlConversation:
+        if c['urlConversation'] == url_conversation:
             index = i
             isValid = True
 
     if not isValid:
-        return redirect('/history/' + urlGame)
+        return redirect('/history/' + url_game)
 
     i = index
     
 
-    next_conv = urlGame + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
-    prev_conv = urlGame + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
+    next_conv = url_game + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
+    prev_conv = url_game + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
 
     return render(request, 'ETMApp/history/conversation.html', {
         'conversation': conversations[i], 
-        'game_url': urlGame,
+        'game_url': url_game,
         'next_conv': next_conv,
         'prev_conv': prev_conv
     })

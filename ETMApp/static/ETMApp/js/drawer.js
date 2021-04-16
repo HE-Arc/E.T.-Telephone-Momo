@@ -1,3 +1,9 @@
+/*
+    Drawer.js
+    © Nicolas Laoun, 2021
+    For ETM
+*/
+
 let cnv = document.getElementById('cnv');
 let ctx = cnv.getContext('2d');
 
@@ -7,6 +13,8 @@ let ctxf = cnvf.getContext('2d');
 let cnvb = document.getElementById('cnvb');
 let ctxb = cnvb.getContext('2d');
 
+
+//Shortcuts.js
 on('p', () => {
     tool = pen;
     document.getElementById('penButton').checked = true;
@@ -33,7 +41,7 @@ on('g', () => {
 
 
 let lineWidth = 10;
-let color = "#000001";
+let color = "#000000";
 
 let canDraw = true;
 
@@ -130,8 +138,9 @@ let bucket = {
             g: parseInt(hex[2], 16),
             b: parseInt(hex[3], 16)
         }
-        console.log(hex);
-        console.log(rgb);
+        if (rgb.r == 0)
+            rgb.r = 1; // Temp fix or the bucket won't work on transparent canvas because the color is already 0 0 0.
+
         ctx.shadowBlur = 0;
         let id = ctx.getImageData(0, 0, cnv.width, cnv.height);
         let pixels = id.data;

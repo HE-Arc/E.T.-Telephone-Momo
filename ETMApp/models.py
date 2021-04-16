@@ -63,7 +63,7 @@ class Conversation(models.Model):
 
         return {
                 'urlConversation': self.url_conversation,
-                'messages': [m.get_serializable() for m in messages]
+                'messages': [m.get_serializable() for m in messages],
             }
 
 
@@ -100,16 +100,6 @@ class Message(models.Model):
             'url_drawing': self.url_drawing,
             'description': self.description
         }
-
-
-class UserLike(models.Model):
-    id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    id_message = models.ForeignKey(Message, on_delete=models.DO_NOTHING)
-
-
-class UserGame(models.Model):
-    id_game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
-    id_message = models.ForeignKey(Message, on_delete=models.CASCADE)
 
 def id_generator(size):
     chars = string.ascii_letters + string.digits

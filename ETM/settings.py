@@ -194,3 +194,5 @@ CHANNEL_LAYERS = {
 }"""
 
 #django.setup()
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

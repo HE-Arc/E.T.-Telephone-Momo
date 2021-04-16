@@ -18,11 +18,3 @@ class ConversationAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     pass
-
-@admin.register(UserLike)
-class UserLikeAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(UserGame)
-class UserGameAdmin(admin.ModelAdmin):
-    pass

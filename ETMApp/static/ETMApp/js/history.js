@@ -1,3 +1,7 @@
+/*
+    Not used anymore, all is done by templates now :(
+*/
+
 function listGames(games) {
 
     let table = document.getElementById('history_table');

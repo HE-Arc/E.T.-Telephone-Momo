@@ -33,9 +33,9 @@ urlpatterns = [
     path('createGame', ETMApp.create_game, name='create_game'),
     path('play/<slug:url>', ETMApp.lobby, name='lobby'),
     path('history', ETMApp.history, name='history'),
-    path('history/<slug:urlGame>/', ETMApp.history_game, name='history_game'),
-    path('history/<slug:urlGame>/<slug:urlConversation>', ETMApp.history_game_conversation, name='history_game_conversation'),
-    path('view/<slug:urlGame>.pdf', ETMApp.view_game, name='view_game'),
+    path('history/<slug:url_game>/', ETMApp.history_game, name='history_game'),
+    path('history/<slug:url_game>/<slug:url_conversation>', ETMApp.history_game_conversation, name='history_game_conversation'),
+    path('view/<slug:url_game>.pdf', ETMApp.view_game, name='view_game'),
     path('about', ETMApp.about, name='about'),
 
     path('admin_debug', ETMApp.admin_debug, name='admin_debug'), # for debug, left on production on purpose
