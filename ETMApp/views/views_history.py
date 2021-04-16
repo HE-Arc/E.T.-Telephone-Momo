@@ -60,3 +60,14 @@ def history_game_conversation(request, url_game, url_conversation):
         'next_conv': next_conv,
         'prev_conv': prev_conv
     })
+
+
+# temp page for debugging and see all parties ever created, even when not connected
+# left on production on purpose
+def admin_debug(request):
+    games = Game.get_all_serializable_admin()
+
+    return render(request, 'ETMApp/history/history.html', {
+        'games': games,
+        'debug': True
+    })
