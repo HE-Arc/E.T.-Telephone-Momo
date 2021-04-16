@@ -20,7 +20,7 @@ let btnPseudo = document.getElementById("btnPseudo");
 if (btnPseudo) {
     btnPseudo.addEventListener("click", changePseudo);
     document.getElementById('pseudo').addEventListener('keyup', (e) => {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             changePseudo();
         }
     });
@@ -113,7 +113,7 @@ function lobbyPlayers(players) {
             let td = document.createElement('td');
             //If it's the actual client, put it in evidence
             if (me.id === player.id) {
-                td.classList.add("text-danger")
+                td.classList.add("text-danger");
                 initPlayer(me);
             }
 
@@ -146,7 +146,7 @@ function initPlayer(initMe) {
     
    
     if (btnPseudo && me == null) {
-        document.getElementById('pseudo').value = htmlEntities(initMe.pseudo)
+        document.getElementById('pseudo').value = htmlEntities(initMe.pseudo);
         document.getElementById('pseudo').disabled = false;
         document.getElementById('btnPseudo').disabled = false;
     }
@@ -196,7 +196,7 @@ function gameStarted(data) {
 
 function sendMessage() {
     let text;
-    if (chooseContainer.style.display == "block") {
+    if (chooseContainer.style.display === "block") {
         text = textContent.value;
     }
     else {

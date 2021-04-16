@@ -14,7 +14,7 @@ function on(keyboard, f, needMetaKey = false) {
 }
 
 window.addEventListener('keydown', e => {
-    if (e.key == "Shift") 
+    if (e.key === "Shift")
         return;
     if (e.key.toLowerCase() in keyDict) {
         for (let s of keyDict[e.key.toLowerCase()]) {

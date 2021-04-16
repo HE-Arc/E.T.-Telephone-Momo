@@ -1,7 +1,7 @@
 from .settings import *
+# not used any more
 
-
-#DEBUG = False
+# DEBUG = False
 """DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -17,4 +17,4 @@ from .settings import *
     }
 }"""
 
-#MEDIA_ROOT = '/var/www/app/public/static/'
+# MEDIA_ROOT = '/var/www/app/public/static/'

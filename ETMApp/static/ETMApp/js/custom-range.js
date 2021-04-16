@@ -39,7 +39,7 @@ let getTrackStyle = function (el) {
     }
 
     return style;
-}
+};
 
 sliderRound.addEventListener('input', function () {
     sheet.textContent = getTrackStyle(this);
@@ -49,10 +49,10 @@ sliderRound.addEventListener('input', function () {
 
 function changeRange(max) {
     let wasMax = false;
-    if (sliderRound.value == sliderRound.max) {
+    if (sliderRound.value === sliderRound.max) {
         wasMax = true;
     }
-    html = `
+    let html = `
         <li class="active selected">3 rounds</li>`;
         let nbLabel = 1;
     for (let i = 0; i < (max - 4) / 2; i++) {
@@ -94,11 +94,11 @@ function changeRange(max) {
         let index = generalIndex;
         e.addEventListener('click', function () {
             sliderRound.value = index;
-            var event = new Event('input');
+            let event = new Event('input');
             sliderRound.dispatchEvent(event);
         });
     });
     sheet.textContent = getTrackStyle(sliderRound);
-    var event = new Event('input');
+    let event = new Event('input');
     sliderRound.dispatchEvent(event);
 }

@@ -1,16 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts import redirect
-from django.template.loader import get_template, render_to_string
 from ETMApp.models import Conversation, Game
-from django.core import serializers
 from easy_pdf.rendering import render_to_pdf_response
-from django.shortcuts import HttpResponse
+
 
 def history(request):
-    
     id_user = request.user.id
     games = []
     if id_user is not None:
@@ -20,11 +14,12 @@ def history(request):
         'games': games
     })
 
+
 def history_game(request, url_game):
     conversations = Conversation.get_all_serializable(url_game)
     game = Game.objects.get(url_game=url_game).get_serializable()
 
-    if (len(conversations) > 0):
+    if len(conversations) > 0:
         return render(request, 'ETMApp/history/conversations.html', {
             'conversations': conversations,
             'game': game,
@@ -32,36 +27,35 @@ def history_game(request, url_game):
         })
     return redirect('/history')
 
+
 def view_game(request, url_game):
     """ pdf of the game """
     conversations = Conversation.get_all_serializable(url_game)
-    isValid = False
-    
-
     return render_to_pdf_response(request, 'ETMApp/view/render.html', {
-            'conversations': conversations, 
-            'gameUrl': url_game,
-        })
+        'conversations': conversations,
+        'gameUrl': url_game,
+    })
+
 
 def history_game_conversation(request, url_game, url_conversation):
     conversations = Conversation.get_all_serializable(url_game)
-    isValid = False
+    is_valid = False
+    index = 0
     for i, c in enumerate(conversations):
         if c['urlConversation'] == url_conversation:
             index = i
-            isValid = True
+            is_valid = True
 
-    if not isValid:
+    if not is_valid:
         return redirect('/history/' + url_game)
 
     i = index
-    
 
     next_conv = url_game + '/' + conversations[(i - 1) % len(conversations)]['urlConversation']
     prev_conv = url_game + '/' + conversations[(i + 1) % len(conversations)]['urlConversation']
 
     return render(request, 'ETMApp/history/conversation.html', {
-        'conversation': conversations[i], 
+        'conversation': conversations[i],
         'game_url': url_game,
         'next_conv': next_conv,
         'prev_conv': prev_conv

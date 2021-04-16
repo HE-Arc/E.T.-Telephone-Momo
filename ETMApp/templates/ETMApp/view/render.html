@@ -14,7 +14,6 @@
         .description {
             font-size: 50px;
             text-align: center;
-            font-family: "Impact";
         }
         .spacer {
             display: block;
@@ -36,7 +35,7 @@
                 <div class="card-img-container">
                     <p >{{message.user}} draw</p>
                     <div class="center">
-                        <img height="500" src="/media/{{message.url_drawing}}">
+                        <img height="500" src="/media/{{message.url_drawing}}" alt="image">
                     </div>
                 {% endif %}
             {% endfor %}

@@ -15,9 +15,7 @@ class Member:
         self.socket = socket
         self.index = 0
 
-        
-
-    def getUser(self):
+    def get_user(self):
         if self.is_connected:
             return User.objects.get(id=self.id)
         else:
@@ -29,6 +27,3 @@ class Member:
             'id': self.id,
             'isAdmin': self.is_admin,
             'isDisconnected': self.is_disconnected}
-
-
-            

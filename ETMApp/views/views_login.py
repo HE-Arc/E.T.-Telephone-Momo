@@ -38,9 +38,9 @@ def try_signup(request):
     if len(username) < 3 or len(password) < 3:
         return JsonResponse({'error': True, 'msg': 'invalid_data'})
     
-    doesExist = User.objects.filter(username=username).exists()
+    does_exist = User.objects.filter(username=username).exists()
 
-    if doesExist:
+    if does_exist:
         return JsonResponse({'error': True, 'msg': 'user_already_exist'})
 
     user = User.objects.create_user(username, password=password)

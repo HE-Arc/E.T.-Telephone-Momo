@@ -132,13 +132,13 @@ let bucket = {
         e.x = Math.round(e.x);
         e.y = Math.round(e.y);
         let stack = [];
-        var hex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+        let hex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
         let rgb = {
             r: parseInt(hex[1], 16),
             g: parseInt(hex[2], 16),
             b: parseInt(hex[3], 16)
-        }
-        if (rgb.r == 0)
+        };
+        if (rgb.r === 0)
             rgb.r = 1; // Temp fix or the bucket won't work on transparent canvas because the color is already 0 0 0.
 
         ctx.shadowBlur = 0;

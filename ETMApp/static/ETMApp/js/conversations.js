@@ -10,13 +10,13 @@ function listConversations(conversations) {
 
     let table = document.getElementById('conversations_table');
 
-    html = '';
+    let html = '';
     //Add parties in element then in the html table
     for (let conversation of conversations) {
         try {
             html += `
                 <div class="mb-3 card overlay-container conversations-card">
-                    <img class="card-img-top card-image" src="/media/${htmlEntities(conversation.messages[1]) ? htmlEntities(conversation.messages[1].url_drawing): ''}">
+                    <img class="card-img-top card-image" src="/media/${htmlEntities(conversation.messages[1]) ? htmlEntities(conversation.messages[1].url_drawing): ''}" alt="image">
                     <div class="overlay">
                         <p class="overlay-text">Click to see the full conversation</p>
                     </div>

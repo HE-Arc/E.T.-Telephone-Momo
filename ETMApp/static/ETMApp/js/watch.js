@@ -50,18 +50,16 @@ function goto(conversationID, messageID) {
 
 function listMessages(messages) {
 
-    let table = document.getElementById('messages');
 
     let first = true;
-    let text = true;
 
     let html = '';
     //Add parties in element then in the html table
     for (let [index, message] of messages.entries()) {
         if (message.url_drawing == null) {
-            let isChoose = 'found'
+            let isChoose = 'found';
             if (first) {
-                isChoose = 'choose'
+                isChoose = 'choose';
             }
             html +=
             `<div class="card-text-container">
@@ -79,7 +77,7 @@ function listMessages(messages) {
                     <div class="card-body">
                         <p class="card-text crop-text-2">${htmlEntities(message.user)} draw</p>
                     </div>
-                    <img class="card-img-bottom card-image card-image-large" src="/media/${htmlEntities(message.url_drawing)}">
+                    <img class="card-img-bottom card-image card-image-large" src="/media/${htmlEntities(message.url_drawing)}" alt="image">
                 </div>
             </div>`;
         }
@@ -113,7 +111,7 @@ function initVoice(voices) {
 
     for(let voice of voices) {
         console.log(voice.lang);
-        if(voice.lang == "fr-FR") {
+        if(voice.lang === "fr-FR") {
             ssu.voice = voice;
             break;
         }
