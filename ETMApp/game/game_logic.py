@@ -62,6 +62,8 @@ class GameLogic:
             self.timer_before_delete = Timer(10, self.delete_game)
             self.timer_before_delete.start()
         elif not self.game_model.has_ended: #if a player leave, skip the round
+            print("disconnect")
+            print("all_player_ready: "+ str(self.all_players_ready()))
             if self.all_players_ready():
                 self.timer.cancel()
                 self.next_round()
@@ -179,9 +181,13 @@ class GameLogic:
         for p in self.players.values():
             p.current_conversation = (p.index + self.current_round) % len(self.conversations)
             if self.current_round % 2:
+                try:
+                    data = self.all_messages[p.current_conversation][-1].description
+                except:
+                    data = "Player has disconnected"
                 p.socket.send(text_data=json.dumps({
                     'type': 'new_round_draw',
-                    'data': self.all_messages[p.current_conversation][-1].description
+                    'data': data
                 }))
             else:
                 p.socket.send(text_data=json.dumps({

@@ -5,6 +5,10 @@ import string
 import random
 
 
+"""
+    Class Game
+    Used to save a game. A game has several conversation
+"""
 class Game(models.Model):
     date = models.DateTimeField('date published')
     url_game = models.CharField(max_length=8, unique=True)
@@ -43,6 +47,10 @@ class UserAnonyme(models.Model):
     username = models.CharField(max_length=50)
 
 
+"""
+    Class Conversation
+    Used to save a series of messages. a game has several conversations, each conversation has several message.
+"""
 class Conversation(models.Model):
     id_game = models.ForeignKey(Game, on_delete=models.CASCADE)
     url_conversation = models.CharField(max_length=8, unique=True)
@@ -67,6 +75,10 @@ class Conversation(models.Model):
             }
 
 
+"""
+    Class Message
+    Used to save the drawings and descriptions to the database
+"""
 class Message(models.Model):
     id_conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)

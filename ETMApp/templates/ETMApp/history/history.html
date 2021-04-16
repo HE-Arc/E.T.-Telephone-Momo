@@ -9,6 +9,7 @@
 
 <div class="row" id="history_table">
 {% for game in games %}
+{% if game.hasEnded %}
     <div class="mb-3 card overlay-container game-card">
         <div class="overlay">
             <p class="overlay-text">Click to get the full game</p>
@@ -22,6 +23,7 @@
             </p>
         </div>
     </div>
+{% endif %}
 {% endfor %}
 
 
