@@ -29,8 +29,8 @@ IS_PRODUCTION = os.environ.get('PRODUCTION', 'False') == 'True'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# if IS_PRODUCTION:
-#    DEBUG = False
+if IS_PRODUCTION:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['momo.srvz-webapp.he-arc.ch', 'localhost']
 
@@ -148,8 +148,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = str(BASE_DIR / 'ETMApp/static/')
 if IS_PRODUCTION:
     STATIC_ROOT = '/var/www/app/public/static/'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR / 'ETMApp/media/')

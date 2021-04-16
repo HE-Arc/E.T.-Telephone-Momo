@@ -33,7 +33,7 @@ def view_game(request, url_game):
     conversations = Conversation.get_all_serializable(url_game)
     return render_to_pdf_response(request, 'ETMApp/view/render.html', {
         'conversations': conversations,
-        'gameUrl': url_game,
+        'game_url': url_game,
     })
 
 
