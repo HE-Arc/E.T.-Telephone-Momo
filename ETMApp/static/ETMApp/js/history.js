@@ -16,7 +16,7 @@ function listGames(games) {
         html += `
         <div class="mb-3 card overlay-container game-card">
             <div class="overlay">
-                <p class="overlay-text">Click to get the full game</p>
+                <p class="overlay-text">Click to see the full game</p>
             </div>
             <div class="card-body">
                 <h5 class="card-title">${timeSince(game.date)} ago</h5>

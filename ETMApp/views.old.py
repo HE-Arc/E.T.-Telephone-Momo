@@ -10,7 +10,6 @@ from django.core import serializers
 from easy_pdf.rendering import render_to_pdf_response
 from django.shortcuts import HttpResponse
 
-logger = logging.getLogger(__name__)
 
 
 def index(request):
