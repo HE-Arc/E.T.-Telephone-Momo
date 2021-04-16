@@ -68,9 +68,6 @@ namespace :python do
 
         execute "env PRODUCTION=True"
         execute "source ~/.bash_profile"
-        execute "echo $PRODUCTION"
-        execute "echo $PASSWORD"
-        execute "printenv"
 	    execute "python3 -m venv #{venv_path}"
         execute "source #{venv_path}/bin/activate"
 	    execute "#{venv_path}/bin/pip install -r #{release_path}/requirements.txt"
