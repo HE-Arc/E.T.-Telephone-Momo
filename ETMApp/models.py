@@ -117,5 +117,6 @@ def id_generator(size):
 
 
 def unique(sequence):
+    # Remove every doublons while keeping the order
     seen = set()
     return [x for x in sequence if not (x in seen or seen.add(x))]

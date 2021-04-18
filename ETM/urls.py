@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 from ETMApp import views as etm_app
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     path('', etm_app.index, name='index'),
     path('login', etm_app.login, name='login'),
     path('tryLogin', etm_app.try_login, name='try_login'),
@@ -35,11 +34,7 @@ urlpatterns = [
          name='history_game_conversation'),
     path('view/<slug:url_game>.pdf', etm_app.view_game, name='view_game'),
     path('about', etm_app.about, name='about'),
-
     path('admin_debug', etm_app.admin_debug, name='admin_debug'),  # for debug, left on production on purpose
-
-    # TODO REMOVE
-    # path('base_game', etm_app.base_game, name='base_game'),
     path('404', etm_app.error404, name='error404'),
 
 ]

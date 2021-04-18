@@ -40,8 +40,6 @@ class GameConsumer(WebsocketConsumer):
                 self.me = Member(self.scope["session"]["pseudo"], self.scope["session"]["anonID"], False,
                                  self.channel_name, self)
                 self.scope["session"].save()
-                # for attr in dir(self.scope):
-                #    print("obj.%s = %r" % (attr, getattr(self.scope, attr)))
         else:
             self.me = Member(user.username, user.id, True, self.channel_name, self)
 
@@ -76,8 +74,7 @@ class GameConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         message = json.loads(text_data)
-        # message = data['message']
-        # print(message)
+
         if message['type'] == 'changePseudo':
             self.change_pseudo(message['data'])
         elif message['type'] == 'startGame':
@@ -91,7 +88,9 @@ class GameConsumer(WebsocketConsumer):
             if self.me.is_admin:
                 self.game.send('next_message', message['data'])
 
+
     def change_pseudo(self, pseudo):
+        # Change the pseudo of an anonyme player
         if 'anonID' in self.scope['session']:
             if 3 <= len(pseudo) < 50:
                 self.me.pseudo = pseudo

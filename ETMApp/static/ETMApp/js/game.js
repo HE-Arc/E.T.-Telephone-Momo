@@ -48,7 +48,8 @@ function displayDraw(description = "") {
     tool = pen;
     document.getElementById('penButton').checked = true;
 
-    document.getElementById('drawDescription').value = htmlEntities(description);
+    //document.getElementById('drawDescription').value = htmlEntities(description);
+    document.getElementById('drawDescription').innerHTML = htmlEntities(description);
     pageTitle.innerHTML = 'Draw';
 }
 

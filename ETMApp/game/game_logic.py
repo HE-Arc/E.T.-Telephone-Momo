@@ -42,15 +42,11 @@ class GameLogic:
             member.is_admin = self.players[member.id].is_admin
         self.players[member.id] = member
 
-        # self.players[member.id] = member
         self.update_player()
         if self.timer_before_delete is not None:
             self.timer_before_delete.cancel()
 
     def remove_player(self, member):
-        # del self.players[member.id]
-
-        # if member.isAdmin:
         member.is_disconnected = True
 
         self.update_player()
@@ -77,35 +73,27 @@ class GameLogic:
         if not self.has_started and len(self.players) >= nb_round >= 3 and nb_round % 2 == 1:
             self.nb_round = nb_round
             self.timer_time = timer_time
-            # self.timer_time = 5
             self.timer = Timer(self.timer_time, self.round_end)
             self.timer.start()
             self.has_started = True
             self.send('game_start', {'time': self.timer_time})
             self.game_model.has_started = True
             self.game_model.save()
-            # self.round_choose_word()
 
             # Remove disconnected players
-       
             self.players = {p.id: p for p in self.players.values() if not p.is_disconnected}
 
             self.nb_player = len(self.players)
-            # rand_numbers = [i for i in range(nb_player)]
-            # random.shuffle(rand_numbers)
-
-            random_conv = self.fonction_de_gurix_et_marty()          
-            print(random_conv)
+            random_conv = self.get_random_conv_order()
 
             for i, m in enumerate(self.players):
-                # self.players[m].index = rand_numbers.pop()
                 self.players[m].index = i
                 self.conv_order = random_conv
-                #self.players[m].conv_order = random_conv
                 self.players[m].is_ready = False
+                
                 conv = Conversation.create(self.game_model)
                 conv.save()
-                # conv.addRound()
+                
                 self.conversations.append(conv)
                 self.all_messages.append([])
                 self.players[m].current_conversation = self.conv_order[0][i]
@@ -183,7 +171,6 @@ class GameLogic:
             return
 
         for p in self.players.values():
-            #p.current_conversation = (p.index + self.current_round) % len(self.conversations)
             p.current_conversation = self.conv_order[self.current_round][p.index] % len(self.conversations)
             if self.current_round % 2:
                 try:
@@ -235,7 +222,9 @@ class GameLogic:
             print("error")
             print(e)
 
-    def fonction_de_gurix_et_marty(self):
+    """Allow the players to be attributed to a random conversation everytime without being attributed twice to the same discution,
+    Or a discution being attributed twice durring the same round"""
+    def get_random_conv_order(self):
         players = [i for i in range(self.nb_player)]
 
         m = []
