@@ -14,4 +14,4 @@ source .venv/bin/activate
 source .venv/Scripts/activate
 ```
 
-Le travail a beaucoup été fait en Xtrem programming en LiveShare sur Visual Studio Code. Le nombre de commit par personne est donc insignicatif par rapport au travail effectué.
+Le travail a beaucoup été effectué en Xtrem programming en LiveShare sur Visual Studio Code. Le nombre de commit par personne est donc insignicatif par rapport au travail effectué.
