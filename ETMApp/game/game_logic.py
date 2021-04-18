@@ -226,3 +226,19 @@ class GameLogic:
         except OSError as e:
             print("error")
             print(e)
+
+    def fonction_de_gurix_et_marty(self):
+        players = [i for i in range(self.nb_player)]
+
+        m = []
+        m.append(players)
+
+        offsets = list(range(1, self.nb_player))
+        random.shuffle(offsets)
+
+        shift = lambda arr, offset: [(i+offset)%self.nb_player for i in arr]
+
+        result = [shift(players, o) for o in offsets]
+
+        m.extend(result)
+        return m
