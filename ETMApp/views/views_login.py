@@ -44,7 +44,6 @@ def try_signup(request):
         return JsonResponse({'error': True, 'msg': 'user_already_exist'})
 
     user = User.objects.create_user(username, password=password)
-    # user = authenticate(username=username, password=password)
     auth_login(request, user)
     return JsonResponse({'error': False, 'msg': 'signed'})
 

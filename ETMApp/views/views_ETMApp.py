@@ -39,9 +39,3 @@ def play(request, url):
 
 def error404(request, exception=None):
     return render(request, 'ETMApp/404.html')
-
-
-
-# TMP PAGES TODO
-def base_game(request):
-    return render(request, 'ETMApp/base_game.html')
