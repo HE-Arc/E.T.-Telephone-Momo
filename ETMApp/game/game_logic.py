@@ -87,21 +87,28 @@ class GameLogic:
             # self.round_choose_word()
 
             # Remove disconnected players
+       
             self.players = {p.id: p for p in self.players.values() if not p.is_disconnected}
 
-            nb_player = len(self.players)
-            rand_numbers = [i for i in range(nb_player)]
-            random.shuffle(rand_numbers)
+            self.nb_player = len(self.players)
+            # rand_numbers = [i for i in range(nb_player)]
+            # random.shuffle(rand_numbers)
 
-            for m in self.players:
-                self.players[m].index = rand_numbers.pop()
+            random_conv = self.fonction_de_gurix_et_marty()          
+            print(random_conv)
+
+            for i, m in enumerate(self.players):
+                # self.players[m].index = rand_numbers.pop()
+                self.players[m].index = i
+                self.conv_order = random_conv
+                #self.players[m].conv_order = random_conv
                 self.players[m].is_ready = False
                 conv = Conversation.create(self.game_model)
                 conv.save()
                 # conv.addRound()
                 self.conversations.append(conv)
                 self.all_messages.append([])
-                self.players[m].current_conversation = self.players[m].index
+                self.players[m].current_conversation = self.conv_order[0][i]
 
     def send_round_message(self, user, text):
         conv = self.conversations[user.current_conversation]
@@ -176,7 +183,8 @@ class GameLogic:
             return
 
         for p in self.players.values():
-            p.current_conversation = (p.index + self.current_round) % len(self.conversations)
+            #p.current_conversation = (p.index + self.current_round) % len(self.conversations)
+            p.current_conversation = self.conv_order[self.current_round][p.index] % len(self.conversations)
             if self.current_round % 2:
                 try:
                     data = self.all_messages[p.current_conversation][-1].description
@@ -226,3 +234,19 @@ class GameLogic:
         except OSError as e:
             print("error")
             print(e)
+
+    def fonction_de_gurix_et_marty(self):
+        players = [i for i in range(self.nb_player)]
+
+        m = []
+        m.append(players)
+
+        offsets = list(range(1, self.nb_player))
+        random.shuffle(offsets)
+
+        shift = lambda arr, offset: [(i+offset)%self.nb_player for i in arr]
+
+        result = [shift(players, o) for o in offsets]
+
+        m.extend(result)
+        return m
