@@ -287,6 +287,7 @@ function applyState(state) {
         ctx.clearRect(0, 0, cnv.width, cnv.height);
         ctx.drawImage(img, 0, 0);
     };
+    img.setAttribute('crossorigin', 'anonymous'); // works for me
     img.src = state;
 }
 
